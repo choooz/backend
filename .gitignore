@@ -5,7 +5,8 @@ HELP.md
 build/
 !gradle/wrapper/gradle-wrapper.jar
 
-!build/libs
+build/
+!libs
 
 src/main/resources/application.properties
 *.properties
