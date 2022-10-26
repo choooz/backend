@@ -1,4 +1,0 @@
-spring:
-  neo4j:
-    pool:
-      idle-time-before-connection-test:
