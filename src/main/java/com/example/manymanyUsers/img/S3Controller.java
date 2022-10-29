@@ -8,12 +8,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/api/image")
 @Tag(name = "image", description = "S3 업로드 api")
 public class S3Controller {
     private final S3Uploader s3Uploader;
@@ -22,7 +24,7 @@ public class S3Controller {
     @Parameters({
             @Parameter(name = "images", description = "이미지 파일", example = "image1.jpg")
     })
-    @PostMapping("/api/image")
+    @PostMapping("/upload")
     public ResponseEntity<HttpStatus> updateUserImage(
             @RequestParam("images") MultipartFile multipartFile) {
         try {
