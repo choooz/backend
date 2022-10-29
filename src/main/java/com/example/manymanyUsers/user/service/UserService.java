@@ -20,5 +20,9 @@ public class UserService {
         User user = new User();
         user.setName(signUpRequestDto.getName());
         user.setEmail(signUpRequestDto.getEmail());
+        user.setPassword(signUpRequestDto.getPassword());
+
+        User result = userRepository.save(user);
+        return result.getId();
     }
 }
