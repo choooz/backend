@@ -27,4 +27,6 @@ public class User extends BaseTimeEntity {
     private String email;
 
     private String imageUrl;
+
+    private String password;
 }
