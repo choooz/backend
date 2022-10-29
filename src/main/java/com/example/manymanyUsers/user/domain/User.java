@@ -1,7 +1,9 @@
 package com.example.manymanyUsers.user.domain;
 
 import com.example.manymanyUsers.common.domain.BaseTimeEntity;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
@@ -12,6 +14,7 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue
