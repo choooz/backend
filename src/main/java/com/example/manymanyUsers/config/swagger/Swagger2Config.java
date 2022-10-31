@@ -1,4 +1,4 @@
-package com.example.manymanyUsers.config;
+package com.example.manymanyUsers.config.swagger;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
