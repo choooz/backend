@@ -60,6 +60,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             userRepository.save(byUsername);
         }
 
-        return new PrincipalDetails(byUsername, oAuth2UserInfo);
+        return new PrincipalDetails(byUsername, oAuth2UserInfo.getAttributes());
     }
 }
