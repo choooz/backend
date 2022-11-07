@@ -1,6 +1,8 @@
 package com.example.manymanyUsers.config.oauth2;
 
 import com.example.manymanyUsers.user.domain.User;
+import lombok.Getter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -9,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+@Getter
+@ToString
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private User user;
