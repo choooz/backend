@@ -1,6 +1,7 @@
 package com.example.manymanyUsers.config.oauth2;
 
 import com.example.manymanyUsers.user.domain.Role;
+import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,8 @@ public class UserOAuth2Service extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        //여기서 accessToken을 이용해 서버로부터 사용자 정보를 받아옴
+        //DefaultOAuth2UserService 클래스의 loadUser() 메서드에 이 기능이 구현되어있기 때문에 super.loadUser() 를 호출하기만하면 된다.
         OAuth2User oAuth2User = super.loadUser(userRequest);
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
@@ -34,9 +37,14 @@ public class UserOAuth2Service extends DefaultOAuth2UserService {
 
         Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
         String nickname = (String) properties.get("nickname");
+        String profile_img = (String)properties.get("profile_image");
+        String kakao_id = (String)properties.get("id");
+
+        System.out.println("properties = " + properties);
+
 
         if(userRepository.existsByEmail(email)){
-//            userRepository
+            User user = User.oauth2Register().email(email).username(nickname).imageUrl(profile_img).provider("kakao").providerId(kakao_id).build();
         }else{
             System.out.println("이미 가입한 유저이므로 회원가입을 진행하지 않습니다.");
         }
