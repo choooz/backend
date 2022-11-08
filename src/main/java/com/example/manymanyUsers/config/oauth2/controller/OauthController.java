@@ -1,6 +1,7 @@
 package com.example.manymanyUsers.config.oauth2.controller;
 
 import com.example.manymanyUsers.config.oauth2.service.OauthService;
+import com.example.manymanyUsers.user.dto.LoginResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +19,11 @@ public class OauthController {
 
 
     @GetMapping("/login/oauth/{provider}")
-    public ResponseEntity<> login(@PathVariable String provider, @RequestParam String code) {
+    public ResponseEntity<LoginResponse> login(@PathVariable String provider, @RequestParam String code) {
 
+        LoginResponse loginResponse = oauthService.login(provider, code);
+
+        return ResponseEntity.ok().body(loginResponse);
 
     }
 }
