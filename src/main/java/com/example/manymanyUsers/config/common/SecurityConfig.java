@@ -1,4 +1,4 @@
-package com.example.manymanyUsers.config.oauth2;
+package com.example.manymanyUsers.config.common;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
