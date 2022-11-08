@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class SignUpRequestDto {
+public class SignUpRequest {
     @NotBlank
     private String name;
 

@@ -2,7 +2,7 @@ package com.example.manymanyUsers.user.service;
 
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
-import com.example.manymanyUsers.user.dto.SignUpRequestDto;
+import com.example.manymanyUsers.user.dto.SignUpRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
 
-    public Long registerUser(SignUpRequestDto signUpRequestDto) {
+    public Long registerUser(SignUpRequest signUpRequestDto) {
         if (userRepository.existsByEmail(signUpRequestDto.getEmail())) {
 //            throw new
         }
