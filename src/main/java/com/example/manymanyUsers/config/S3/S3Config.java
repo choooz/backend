@@ -1,4 +1,4 @@
-package com.example.manymanyUsers.config;
+package com.example.manymanyUsers.config.S3;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
