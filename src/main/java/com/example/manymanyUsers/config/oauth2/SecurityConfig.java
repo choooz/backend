@@ -20,19 +20,22 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private final UserDetailsService userDetailsService;
+//    private final UserDetailsService userDetailsService;
 //    private final JwtRequestFilter jwtRequestFilter
-//    private final OAuth2AuthenticationSucces
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final UserOAuth2Service userOAuth2Service;
 
     @Bean
     @Order(SecurityProperties.BASIC_AUTH_ORDER)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http
+                .httpBasic().disable()//기본 로그인 페이지 사용x
+                .csrf().disable()
                 .oauth2Login()
-                .defaultSuccessUrl("/login-success");
-//                .successHandler(oAuth2AuthenticationSuccessHandler)
-//                .userInfoEndpoint()
-//                .userService(userOAuth2Service);
+                .defaultSuccessUrl("/login-success")
+                .successHandler(oAuth2AuthenticationSuccessHandler)
+                .userInfoEndpoint()
+                .userService(userOAuth2Service);
 
         return http.build();
     }
