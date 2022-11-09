@@ -1,5 +1,6 @@
 package com.example.manymanyUsers.config.oauth2.service;
 
+import com.example.manymanyUsers.config.jwt.JwtTokenProvider;
 import com.example.manymanyUsers.user.domain.UserRepository;
 import com.example.manymanyUsers.user.dto.LoginResponse;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class OauthService {
 
     private final InMemoryClientRegistrationRepository inMemoryRepository;
     private final UserRepository userRepository;
-//    private final
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     public LoginResponse login(String providerName, String code) {
