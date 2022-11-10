@@ -22,9 +22,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-    private final AuthTokenProvider authTokenProvider;
-
-
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer()  throws Exception {
         // swagger-ui.html의 경우 인증된 사용자가 아니어도 접근가능하도록 설정(dev환경에 대해서만 swagger 설정을 하였기 때문에 인증된 사용자가 아니어도 됨)
@@ -48,16 +45,16 @@ public class SecurityConfig {
                 .and()
                 .cors()
                 .and()
-                .csrf().disable()
+                .csrf().disable();
                 // 예외 처리를 하고 싶다면 아래와 같이 작성 가능합니다.
                 //.exceptionHandling() // 예외 처리 지정
                 //.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 //.accessDeniedHandler(new CustomAccessDeniedHandler())
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // 커스텀 필터 등록하며, 기존에 지정된 필터에 앞서 실행
+//                .and()
+//                .sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
+//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // 커스텀 필터 등록하며, 기존에 지정된 필터에 앞서 실행
         return http.build();
     }
 
