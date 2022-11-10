@@ -54,11 +54,7 @@ public class KakaoService {
         MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
         param.add("grant_type", "authorization_code");
         param.add("client_id", clientId);
-//        param.add("redirect_uri", "http://localhost:3000/login");
-
-        // TODO : Redirect Url 파라미터로 받아서 적용
-        //        로컬, 개발, 운영 서버 테스트에서 계속 변경할 수 없음
-        param.add("redirect_uri", redirectUrl);
+        param.add("redirect_uri", redirectUrl); //로컬, 개발, 운영 서버 테스트에서 계속 변경할 수 있게 Redirect Url 파라미터로 받아서 적용
         param.add("code", code);
         param.add("client_secret", client_secret);
 
@@ -94,12 +90,13 @@ public class KakaoService {
                     res.append(line);
                 }
 
-                System.out.println("res = " + res);
 
                 JSONParser parser = new JSONParser();
                 JSONObject obj = (JSONObject) parser.parse(res.toString());
 
+
                 JSONObject properties = (JSONObject) obj.get("properties");
+
 
                 String id = obj.get("id").toString();
                 String nickname = properties.get("nickname").toString();
@@ -134,7 +131,6 @@ public class KakaoService {
             }
 
             int responseCode = urlConnection.getResponseCode();
-            System.out.println("responseCode = " + responseCode);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -145,8 +141,8 @@ public class KakaoService {
 
 
     public String KakaoLogin(String code, String redirectUrl) throws IOException, ParseException {
-        String accessToken = this.getKakaoToken(code, redirectUrl);// 인가 코드로 카카오 서버에 카카오 엑세스 토큰 요청
-        Map<String, String> userInfo = this.getKaKaoUserInfo(accessToken);  //카카오 서버에 카카오 엑세스 토큰으로 유저정보 요청
+        String KakaoaccessToken = this.getKakaoToken(code, redirectUrl);// 인가 코드로 카카오 서버에 카카오 엑세스 토큰 요청
+        Map<String, String> userInfo = this.getKaKaoUserInfo(KakaoaccessToken);  //카카오 서버에 카카오 엑세스 토큰으로 유저정보 요청
         System.out.println("userInfo = " + userInfo);
 //        if (IsUserEmpty(userInfo.get("id"))) { // 카카오 계정은 이매일이 카카오에서 주는 아이디값
 //            UserInfoDTO userInfoDTO = new UserInfoDTO();
@@ -156,7 +152,7 @@ public class KakaoService {
 //            saveUser(userInfoDTO);
 //        }
 //        return this.jwtTokenProvider.makeJwtToken(userInfo.get("id"),30); // 카카오 계정은 이매일이 카카오에서 주는 아이디값이라 아이디 값으로 대체
-        return accessToken;
+        return KakaoaccessToken;
     }
 
 
