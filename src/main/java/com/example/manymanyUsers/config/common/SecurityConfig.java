@@ -25,7 +25,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer()  throws Exception {
         // swagger-ui.html의 경우 인증된 사용자가 아니어도 접근가능하도록 설정(dev환경에 대해서만 swagger 설정을 하였기 때문에 인증된 사용자가 아니어도 됨)
-        return (web) -> web.ignoring().antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**");
+        return (web) -> web.ignoring().antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**","v1-definition");
     }
 
     @Bean
@@ -35,7 +35,7 @@ public class SecurityConfig {
                 .httpBasic().disable()//기본 로그인 페이지 사용x , rest API 만들기 위해 필요
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll() // preflight 대응
-                .antMatchers("/auth/**").permitAll() // /auth/**에 대한 접근을 인증 절차 없이 허용(로그인 관련 url)
+                .antMatchers("/api/**").permitAll() // /api/**에 대한 접근을 인증 절차 없이 허용(로그인 관련 url)
                 // 특정 권한을 가진 사용자만 접근을 허용해야 할 경우, 하기 항목을 통해 가능
                 //.antMatchers("/admin/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated() // 위에서 따로 지정한 접근허용 리소스 설정 후 그 외 나머지 리소스들은 무조건 인증을 완료해야 접근 가능
