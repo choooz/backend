@@ -11,6 +11,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -35,8 +36,9 @@ public class KakaoService {
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String clientId;
 
-    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
-    private String redirect_uri;
+
+    @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
+    private String client_secret;
 
 
     public String getKakaoToken(String code, String redirectUrl) throws ParseException {
@@ -44,6 +46,7 @@ public class KakaoService {
         String host = "https://kauth.kakao.com/oauth/token";
 
         RestTemplate rt = new RestTemplate();
+        rt.setRequestFactory(new HttpComponentsClientHttpRequestFactory()); // restTemplate 에러 메세지 확인 설정
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/x-www-form-urlencoded");
@@ -57,6 +60,7 @@ public class KakaoService {
         //        로컬, 개발, 운영 서버 테스트에서 계속 변경할 수 없음
         param.add("redirect_uri", redirectUrl);
         param.add("code", code);
+        param.add("client_secret", client_secret);
 
         HttpEntity<MultiValueMap<String, String>> req = new HttpEntity<>(param, headers);
         ResponseEntity<String> res = rt.exchange(host,
