@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.stereotype.Component;
 
+import java.security.Key;
+
 @RequiredArgsConstructor
 @Getter
 @ConstructorBinding
@@ -15,7 +17,7 @@ public class JwtProperties {
     private String issuer;
 
     @Value("${secretKey}")
-    private String secretKey;
+    private Key secretKey;
 
     @Value("${tokenPrefix}")
     private String tokenPrefix;
