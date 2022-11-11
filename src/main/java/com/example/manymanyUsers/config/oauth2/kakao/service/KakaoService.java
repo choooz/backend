@@ -144,14 +144,10 @@ public class KakaoService {
         String KakaoaccessToken = this.getKakaoToken(code, redirectUrl);// 인가 코드로 카카오 서버에 카카오 엑세스 토큰 요청
         Map<String, String> userInfo = this.getKaKaoUserInfo(KakaoaccessToken);  //카카오 서버에 카카오 엑세스 토큰으로 유저정보 요청
         System.out.println("userInfo = " + userInfo);
-//        if (IsUserEmpty(userInfo.get("id"))) { // 카카오 계정은 이매일이 카카오에서 주는 아이디값
-//            UserInfoDTO userInfoDTO = new UserInfoDTO();
-//            userInfoDTO.setEmail(userInfo.get("id"));
-//            userInfoDTO.setNickname(userInfo.get("nickname"));
-//            userInfoDTO.setImgUrl(userInfo.get("profile_image"));
-//            saveUser(userInfoDTO);
-//        }
-//        return this.jwtTokenProvider.makeJwtToken(userInfo.get("id"),30); // 카카오 계정은 이매일이 카카오에서 주는 아이디값이라 아이디 값으로 대체
+        if (IsUserEmpty(userInfo.get("id"))) { // 카카오 계정은 이매일이 카카오에서 주는 아이디값
+
+        }
+        return this.jwtTokenProvider.makeJwtToken(userInfo.get("id"),30); // 카카오 계정은 이매일이 카카오에서 주는 아이디값이라 아이디 값으로 대체
         return KakaoaccessToken;
     }
 
