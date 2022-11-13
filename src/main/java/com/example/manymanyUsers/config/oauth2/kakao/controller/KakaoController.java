@@ -23,12 +23,12 @@ public class KakaoController {
     /**
      * 카카오 서버에서 유저정보 조희
      * @param getkakaoToken
-     * @return
+     * @return                엑세스 토큰
      * @throws IOException
      * @throws ParseException
      */
     @PostMapping("/kakao")
-    public ResponseEntity<String> getToken(@Valid @RequestBody GetkakaoToken getkakaoToken) throws IOException, ParseException {
+    public ResponseEntity<String> getKaKaoToken(@Valid @RequestBody GetkakaoToken getkakaoToken) throws IOException, ParseException {
         String code = getkakaoToken.getCode();
         String redirectUrl = getkakaoToken.getRedirectUrl();
         String accessToken = kakaoService.KakaoLogin(code, redirectUrl);

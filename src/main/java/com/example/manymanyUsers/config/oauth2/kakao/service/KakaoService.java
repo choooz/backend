@@ -45,6 +45,7 @@ public class KakaoService {
         // 인가코드로 토큰받기
         String host = "https://kauth.kakao.com/oauth/token";
 
+        // https://withseungryu.tistory.com/116 : RestTemplate 참고할 블로그
         RestTemplate rt = new RestTemplate();
         rt.setRequestFactory(new HttpComponentsClientHttpRequestFactory()); // restTemplate 에러 메세지 확인 설정
 
@@ -89,7 +90,6 @@ public class KakaoService {
                 {
                     res.append(line);
                 }
-
 
                 JSONParser parser = new JSONParser();
                 JSONObject obj = (JSONObject) parser.parse(res.toString());
@@ -148,7 +148,6 @@ public class KakaoService {
 
         }
         return this.jwtTokenProvider.makeJwtToken(userInfo.get("id"),30); // 카카오 계정은 이매일이 카카오에서 주는 아이디값이라 아이디 값으로 대체
-        return KakaoaccessToken;
     }
 
 
@@ -158,13 +157,9 @@ public class KakaoService {
 //    }
 
 
-//    public boolean IsUserEmpty(String email) {
-//        User user = userMapper.selectUserInfo(email);
-//        if (user == null) {
-//            return true;
-//        }
-//        return false;
-//    }
+    public boolean IsUserEmpty(String email) {
+        return !userRepository.existsByEmail(email);
+    }
 
 }
 

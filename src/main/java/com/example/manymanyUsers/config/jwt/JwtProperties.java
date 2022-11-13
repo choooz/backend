@@ -17,7 +17,7 @@ public class JwtProperties {
     private String issuer;
 
     @Value("${secretKey}")
-    private Key secretKey;
+    private String secretKey;
 
     @Value("${tokenPrefix}")
     private String tokenPrefix;
