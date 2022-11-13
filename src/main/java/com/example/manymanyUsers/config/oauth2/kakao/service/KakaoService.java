@@ -1,6 +1,7 @@
 package com.example.manymanyUsers.config.oauth2.kakao.service;
 
 import com.example.manymanyUsers.config.jwt.JwtTokenProvider;
+import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
@@ -31,7 +32,7 @@ public class KakaoService {
 
     private final UserRepository userRepository;
 
-//    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String clientId;
@@ -145,16 +146,13 @@ public class KakaoService {
         Map<String, String> userInfo = this.getKaKaoUserInfo(KakaoaccessToken);  //카카오 서버에 카카오 엑세스 토큰으로 유저정보 요청
         System.out.println("userInfo = " + userInfo);
         if (IsUserEmpty(userInfo.get("id"))) { // 카카오 계정은 이매일이 카카오에서 주는 아이디값
-
+            User user = new User();
+            user.setEmail(userInfo.get("id"));
         }
         return this.jwtTokenProvider.makeJwtToken(userInfo.get("id"),30); // 카카오 계정은 이매일이 카카오에서 주는 아이디값이라 아이디 값으로 대체
     }
 
 
-//    public void saveUser(UserInfoDTO userInfo) {
-//        User user = new User(userInfo);
-//        userMapper.insertUserInfo(user);
-//    }
 
 
     public boolean IsUserEmpty(String email) {
