@@ -31,14 +31,17 @@ public class User extends BaseTimeEntity {
     @Setter
     private Role role;
 
+
+
     @Builder(builderClassName = "OAuth2Register", builderMethodName = "oauth2Register")
-    public User(String username, String password, String email, Role role, String provider, String providerId) {
+    public User(String username, String password, String email, Role role, String provider, String providerId, String imageUrl) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.role = role;
         this.provider = provider;
         this.providerId = providerId;
+        this.imageUrl = imageUrl;
     }
 
 }

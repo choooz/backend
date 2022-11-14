@@ -1,4 +1,4 @@
-package com.example.manymanyUsers.config;
+package com.example.manymanyUsers.config.common;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
