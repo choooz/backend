@@ -27,7 +27,7 @@ public class JwtTokenProvider {
                 .setExpiration(new Date(now.getTime() + Duration.ofMinutes(minutes).toMillis()))
                 .claim("email",email)
 //                .signWith(jwtProperties.getSecretKey(),SignatureAlgorithm.ES512)
-                .signWith(SignatureAlgorithm.ES512, jwtProperties.getSecretKey())
+                .signWith(SignatureAlgorithm.HS512, jwtProperties.getSecretKey())
                 .compact();
     }
 }

@@ -148,6 +148,7 @@ public class KakaoService {
         if (IsUserEmpty(userInfo.get("id"))) { // 카카오 계정은 이매일이 카카오에서 주는 아이디값
             User user = new User();
             user.setEmail(userInfo.get("id"));
+            userRepository.save(user);
         }
         return this.jwtTokenProvider.makeJwtToken(userInfo.get("id"),30); // 카카오 계정은 이매일이 카카오에서 주는 아이디값이라 아이디 값으로 대체
     }
