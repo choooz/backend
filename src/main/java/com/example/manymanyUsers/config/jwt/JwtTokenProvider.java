@@ -1,5 +1,6 @@
 package com.example.manymanyUsers.config.jwt;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.Date;
+import java.util.HashMap;
 
 @RequiredArgsConstructor
 @Component
@@ -17,6 +19,12 @@ public class JwtTokenProvider {
 
     private final JwtProperties jwtProperties;
 
+    /**
+     * JwtToken 생성 메서드
+     * @param email     : 유저 이메일
+     * @param minutes   : jwt 유효시간
+     * @return          : jwt 토큰
+     */
     public String makeJwtToken(String email, int minutes) {
         Date now = new Date();
 
@@ -26,8 +34,37 @@ public class JwtTokenProvider {
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + Duration.ofMinutes(minutes).toMillis()))
                 .claim("email",email)
-//                .signWith(jwtProperties.getSecretKey(),SignatureAlgorithm.ES512)
                 .signWith(SignatureAlgorithm.HS512, jwtProperties.getSecretKey())
                 .compact();
     }
+
+
+    public HashMap<String, Object> parseJwtToken(String authorizationHeader) {
+        validationAuthorizationHeader(authorizationHeader);
+        String token = extractToken(authorizationHeader);
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+
+        hashMap.put("token", token);
+        //토큰 검증
+        Claims claims = (Claims) validateToken(token);
+
+        hashMap.put("claims", claims);
+
+        return hashMap;
+    }
+
+
+    /**
+     * 토큰 헤더 검증 메서드 : 헤더가 없거나, Bearer 로 시작하지않으면 에러처리
+     * @param header
+     */
+    private void validationAuthorizationHeader(String header) {
+        log.info("*******header : {}", header);
+        if (header == null || !header.startsWith("Bearer ")) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+
 }
