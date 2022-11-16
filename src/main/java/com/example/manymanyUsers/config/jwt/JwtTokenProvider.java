@@ -66,5 +66,14 @@ public class JwtTokenProvider {
         }
     }
 
+    /**
+     * 토큰 추출 메서드 : 헤더에서 토큰값만 추출해줌
+     * @param authorizationHeader   : 헤더
+     * @return                      : 추출된 토큰 값
+     */
+    private String extractToken(String authorizationHeader) {
+        return authorizationHeader.substring("Bearer ".length());
+    }
+
 
 }
