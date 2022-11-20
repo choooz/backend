@@ -1,9 +1,6 @@
 package com.example.manymanyUsers.config.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Header;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -73,6 +70,20 @@ public class JwtTokenProvider {
      */
     private String extractToken(String authorizationHeader) {
         return authorizationHeader.substring("Bearer ".length());
+    }
+
+    /**
+     * 토큰 검증 메서드
+     * @param token                 :
+     * @return                      : 토큰안에 들어있는 유저 이메일 값(user Email)
+     * @throws ExpiredJwtException
+     */
+    public Object validateToken(String token) throws ExpiredJwtException {
+
+        return Jwts.parser()
+                .setSigningKey(jwtProperties.getSecretKey())
+                .parseClaimsJws(token)
+                .getBody();
     }
 
 

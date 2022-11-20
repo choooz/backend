@@ -1,5 +1,8 @@
 package com.example.manymanyUsers.config.common;
 
+import com.example.manymanyUsers.config.jwt.JwtProperties;
+import com.example.manymanyUsers.config.jwt.JwtTokenProvider;
+import com.example.manymanyUsers.config.jwt.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
@@ -8,10 +11,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -20,14 +21,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig {
+public class SecurityConfig{
+
+    private JwtAuthenticationFilter jwtAuthenticationFilter =  new JwtAuthenticationFilter(new JwtTokenProvider(new JwtProperties()));
 
     private static final String[] PERMIT_URL_ARRAY = {
             "/api/**",
             "/swagger-ui.html",
             "/swagger-ui/**"
     };
-
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -38,6 +40,7 @@ public class SecurityConfig {
     @Bean
     @Order(SecurityProperties.BASIC_AUTH_ORDER)
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
                 .httpBasic().disable()//기본 로그인 페이지 사용x , rest API 만들기 위해 필요
                 .authorizeRequests()
@@ -48,20 +51,24 @@ public class SecurityConfig {
                 .anyRequest().authenticated() // 위에서 따로 지정한 접근허용 리소스 설정 후 그 외 나머지 리소스들은 무조건 인증을 완료해야 접근 가능
                 .and()
                 .headers() // 아래에 X-Frame-Option 헤더 설정을 위해 headers() 작성
-                .frameOptions().sameOrigin() // 동일 도메인에서는 iframe 접근 가능하도록 X-Frame-Options을 smaeOrigin()으로 설정
+                .frameOptions().sameOrigin() // 동일 도메인에서는 iframe 접근 가능하도록 X-Frame-Options을 sameOrigin()으로 설정
                 .and()
                 .cors()
                 .and()
-                .csrf().disable();
+                .csrf().disable()
+                //UsernamePasswordAuthenticationFilter 앞단에 jwtAuthenticationFilter 설정
+                .addFilterBefore(jwtAuthenticationFilter,UsernamePasswordAuthenticationFilter.class);
+                //.addFilterBefore()
                 // 예외 처리를 하고 싶다면 아래와 같이 작성 가능합니다.
                 //.exceptionHandling() // 예외 처리 지정
                 //.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 //.accessDeniedHandler(new CustomAccessDeniedHandler())
-//                .and()
-//                .sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // 커스텀 필터 등록하며, 기존에 지정된 필터에 앞서 실행
+                //.and()
+                //.sessionManagement()
+                //.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                //.and()
+                //.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // 커스텀 필터 등록하며, 기존에 지정된 필터에 앞서 실행
+        //매 요청마다 CorsFilter 실행한 후에 jwtAuthenticationFilter 를 실행한다.
         return http.build();
     }
 
