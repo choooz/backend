@@ -55,9 +55,9 @@ public class SecurityConfig{
                 .and()
                 .cors()
                 .and()
-                .csrf().disable()
+                .csrf().disable();
                 //UsernamePasswordAuthenticationFilter 앞단에 jwtAuthenticationFilter 설정
-                .addFilterBefore(jwtAuthenticationFilter,UsernamePasswordAuthenticationFilter.class);
+                //.addFilterBefore(jwtAuthenticationFilter,UsernamePasswordAuthenticationFilter.class);
                 //.addFilterBefore()
                 // 예외 처리를 하고 싶다면 아래와 같이 작성 가능합니다.
                 //.exceptionHandling() // 예외 처리 지정

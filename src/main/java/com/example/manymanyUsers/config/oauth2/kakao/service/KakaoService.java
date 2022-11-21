@@ -41,7 +41,7 @@ public class KakaoService {
     @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
     private String client_secret;
 
-
+    // 카카오 서버에 api 요청을 때려야함 -> 웹 통신을 위한 라이브러리를 사용해야함 (프론트는 axios 우리는 RestTemplate)
     public String getKakaoToken(String code, String redirectUrl) throws ParseException {
         // 인가코드로 토큰받기
         String host = "https://kauth.kakao.com/oauth/token";
