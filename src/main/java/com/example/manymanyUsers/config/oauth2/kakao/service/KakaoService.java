@@ -143,6 +143,7 @@ public class KakaoService {
 
     public String KakaoLogin(String code, String redirectUrl) throws IOException, ParseException {
         String KakaoaccessToken = this.getKakaoToken(code, redirectUrl);// 인가 코드로 카카오 서버에 카카오 엑세스 토큰 요청
+        System.out.println("KakaoaccessToken = " + KakaoaccessToken);
         Map<String, String> userInfo = this.getKaKaoUserInfo(KakaoaccessToken);  //카카오 서버에 카카오 엑세스 토큰으로 유저정보 요청
         System.out.println("userInfo = " + userInfo);
         if (IsUserEmpty(userInfo.get("id"))) { // 카카오 계정은 이매일이 카카오에서 주는 아이디값

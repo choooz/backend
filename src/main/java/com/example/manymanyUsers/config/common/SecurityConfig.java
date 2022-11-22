@@ -28,7 +28,7 @@ public class SecurityConfig{
     private static final String[] PERMIT_URL_ARRAY = {
             "/api/**",
             "/swagger-ui.html",
-            "/swagger-ui/**"
+            "/swagger-ui/**",
     };
 
     @Bean
