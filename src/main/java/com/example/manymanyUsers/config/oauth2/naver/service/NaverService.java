@@ -42,7 +42,7 @@ public class NaverService {
     private String client_secret;
 
 
-    public String getNaverToken(String code, String redirectUrl) throws ParseException {
+    public String getNaverToken(String code, String state) throws ParseException {
         // 인가코드로 토큰받기
         String host = "https://nid.naver.com/oauth2.0/token";
 
@@ -55,9 +55,9 @@ public class NaverService {
         MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
         param.add("grant_type", "authorization_code");
         param.add("client_id", clientId);
-        param.add("redirect_uri", redirectUrl); //로컬, 개발, 운영 서버 테스트에서 계속 변경할 수 있게 Redirect Url 파라미터로 받아서 적용
-        param.add("code", code);
         param.add("client_secret", client_secret);
+        param.add("code", code);
+        param.add("state", state);
 
         HttpEntity<MultiValueMap<String, String>> req = new HttpEntity<>(param, headers);
         ResponseEntity<String> res = rt.exchange(host,
@@ -68,19 +68,22 @@ public class NaverService {
         JSONParser jsonParser = new JSONParser();
         JSONObject parse = (JSONObject) jsonParser.parse(res.getBody());
 
-        return (String) parse.get("access_token");
+        String access_token = (String) parse.get("access_token");
+        System.out.println(access_token);
+        return access_token;
+
     }
 
 
     public Map<String, String> getNaverUserInfo(String access_token) {
         String host = "https://openapi.naver.com/v1/nid/me";
         Map<String, String> result = new HashMap<>(); //key, value json 형식으로 데이터 내보내기 위해 hashMap 사용
-
         try {
             URL url = new URL(host);
 
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestProperty("Authorization", "Bearer " + access_token);
+            //request header 부분
+            urlConnection.setRequestProperty("Authorization", "Bearer " +access_token);
             urlConnection.setRequestMethod("GET");
 
             try (BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))){
@@ -90,19 +93,20 @@ public class NaverService {
                 {
                     res.append(line);
                 }
+                // int responseCode = urlConnection.getResponseCode();
+                // System.out.println(responseCode);
 
                 JSONParser parser = new JSONParser();
                 JSONObject obj = (JSONObject) parser.parse(res.toString());
 
+                System.out.println(obj);
+                JSONObject response = (JSONObject) obj.get("response");
 
-                JSONObject properties = (JSONObject) obj.get("properties");
+                String email = response.get("email").toString();
+                String nickname = response.get("nickname").toString();
+                String profile_image = response.get("profile_image").toString();
 
-
-                String id = obj.get("id").toString();
-                String nickname = properties.get("nickname").toString();
-                String profile_image = properties.get("profile_image").toString();
-
-                result.put("id", id);
+                result.put("email", email);
                 result.put("nickname", nickname);
                 result.put("profile_image", profile_image);
             }
@@ -110,8 +114,8 @@ public class NaverService {
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
-
         return result;
+
     }
 
     public String getAgreementInfo(String access_token) throws IOException {
@@ -140,16 +144,16 @@ public class NaverService {
     }
 
 
-    public String NaverLogin(String code, String redirectUrl) throws IOException, ParseException {
-        String NaveraccessToken = this.getNaverToken(code, redirectUrl);// 인가 코드로 카카오 서버에 카카오 엑세스 토큰 요청
+    public String NaverLogin(String code, String state) throws IOException, ParseException {
+        String NaveraccessToken = this.getNaverToken(code, state);// 인가 코드로 카카오 서버에 카카오 엑세스 토큰 요청
         Map<String, String> userInfo = this.getNaverUserInfo(NaveraccessToken);  //카카오 서버에 카카오 엑세스 토큰으로 유저정보 요청
         System.out.println("userInfo = " + userInfo);
-        if (IsUserEmpty(userInfo.get("id"))) { // 카카오 계정은 이매일이 카카오에서 주는 아이디값
+        if (IsUserEmpty(userInfo.get("email"))) { // 카카오 계정은 이매일이 카카오에서 주는 아이디값
             User user = new User();
-            user.setEmail(userInfo.get("id"));
+            user.setEmail(userInfo.get("email"));
             userRepository.save(user);
         }
-        return this.jwtTokenProvider.makeJwtToken(userInfo.get("id"),30); // 카카오 계정은 이매일이 카카오에서 주는 아이디값이라 아이디 값으로 대체
+        return this.jwtTokenProvider.makeJwtToken(userInfo.get("email"),30); // 카카오 계정은 이매일이 카카오에서 주는 아이디값이라 아이디 값으로 대체
     }
 
 
