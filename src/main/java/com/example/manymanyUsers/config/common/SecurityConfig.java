@@ -56,19 +56,7 @@ public class SecurityConfig{
                 .cors()
                 .and()
                 .csrf().disable();
-                //UsernamePasswordAuthenticationFilter 앞단에 jwtAuthenticationFilter 설정
-//                .addFilterBefore(jwtAuthenticationFilter,UsernamePasswordAuthenticationFilter.class);
-                //.addFilterBefore()
-                // 예외 처리를 하고 싶다면 아래와 같이 작성 가능합니다.
-                //.exceptionHandling() // 예외 처리 지정
-                //.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                //.accessDeniedHandler(new CustomAccessDeniedHandler())
-                //.and()
-                //.sessionManagement()
-                //.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                //.and()
-                //.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // 커스텀 필터 등록하며, 기존에 지정된 필터에 앞서 실행
-        //매 요청마다 CorsFilter 실행한 후에 jwtAuthenticationFilter 를 실행한다.
+
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .antMatcher("/api/userInfo");
 

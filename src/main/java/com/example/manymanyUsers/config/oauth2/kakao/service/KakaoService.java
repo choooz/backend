@@ -1,6 +1,7 @@
 package com.example.manymanyUsers.config.oauth2.kakao.service;
 
 import com.example.manymanyUsers.config.jwt.JwtTokenProvider;
+import com.example.manymanyUsers.user.domain.Providers;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -148,7 +149,8 @@ public class KakaoService {
         System.out.println("userInfo = " + userInfo);
         if (IsUserEmpty(userInfo.get("id"))) { // 카카오 계정은 이매일이 카카오에서 주는 아이디값
             User user = new User();
-            user.setEmail(userInfo.get("id"));
+            user.setProviderId(userInfo.get("id"));
+            user.setProvider(Providers.KAKAO);
             userRepository.save(user);
         }
         return this.jwtTokenProvider.makeJwtToken(userInfo.get("id"),30); // 카카오 계정은 이매일이 카카오에서 주는 아이디값이라 아이디 값으로 대체
