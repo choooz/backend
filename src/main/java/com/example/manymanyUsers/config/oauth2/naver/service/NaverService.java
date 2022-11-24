@@ -99,7 +99,7 @@ public class NaverService {
                 JSONParser parser = new JSONParser();
                 JSONObject obj = (JSONObject) parser.parse(res.toString());
 
-                System.out.println(obj);
+                System.out.println(obj);   // response 부분이 따로 { } 로 되어 있음
                 JSONObject response = (JSONObject) obj.get("response");
 
                 String email = response.get("email").toString();
