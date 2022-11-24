@@ -13,12 +13,10 @@ import java.security.Key;
 @ConstructorBinding
 @Component
 public class JwtProperties {
-    @Value("${issuer}")
-    private String issuer;
 
-    @Value("${secretKey}")
-    private String secretKey;
+    private final String issuer = "manyUser";
 
-    @Value("${tokenPrefix}")
-    private String tokenPrefix;
+    private final String secretKey = "secretManyUser";
+
+    private final String tokenPrefix = "Bearer";
 }

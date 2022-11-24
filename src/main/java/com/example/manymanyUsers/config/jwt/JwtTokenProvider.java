@@ -1,5 +1,6 @@
 package com.example.manymanyUsers.config.jwt;
 
+
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,11 +19,11 @@ public class JwtTokenProvider {
 
     /**
      * JwtToken 생성 메서드
-     * @param email     : 유저 이메일
-     * @param minutes   : jwt 유효시간
-     * @return          : jwt 토큰
+     * @param providerId     : 유저 Oauth 아이디
+     * @param minutes        : jwt 유효시간
+     * @return               : jwt 토큰
      */
-    public String makeJwtToken(String email, int minutes) {
+    public String makeJwtToken(String providerId, int minutes) {
         Date now = new Date();
 
         return Jwts.builder()
@@ -30,7 +31,7 @@ public class JwtTokenProvider {
                 .setIssuer(jwtProperties.getIssuer())
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + Duration.ofMinutes(minutes).toMillis()))
-                .claim("email",email)
+                .claim("providerId",providerId)
                 .signWith(SignatureAlgorithm.HS512, jwtProperties.getSecretKey())
                 .compact();
     }
@@ -40,6 +41,7 @@ public class JwtTokenProvider {
         validationAuthorizationHeader(authorizationHeader);
         String token = extractToken(authorizationHeader);
 
+        log.info("*******Accesstoken : {}",token);
         HashMap<String, Object> hashMap = new HashMap<>();
 
         hashMap.put("token", token);

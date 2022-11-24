@@ -23,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig{
 
-    private JwtAuthenticationFilter jwtAuthenticationFilter =  new JwtAuthenticationFilter(new JwtTokenProvider(new JwtProperties()));
+    private JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(new JwtTokenProvider(new JwtProperties()));
 
     private static final String[] PERMIT_URL_ARRAY = {
             "/api/**",
@@ -58,7 +58,7 @@ public class SecurityConfig{
                 .csrf().disable();
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .antMatcher("/api/userInfo");
+                .antMatcher("/api/oauth/kakaoLogin");
 
         return http.build();
     }

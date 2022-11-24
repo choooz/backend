@@ -17,7 +17,7 @@ public class User extends BaseTimeEntity {
     @Column
     private String username;
 
-    @Column(nullable = false)
+    @Column
     private String email;
 
     private String imageUrl;
