@@ -69,7 +69,7 @@ public class NaverService {
         JSONObject parse = (JSONObject) jsonParser.parse(res.getBody());
 
         String access_token = (String) parse.get("access_token");
-        System.out.println(access_token);
+        //System.out.println(access_token);
         return access_token;
 
     }
@@ -145,15 +145,15 @@ public class NaverService {
 
 
     public String NaverLogin(String code, String state) throws IOException, ParseException {
-        String NaveraccessToken = this.getNaverToken(code, state);// 인가 코드로 카카오 서버에 카카오 엑세스 토큰 요청
-        Map<String, String> userInfo = this.getNaverUserInfo(NaveraccessToken);  //카카오 서버에 카카오 엑세스 토큰으로 유저정보 요청
+        String NaveraccessToken = this.getNaverToken(code, state);// 인가 코드로 네이버 서버에 카카오 엑세스 토큰 요청
+        Map<String, String> userInfo = this.getNaverUserInfo(NaveraccessToken);  //네이버 서버에 네이버 엑세스 토큰으로 유저정보 요청
         System.out.println("userInfo = " + userInfo);
-        if (IsUserEmpty(userInfo.get("email"))) { // 카카오 계정은 이매일이 카카오에서 주는 아이디값
+        if (IsUserEmpty(userInfo.get("email"))) { //네이버에서는 이메일을 바로 가져올 수 있기때문에 필요 없는 부분
             User user = new User();
             user.setEmail(userInfo.get("email"));
             userRepository.save(user);
         }
-        return this.jwtTokenProvider.makeJwtToken(userInfo.get("email"),30); // 카카오 계정은 이매일이 카카오에서 주는 아이디값이라 아이디 값으로 대체
+        return this.jwtTokenProvider.makeJwtToken(userInfo.get("email"),30); // 네이버 계정은 이매일이 네이버에서 주는 아이디값이라 아이디 값으로 대체
     }
 
 
