@@ -1,8 +1,12 @@
 package com.example.manymanyUsers.config.oauth2.kakao.controller;
 
+import com.example.manymanyUsers.config.oauth2.kakao.dto.GetUserInfo;
 import com.example.manymanyUsers.config.oauth2.kakao.dto.GetkakaoToken;
 import com.example.manymanyUsers.config.oauth2.kakao.service.KakaoService;
+import com.example.manymanyUsers.user.domain.User;
+import com.example.manymanyUsers.user.domain.UserRepository;
 import com.example.manymanyUsers.user.service.UserService;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,12 +23,13 @@ import java.io.IOException;
 public class KakaoController {
 
     private final KakaoService kakaoService;
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     /**
      * 카카오 서버에서 유저정보 조희
+     *
      * @param getkakaoToken
-     * @return                엑세스 토큰
+     * @return 엑세스 토큰
      * @throws IOException
      * @throws ParseException
      */
@@ -35,15 +41,20 @@ public class KakaoController {
         return ResponseEntity.ok(accessToken);
     }
 
-//    @GetMapping("/login")
-//    public UserInfoDTO login(@RequestAttribute Claims claims){
-//        String email = (String) claims.get("email");
-//        User user = userService.getUserInfo(email);
-//        UserInfoDTO result = new UserInfoDTO();
-//        result.setImgUrl(user.getImgUrl());
-//        result.setEmail(user.getEmail());
-//        result.setNickname(user.getNickname());
-//        return result;
-//    }
 
+    @GetMapping("/kakaoLogin")
+    public ResponseEntity<GetUserInfo> getUserInfo(@RequestAttribute Claims claims) {
+        //엑세스 토큰안의 유저 이메일로 유저를 찾은 다음 유저정보 리턴해줌
+        String providerId = (String) claims.get("providerId");
+        //provderId로 유저 꺼내기
+        Optional<User> result = userRepository.findByProviderId(providerId);
+        User user = result.get();
+        GetUserInfo getUserInfo = GetUserInfo.builder()
+                                    .username(user.getUsername())
+                                    .email(user.getEmail())
+                                    .imageUrl(user.getImageUrl())
+                                    .provider(user.getProvider())
+                                    .providerId(user.getProviderId()).build();
+        return ResponseEntity.ok(getUserInfo);
+    }
 }

@@ -17,14 +17,15 @@ public class User extends BaseTimeEntity {
     @Column
     private String username;
 
-    @Column(nullable = false)
+    @Column
     private String email;
 
     private String imageUrl;
 
     private String password;
 
-    private String provider;    // oauth2를 이용할 경우 어떤 플랫폼을 이용하는지
+    @Enumerated(EnumType.STRING)
+    private Providers provider;    // oauth2를 이용할 경우 어떤 플랫폼을 이용하는지
     private String providerId;  // oauth2를 이용할 경우 아이디값
 
     @Enumerated(EnumType.STRING)
@@ -34,7 +35,7 @@ public class User extends BaseTimeEntity {
 
 
     @Builder(builderClassName = "OAuth2Register", builderMethodName = "oauth2Register")
-    public User(String username, String password, String email, Role role, String provider, String providerId, String imageUrl) {
+    public User(String username, String password, String email, Role role, Providers provider, String providerId, String imageUrl) {
         this.username = username;
         this.password = password;
         this.email = email;
