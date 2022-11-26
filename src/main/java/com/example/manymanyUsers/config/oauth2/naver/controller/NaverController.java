@@ -1,7 +1,7 @@
 package com.example.manymanyUsers.config.oauth2.naver.controller;
 
 
-import com.example.manymanyUsers.config.oauth2.naver.dto.GetUserInfo;
+import com.example.manymanyUsers.config.oauth2.kakao.dto.GetUserInfo;
 import com.example.manymanyUsers.config.oauth2.naver.dto.GetnaverToken;
 import com.example.manymanyUsers.config.oauth2.naver.service.NaverService;
 import com.example.manymanyUsers.user.domain.User;
@@ -35,7 +35,7 @@ public class NaverController {
 
     @GetMapping("/naverLogin")
     public ResponseEntity<GetUserInfo> getUserInfo(@RequestAttribute Claims claims) {
-
+        //엑세스 토큰안의 유저 이메일로 유저를 찾은 다음 유저정보 리턴해줌
         String providerId = (String) claims.get("providerId");
         //provderId로 유저 꺼내기
         Optional<User> result = userRepository.findByProviderId(providerId);
