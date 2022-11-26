@@ -1,6 +1,7 @@
 package com.example.manymanyUsers.config.oauth2.naver.service;
 
 import com.example.manymanyUsers.config.jwt.JwtTokenProvider;
+import com.example.manymanyUsers.user.domain.Providers;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -102,11 +104,12 @@ public class NaverService {
                 System.out.println(obj);   // response 부분이 따로 { } 로 되어 있음
                 JSONObject response = (JSONObject) obj.get("response");
 
-                String email = response.get("email").toString();
+
+                String id = response.get("id").toString();
                 String nickname = response.get("nickname").toString();
                 String profile_image = response.get("profile_image").toString();
 
-                result.put("email", email);
+                result.put("id",id);
                 result.put("nickname", nickname);
                 result.put("profile_image", profile_image);
             }
@@ -118,49 +121,51 @@ public class NaverService {
 
     }
 
-    public String getAgreementInfo(String access_token) throws IOException {
-        StringBuilder result = new StringBuilder();
-        String host = "https://kapi.kakao.com/v2/user/scopes";
-
-        URL url = new URL(host);
-        HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
-        urlConnection.setRequestMethod("GET");
-        urlConnection.setRequestProperty("Authorization", "Bearer "+access_token);
-
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
-            String line;
-            while((line=br.readLine())!=null)
-            {
-                result.append(line);
-            }
-
-            int responseCode = urlConnection.getResponseCode();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return result.toString();
-    }
+//    public String getAgreementInfo(String access_token) throws IOException {
+//        StringBuilder result = new StringBuilder();
+//        String host = "https://kapi.kakao.com/v2/user/scopes";
+//
+//        URL url = new URL(host);
+//        HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
+//        urlConnection.setRequestMethod("GET");
+//        urlConnection.setRequestProperty("Authorization", "Bearer "+access_token);
+//
+//        try (BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
+//            String line;
+//            while((line=br.readLine())!=null)
+//            {
+//                result.append(line);
+//            }
+//
+//            int responseCode = urlConnection.getResponseCode();
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return result.toString();
+//    }
 
 
     public String NaverLogin(String code, String state) throws IOException, ParseException {
         String NaveraccessToken = this.getNaverToken(code, state);// 인가 코드로 네이버 서버에 카카오 엑세스 토큰 요청
+        System.out.println("------------------엑세스 토큰 값 ---------------------------");
+        System.out.println("NaveraccessToken = " + NaveraccessToken);
+        System.out.println("------------------엑세스 토큰 값 ---------------------------");
         Map<String, String> userInfo = this.getNaverUserInfo(NaveraccessToken);  //네이버 서버에 네이버 엑세스 토큰으로 유저정보 요청
         System.out.println("userInfo = " + userInfo);
-        if (IsUserEmpty(userInfo.get("email"))) { //네이버에서는 이메일을 바로 가져올 수 있기때문에 필요 없는 부분
+        if (getUserByEmail(userInfo.get("id")).isEmpty()) {
             User user = new User();
-            user.setEmail(userInfo.get("email"));
+            user.setProviderId(userInfo.get("id"));
+            user.setProvider(Providers.NAVER);
             userRepository.save(user);
         }
-        return this.jwtTokenProvider.makeJwtToken(userInfo.get("email"),30); // 네이버 계정은 이매일이 네이버에서 주는 아이디값이라 아이디 값으로 대체
+        return this.jwtTokenProvider.makeJwtToken(userInfo.get("id"),30);
     }
 
 
-
-
-    public boolean IsUserEmpty(String email) {
-        return !userRepository.existsByEmail(email);
+    public Optional<User> getUserByEmail(String providerId) {
+        return userRepository.findByProviderId(providerId);
     }
 
 }
