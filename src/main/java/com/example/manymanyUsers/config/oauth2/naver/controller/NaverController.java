@@ -33,8 +33,7 @@ public class NaverController {
     }
 
     @GetMapping("/naverLogin")
-    public ResponseEntity<GetUserInfo> getNaverUserInfo(@RequestAttribute Claims claims) {
-
+    public ResponseEntity<GetUserInfo> getUserInfo(@RequestAttribute Claims claims) {
         String providerId = (String) claims.get("providerId");
         //provderId로 유저 꺼내기
         Optional<User> result = userRepository.findByProviderId(providerId);
@@ -47,4 +46,5 @@ public class NaverController {
                 .providerId(user.getProviderId()).build();
         return ResponseEntity.ok(getUserInfo);
     }
+
 }
