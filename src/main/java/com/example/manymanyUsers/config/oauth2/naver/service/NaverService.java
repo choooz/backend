@@ -70,9 +70,7 @@ public class NaverService {
         JSONParser jsonParser = new JSONParser();
         JSONObject parse = (JSONObject) jsonParser.parse(res.getBody());
 
-        String access_token = (String) parse.get("access_token");
-        //System.out.println(access_token);
-        return access_token;
+        return (String) parse.get("access_token");
 
     }
 
