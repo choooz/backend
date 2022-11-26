@@ -2,10 +2,10 @@ package com.example.manymanyUsers.config.oauth2.kakao.controller;
 
 import com.example.manymanyUsers.config.oauth2.kakao.dto.GetUserInfo;
 import com.example.manymanyUsers.config.oauth2.kakao.dto.GetkakaoToken;
+import com.example.manymanyUsers.config.oauth2.kakao.dto.TokenResponse;
 import com.example.manymanyUsers.config.oauth2.kakao.service.KakaoService;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
-import com.example.manymanyUsers.user.service.UserService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
@@ -34,11 +34,16 @@ public class KakaoController {
      * @throws ParseException
      */
     @PostMapping("/kakao")
-    public ResponseEntity<String> getKaKaoToken(@Valid @RequestBody GetkakaoToken getkakaoToken) throws IOException, ParseException {
+    public ResponseEntity getKaKaoToken(@Valid @RequestBody GetkakaoToken getkakaoToken) throws IOException, ParseException {
         String code = getkakaoToken.getCode();
         String redirectUrl = getkakaoToken.getRedirectUrl();
         String accessToken = kakaoService.KakaoLogin(code, redirectUrl);
-        return ResponseEntity.ok(accessToken);
+//        return ResponseEntity.ok(accessToken);
+        TokenResponse tokenResponse = TokenResponse.builder()
+                .token(accessToken)
+                .message("엑세스 토큰")
+                .build();
+        return new ResponseEntity(tokenResponse, HttpStatus.OK);
     }
 
 
