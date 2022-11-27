@@ -1,4 +1,4 @@
-package com.example.manymanyUsers.config.oauth2.kakao.service;
+package com.example.manymanyUsers.config.oauth2.naver.service;
 
 import com.example.manymanyUsers.config.jwt.JwtTokenProvider;
 import com.example.manymanyUsers.user.domain.Providers;
@@ -30,25 +30,24 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class KakaoService {
+public class NaverService {
 
     private final UserRepository userRepository;
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+    @Value("${spring.security.oauth2.client.registration.naver.client-id}")
     private String clientId;
 
 
-    @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
+    @Value("${spring.security.oauth2.client.registration.naver.client-secret}")
     private String client_secret;
 
-    // 카카오 서버에 api 요청을 때려야함 -> 웹 통신을 위한 라이브러리를 사용해야함 (프론트는 axios 우리는 RestTemplate)
-    public String getKakaoToken(String code, String redirectUrl) throws ParseException {
-        // 인가코드로 토큰받기
-        String host = "https://kauth.kakao.com/oauth/token";
 
-        // https://withseungryu.tistory.com/116 : RestTemplate 참고할 블로그
+    public String getNaverToken(String code, String state) throws ParseException {
+        // 인가코드로 토큰받기
+        String host = "https://nid.naver.com/oauth2.0/token";
+
         RestTemplate rt = new RestTemplate();
         rt.setRequestFactory(new HttpComponentsClientHttpRequestFactory()); // restTemplate 에러 메세지 확인 설정
 
@@ -58,9 +57,9 @@ public class KakaoService {
         MultiValueMap<String, String> param = new LinkedMultiValueMap<>();
         param.add("grant_type", "authorization_code");
         param.add("client_id", clientId);
-        param.add("redirect_uri", redirectUrl); //로컬, 개발, 운영 서버 테스트에서 계속 변경할 수 있게 Redirect Url 파라미터로 받아서 적용
-        param.add("code", code);
         param.add("client_secret", client_secret);
+        param.add("code", code);
+        param.add("state", state);
 
         HttpEntity<MultiValueMap<String, String>> req = new HttpEntity<>(param, headers);
         ResponseEntity<String> res = rt.exchange(host,
@@ -72,18 +71,19 @@ public class KakaoService {
         JSONObject parse = (JSONObject) jsonParser.parse(res.getBody());
 
         return (String) parse.get("access_token");
+
     }
 
 
-    public Map<String, String> getKaKaoUserInfo(String access_token) {
-        String host = "https://kapi.kakao.com/v2/user/me";
+    public Map<String, String> getNaverUserInfo(String access_token) {
+        String host = "https://openapi.naver.com/v1/nid/me";
         Map<String, String> result = new HashMap<>(); //key, value json 형식으로 데이터 내보내기 위해 hashMap 사용
-
         try {
             URL url = new URL(host);
 
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestProperty("Authorization", "Bearer " + access_token);
+            //request header 부분
+            urlConnection.setRequestProperty("Authorization", "Bearer " +access_token);
             urlConnection.setRequestMethod("GET");
 
             try (BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))){
@@ -93,19 +93,21 @@ public class KakaoService {
                 {
                     res.append(line);
                 }
+                // int responseCode = urlConnection.getResponseCode();
+                // System.out.println(responseCode);
 
                 JSONParser parser = new JSONParser();
                 JSONObject obj = (JSONObject) parser.parse(res.toString());
 
+                System.out.println(obj);   // response 부분이 따로 { } 로 되어 있음
+                JSONObject response = (JSONObject) obj.get("response");
 
-                JSONObject properties = (JSONObject) obj.get("properties");
 
+                String id = response.get("id").toString();
+                String nickname = response.get("nickname").toString();
+                String profile_image = response.get("profile_image").toString();
 
-                String id = obj.get("id").toString();
-                String nickname = properties.get("nickname").toString();
-                String profile_image = properties.get("profile_image").toString();
-
-                result.put("id", id);
+                result.put("id",id);
                 result.put("nickname", nickname);
                 result.put("profile_image", profile_image);
             }
@@ -113,48 +115,50 @@ public class KakaoService {
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
-
         return result;
+
     }
 
-    public String getAgreementInfo(String access_token) throws IOException {
-        StringBuilder result = new StringBuilder();
-        String host = "https://kapi.kakao.com/v2/user/scopes";
+//    public String getAgreementInfo(String access_token) throws IOException {
+//        StringBuilder result = new StringBuilder();
+//        String host = "https://kapi.kakao.com/v2/user/scopes";
+//
+//        URL url = new URL(host);
+//        HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
+//        urlConnection.setRequestMethod("GET");
+//        urlConnection.setRequestProperty("Authorization", "Bearer "+access_token);
+//
+//        try (BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
+//            String line;
+//            while((line=br.readLine())!=null)
+//            {
+//                result.append(line);
+//            }
+//
+//            int responseCode = urlConnection.getResponseCode();
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return result.toString();
+//    }
 
-        URL url = new URL(host);
-        HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
-        urlConnection.setRequestMethod("GET");
-        urlConnection.setRequestProperty("Authorization", "Bearer "+access_token);
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
-            String line;
-            while((line=br.readLine())!=null)
-            {
-                result.append(line);
-            }
-
-            int responseCode = urlConnection.getResponseCode();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return result.toString();
-    }
-
-
-    public String KakaoLogin(String code, String redirectUrl) throws IOException, ParseException {
-        String KakaoaccessToken = this.getKakaoToken(code, redirectUrl);// 인가 코드로 카카오 서버에 카카오 엑세스 토큰 요청
-        System.out.println("KakaoaccessToken = " + KakaoaccessToken);
-        Map<String, String> userInfo = this.getKaKaoUserInfo(KakaoaccessToken);  //카카오 서버에 카카오 엑세스 토큰으로 유저정보 요청
+    public String NaverLogin(String code, String state) throws IOException, ParseException {
+        String NaveraccessToken = this.getNaverToken(code, state);// 인가 코드로 네이버 서버에 카카오 엑세스 토큰 요청
+        System.out.println("------------------엑세스 토큰 값 ---------------------------");
+        System.out.println("NaveraccessToken = " + NaveraccessToken);
+        System.out.println("------------------엑세스 토큰 값 ---------------------------");
+        Map<String, String> userInfo = this.getNaverUserInfo(NaveraccessToken);  //네이버 서버에 네이버 엑세스 토큰으로 유저정보 요청
         System.out.println("userInfo = " + userInfo);
-        if (getUserByEmail(userInfo.get("id")).isEmpty()) { // 카카오 계정은 이매일이 카카오에서 주는 아이디값
+        if (getUserByEmail(userInfo.get("id")).isEmpty()) {
             User user = new User();
             user.setProviderId(userInfo.get("id"));
-            user.setProvider(Providers.KAKAO);
+            user.setProvider(Providers.NAVER);
             userRepository.save(user);
         }
-        return this.jwtTokenProvider.makeJwtToken(userInfo.get("id"),30); // 카카오 계정은 이매일이 카카오에서 주는 아이디값이라 아이디 값으로 대체
+        return this.jwtTokenProvider.makeJwtToken(userInfo.get("id"),30);
     }
 
 
