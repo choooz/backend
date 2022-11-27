@@ -42,6 +42,7 @@ public class KakaoController {
         TokenResponse tokenResponse = TokenResponse.builder()
                 .token(accessToken)
                 .message("엑세스 토큰")
+                .statusCode("200")
                 .build();
         return new ResponseEntity(tokenResponse, HttpStatus.OK);
     }
