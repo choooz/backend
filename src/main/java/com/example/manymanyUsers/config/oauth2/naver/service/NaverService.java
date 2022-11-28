@@ -119,31 +119,6 @@ public class NaverService {
 
     }
 
-//    public String getAgreementInfo(String access_token) throws IOException {
-//        StringBuilder result = new StringBuilder();
-//        String host = "https://kapi.kakao.com/v2/user/scopes";
-//
-//        URL url = new URL(host);
-//        HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
-//        urlConnection.setRequestMethod("GET");
-//        urlConnection.setRequestProperty("Authorization", "Bearer "+access_token);
-//
-//        try (BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
-//            String line;
-//            while((line=br.readLine())!=null)
-//            {
-//                result.append(line);
-//            }
-//
-//            int responseCode = urlConnection.getResponseCode();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return result.toString();
-//    }
-
 
     public String NaverLogin(String code, String state) throws IOException, ParseException {
         String NaveraccessToken = this.getNaverToken(code, state);// 인가 코드로 네이버 서버에 카카오 엑세스 토큰 요청
