@@ -122,11 +122,7 @@ public class NaverService {
 
     public String NaverLogin(String code, String state) throws IOException, ParseException {
         String NaveraccessToken = this.getNaverToken(code, state);// 인가 코드로 네이버 서버에 카카오 엑세스 토큰 요청
-        System.out.println("------------------엑세스 토큰 값 ---------------------------");
-        System.out.println("NaveraccessToken = " + NaveraccessToken);
-        System.out.println("------------------엑세스 토큰 값 ---------------------------");
         Map<String, String> userInfo = this.getNaverUserInfo(NaveraccessToken);  //네이버 서버에 네이버 엑세스 토큰으로 유저정보 요청
-        System.out.println("userInfo = " + userInfo);
         if (getUserByEmail(userInfo.get("id")).isEmpty()) {
             User user = new User();
             user.setProviderId(userInfo.get("id"));
