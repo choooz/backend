@@ -12,13 +12,11 @@ import org.springframework.http.HttpStatus;
 public class TokenResponse {
     private String token;
     private String message;
-    private String statusCode;
 
     @Builder
-    public TokenResponse(String token, String message, String statusCode) {
+    public TokenResponse(String token, String message) {
         this.token = token;
         this.message = message;
-        this.statusCode = statusCode;
     }
 
 }

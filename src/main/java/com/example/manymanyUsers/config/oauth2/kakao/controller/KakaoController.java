@@ -38,11 +38,9 @@ public class KakaoController {
         String code = getkakaoToken.getCode();
         String redirectUrl = getkakaoToken.getRedirectUrl();
         String accessToken = kakaoService.KakaoLogin(code, redirectUrl);
-//        return ResponseEntity.ok(accessToken);
         TokenResponse tokenResponse = TokenResponse.builder()
                 .token(accessToken)
                 .message("엑세스 토큰")
-                .statusCode("200")
                 .build();
         return new ResponseEntity(tokenResponse, HttpStatus.OK);
     }
