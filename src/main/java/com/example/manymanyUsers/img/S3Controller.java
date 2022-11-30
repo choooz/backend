@@ -1,5 +1,6 @@
 package com.example.manymanyUsers.img;
 
+import com.example.manymanyUsers.img.dto.ImageUpload;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -25,13 +26,14 @@ public class S3Controller {
             @Parameter(name = "images", description = "이미지 파일", example = "image1.jpg")
     })
     @PostMapping("/upload")
-    public ResponseEntity<HttpStatus> updateUserImage(
+    public ResponseEntity updateUserImage(
             @RequestParam("images") MultipartFile multipartFile) {
         try {
-            s3Uploader.uploadFiles(multipartFile, "static");
+            String uploadedUrl = s3Uploader.uploadFiles(multipartFile, "static");
+            ImageUpload imageUpload = new ImageUpload(uploadedUrl, "이미지 업로드에 성공했습니다.");
+            return new ResponseEntity(imageUpload ,HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("잘못된 요청입니다.",HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity("이미지 업로드에 성공했습니다.", HttpStatus.OK);
     }
 }
