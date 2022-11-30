@@ -46,8 +46,8 @@ public class KakaoController {
     }
 
 
-    @GetMapping("/kakaoLogin")
-    public ResponseEntity<GetUserInfo> getUserInfo(@RequestAttribute Claims claims) {
+    @GetMapping("/Login")
+    public ResponseEntity getUserInfo(@RequestAttribute Claims claims) {
         //엑세스 토큰안의 유저 이메일로 유저를 찾은 다음 유저정보 리턴해줌
         String providerId = (String) claims.get("providerId");
         System.out.println("providerId = " + providerId);
@@ -59,7 +59,9 @@ public class KakaoController {
                                     .email(user.getEmail())
                                     .imageUrl(user.getImageUrl())
                                     .provider(user.getProvider())
-                                    .providerId(user.getProviderId()).build();
-        return ResponseEntity.ok(getUserInfo);
+                                    .providerId(user.getProviderId())
+                                    .message("유저 정보 요청에 성공했습니다.")
+                                    .build();
+        return new ResponseEntity(getUserInfo, HttpStatus.OK);
     }
 }

@@ -10,32 +10,43 @@ import java.io.Serializable;
 /**
  * 사용자 정보 조회 DTO
  */
-@ToString
-@Builder
+
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GetUserInfo implements Serializable {
 
     /**
      * 유저 종류 - KAKAO, NAVER, GOOGLE
      */
-    private final Providers provider;
+    private Providers provider;
 
 
     /**
      * Oauth 에서 제공하는 아이디
      */
-    private final String providerId;
+    private String providerId;
 
-    private final String username;
+    private String username;
 
-    private final String email;
+    private String email;
 
-    private final String imageUrl;
+    private String imageUrl;
 
-    private final String password;
+    private String password;
 
-    private final Role role;
+    private Role role;
 
+    private String message;
 
+    @Builder
+    public GetUserInfo(Providers provider, String providerId, String username, String email, String imageUrl, String password, Role role, String message) {
+        this.provider = provider;
+        this.providerId = providerId;
+        this.username = username;
+        this.email = email;
+        this.imageUrl = imageUrl;
+        this.password = password;
+        this.role = role;
+        this.message = message;
+    }
 }
