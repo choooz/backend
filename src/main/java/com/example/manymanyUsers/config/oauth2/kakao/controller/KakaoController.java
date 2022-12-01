@@ -46,7 +46,7 @@ public class KakaoController {
     }
 
 
-    @GetMapping("/Login")
+    @GetMapping("/login")
     public ResponseEntity getUserInfo(@RequestAttribute Claims claims) {
         //엑세스 토큰안의 유저 이메일로 유저를 찾은 다음 유저정보 리턴해줌
         String providerId = (String) claims.get("providerId");
