@@ -33,7 +33,6 @@ public class User extends BaseTimeEntity {
     private Role role;
 
 
-
     @Builder(builderClassName = "OAuth2Register", builderMethodName = "oauth2Register")
     public User(String username, String password, String email, Role role, Providers provider, String providerId, String imageUrl) {
         this.username = username;

@@ -33,6 +33,7 @@ public class S3Controller {
             ImageUpload imageUpload = new ImageUpload(uploadedUrl, "이미지 업로드에 성공했습니다.");
             return new ResponseEntity(imageUpload ,HttpStatus.OK);
         } catch (Exception e) {
+            System.out.println("e = " + e);
             return new ResponseEntity("잘못된 요청입니다.",HttpStatus.BAD_REQUEST);
         }
     }
