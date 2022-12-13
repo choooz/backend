@@ -19,5 +19,20 @@ public class Vote extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "USER_ID")
     private User postedUser;
+
+    @Column
+    private String title;
+
+    @Column
+    private String ImageA;
+
+    @Column
+    private String ImageB;
+
+    @Column
+    private String detail;
+
+
 }
