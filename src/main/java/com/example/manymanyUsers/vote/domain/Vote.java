@@ -2,8 +2,8 @@ package com.example.manymanyUsers.vote.domain;
 
 import com.example.manymanyUsers.common.domain.BaseTimeEntity;
 import com.example.manymanyUsers.user.domain.User;
-import com.example.manymanyUsers.vote.Category;
-import com.example.manymanyUsers.vote.Requirement;
+import com.example.manymanyUsers.vote.enums.Category;
+import com.example.manymanyUsers.vote.enums.Gender;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,5 +42,5 @@ public class Vote extends BaseTimeEntity {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Requirement requirement;
+    private Gender gender;
 }
