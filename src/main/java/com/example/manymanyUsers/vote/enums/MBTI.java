@@ -27,7 +27,6 @@ public enum MBTI implements EnumModel{
         this.value = value;
     }
 
-
     @Override
     public String getKey() {
         return name();
