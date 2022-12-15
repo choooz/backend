@@ -19,11 +19,22 @@ import javax.persistence.*;
 public class Vote extends BaseTimeEntity {
     @Id
     @GeneratedValue
+    @Column(name = "VOTE_ID")
     private Long id;
 
+    /**
+     * User 와의 연관관계 주인
+     */
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User postedUser;
+
+    /**
+     * voteResult 와의 연관관계 주인
+     */
+    @OneToOne
+    @JoinColumn(name = "VOTE_RESULT_ID")
+    private VoteResult voteResult;
 
     @Column
     private String title;
