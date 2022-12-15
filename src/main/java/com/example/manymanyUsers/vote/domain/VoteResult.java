@@ -1,6 +1,7 @@
 package com.example.manymanyUsers.vote.domain;
 
 import com.example.manymanyUsers.user.domain.User;
+import com.example.manymanyUsers.vote.enums.CHOICE;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -26,5 +27,6 @@ public class VoteResult {
     private User votedUser;
 
     @Column(nullable = false)
+    private CHOICE choice;
 
 }
