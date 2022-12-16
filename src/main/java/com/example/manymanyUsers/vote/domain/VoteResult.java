@@ -1,7 +1,7 @@
 package com.example.manymanyUsers.vote.domain;
 
 import com.example.manymanyUsers.user.domain.User;
-import com.example.manymanyUsers.vote.enums.CHOICE;
+import com.example.manymanyUsers.vote.enums.Choice;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -15,7 +15,6 @@ public class VoteResult {
     @Column(name = "VOTE_RESULT_ID")
     private Long id;
 
-
     @OneToOne(mappedBy = "voteResult")
     private Vote vote;
 
@@ -27,6 +26,6 @@ public class VoteResult {
     private User votedUser;
 
     @Column(nullable = false)
-    private CHOICE choice;
+    private Choice choice;
 
 }
