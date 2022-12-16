@@ -54,9 +54,9 @@ public class Vote extends BaseTimeEntity {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Gender gender;
+    private Gender filteredGender;
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Age age;
+    private Age filteredAge;
 }
