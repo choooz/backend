@@ -24,7 +24,8 @@ public class VoteService {
 
     @Transactional
     public void createVote(@Valid CreateVoteRequest createVoteRequest) throws NotFoundException{
-        Optional<User> find = userRepository.findByEmail(createVoteRequest.getPostedUserEmail());
+        Optional<User> find = userRepository.findByProviderId(createVoteRequest.getProviderId());
+        System.out.println("createVoteRequest.getProviderId() = " + createVoteRequest.getProviderId());
         if(find.isEmpty()){
             throw new NotFoundException("이메일로 가입된 유저가 없습니다.");
         }

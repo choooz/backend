@@ -25,7 +25,6 @@ public class VoteController {
     @PostMapping("/createVote")
     public ResponseEntity createVote(@Valid @RequestBody CreateVoteRequest createVoteRequest) {
 
-
         try {
             voteService.createVote(createVoteRequest);
         } catch (NotFoundException e) {
@@ -35,7 +34,6 @@ public class VoteController {
                     .build();
             return new ResponseEntity(createVoteResponse, HttpStatus.NOT_FOUND);
         }
-
 
         CreateVoteResponse createVoteResponse = CreateVoteResponse.builder()
                 .message("투표 생성에 성공했습니다.")
