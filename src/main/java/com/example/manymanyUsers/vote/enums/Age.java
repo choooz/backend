@@ -3,7 +3,8 @@ package com.example.manymanyUsers.vote.enums;
 import com.example.manymanyUsers.common.enums.EnumModel;
 
 public enum Age implements EnumModel {
-    TEST("테스트");
+    TEST("테스트"),
+    NULL("null");
 
     private String value;
 
