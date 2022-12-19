@@ -19,7 +19,8 @@ public enum MBTI implements EnumModel{
     ISFJ("isfj"),
     ISFP("isfp"),
     ISTJ("istj"),
-    ISTP("istp");
+    ISTP("istp"),
+    NULL("null");
 
     private String value;
 
