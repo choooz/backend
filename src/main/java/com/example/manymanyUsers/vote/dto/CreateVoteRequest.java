@@ -19,10 +19,8 @@ public class CreateVoteRequest {
     @NotBlank
     private String title;
 
-    @NotBlank
     private String ImageA;
 
-    @NotBlank
     private String ImageB;
 
     @NotBlank

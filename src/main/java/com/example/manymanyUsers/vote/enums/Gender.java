@@ -4,7 +4,8 @@ import com.example.manymanyUsers.common.enums.EnumModel;
 
 public enum Gender implements EnumModel {
     MALE("남자"),
-    FEMALE("여자");
+    FEMALE("여자"),
+    NULL("null");
 
     private String value;
 
