@@ -18,6 +18,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class VoteService {
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;
