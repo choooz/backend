@@ -58,7 +58,7 @@ public class SecurityConfig{
                 .csrf().disable();
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .antMatcher("/api/oauth/kakaoLogin");
+                .antMatcher("/api/oauth/login");
 
         return http.build();
     }

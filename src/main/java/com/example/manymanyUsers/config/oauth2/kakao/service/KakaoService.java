@@ -145,10 +145,8 @@ public class KakaoService {
 
     public String KakaoLogin(String code, String redirectUrl) throws IOException, ParseException {
         String KakaoaccessToken = this.getKakaoToken(code, redirectUrl);// 인가 코드로 카카오 서버에 카카오 엑세스 토큰 요청
-        System.out.println("KakaoaccessToken = " + KakaoaccessToken);
         Map<String, String> userInfo = this.getKaKaoUserInfo(KakaoaccessToken);  //카카오 서버에 카카오 엑세스 토큰으로 유저정보 요청
-        System.out.println("userInfo = " + userInfo);
-        if (getUserByEmail(userInfo.get("id")).isEmpty()) { // 카카오 계정은 이매일이 카카오에서 주는 아이디값
+        if (findByProviderId(userInfo.get("id")).isEmpty()) { // 카카오 계정은 이매일이 카카오에서 주는 아이디값
             User user = new User();
             user.setProviderId(userInfo.get("id"));
             user.setProvider(Providers.KAKAO);
@@ -158,7 +156,7 @@ public class KakaoService {
     }
 
 
-    public Optional<User> getUserByEmail(String providerId) {
+    public Optional<User> findByProviderId(String providerId) {
         return userRepository.findByProviderId(providerId);
     }
 

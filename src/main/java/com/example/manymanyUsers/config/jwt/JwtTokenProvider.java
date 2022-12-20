@@ -23,7 +23,8 @@ public class JwtTokenProvider {
      * @param minutes        : jwt 유효시간
      * @return               : jwt 토큰
      */
-    public String makeJwtToken(String providerId, int minutes) {
+    public String
+    makeJwtToken(String providerId, int minutes) {
         Date now = new Date();
 
         return Jwts.builder()

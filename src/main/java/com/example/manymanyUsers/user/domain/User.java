@@ -12,6 +12,7 @@ import javax.persistence.*;
 public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue
+    @Column(name = "USER_ID")
     private Long id;
 
     @Column
@@ -26,12 +27,12 @@ public class User extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private Providers provider;    // oauth2를 이용할 경우 어떤 플랫폼을 이용하는지
+
     private String providerId;  // oauth2를 이용할 경우 아이디값
 
     @Enumerated(EnumType.STRING)
     @Setter
     private Role role;
-
 
 
     @Builder(builderClassName = "OAuth2Register", builderMethodName = "oauth2Register")

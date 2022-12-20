@@ -119,39 +119,10 @@ public class NaverService {
 
     }
 
-//    public String getAgreementInfo(String access_token) throws IOException {
-//        StringBuilder result = new StringBuilder();
-//        String host = "https://kapi.kakao.com/v2/user/scopes";
-//
-//        URL url = new URL(host);
-//        HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
-//        urlConnection.setRequestMethod("GET");
-//        urlConnection.setRequestProperty("Authorization", "Bearer "+access_token);
-//
-//        try (BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()))) {
-//            String line;
-//            while((line=br.readLine())!=null)
-//            {
-//                result.append(line);
-//            }
-//
-//            int responseCode = urlConnection.getResponseCode();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return result.toString();
-//    }
-
 
     public String NaverLogin(String code, String state) throws IOException, ParseException {
         String NaveraccessToken = this.getNaverToken(code, state);// 인가 코드로 네이버 서버에 카카오 엑세스 토큰 요청
-        System.out.println("------------------엑세스 토큰 값 ---------------------------");
-        System.out.println("NaveraccessToken = " + NaveraccessToken);
-        System.out.println("------------------엑세스 토큰 값 ---------------------------");
         Map<String, String> userInfo = this.getNaverUserInfo(NaveraccessToken);  //네이버 서버에 네이버 엑세스 토큰으로 유저정보 요청
-        System.out.println("userInfo = " + userInfo);
         if (getUserByEmail(userInfo.get("id")).isEmpty()) {
             User user = new User();
             user.setProviderId(userInfo.get("id"));
