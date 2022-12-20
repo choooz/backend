@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 public class CreateVoteRequest {
 
     @NotBlank
-    private String providerId;
+    private Long userId;
 
     @NotBlank
     private String title;

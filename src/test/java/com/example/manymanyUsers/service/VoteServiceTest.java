@@ -11,7 +11,6 @@ import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import com.example.manymanyUsers.vote.service.VoteService;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +36,11 @@ public class VoteServiceTest {
     public void 투표생성_성공() throws Exception {
         //given
         SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", "", "providerId");
-        String userProviderId = userService.registerUser(request);
+        Long userId = userService.registerUser(request);
 
         //when
         CreateVoteRequest createVoteRequest = new CreateVoteRequest(
-                userProviderId,
+                userId,
                 "투표 제목",
                 "imageA",
                 "imageB",
@@ -52,11 +51,12 @@ public class VoteServiceTest {
 
         voteService.createVote(createVoteRequest);
 
-        Optional<Vote> byProviderId = voteRepository.findByProviderId(createVoteRequest.getProviderId());
+        Optional<User> userRepositoryByProviderId = userRepository.findById(createVoteRequest.getUserId());
+        User user = userRepositoryByProviderId.get();
+
+        Optional<Vote> byProviderId = voteRepository.findByPostedUser(user);
         Vote vote = byProviderId.get();
 
-        Optional<User> userRepositoryByProviderId = userRepository.findByProviderId(createVoteRequest.getProviderId());
-        User user = userRepositoryByProviderId.get();
 
         //then
         assertEquals(vote.getPostedUser(), user);
@@ -65,7 +65,7 @@ public class VoteServiceTest {
         assertEquals(vote.getDetail(), createVoteRequest.getDetail());
         assertEquals(vote.getImageA(), createVoteRequest.getImageA());
         assertEquals(vote.getImageB(), createVoteRequest.getImageB());
-        assertEquals(vote.getFilteredAge(), createVoteRequest.getGender());
+        assertEquals(vote.getFilteredGender(), createVoteRequest.getGender());
         assertEquals(vote.getFilteredAge(), createVoteRequest.getAge());
         assertEquals(vote.getCategory(), createVoteRequest.getCategory());
     }

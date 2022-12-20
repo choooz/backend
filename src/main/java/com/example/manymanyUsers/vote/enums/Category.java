@@ -4,7 +4,7 @@ import com.example.manymanyUsers.common.enums.EnumModel;
 
 public enum Category implements EnumModel {
 
-    TEST("테스트"),
+    TEXT("텍스트"),
     NULL("null");
 
     private String value;

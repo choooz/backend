@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
 
-    public String registerUser(SignUpRequest signUpRequestDto) throws Exception{
+    public Long registerUser(SignUpRequest signUpRequestDto) throws Exception{
         if (userRepository.existsByProviderId(signUpRequestDto.getProviderId())) {
             throw new Exception("중복된 유저가 존재합니다.");
         }
@@ -24,7 +24,7 @@ public class UserService {
         user.setPassword(signUpRequestDto.getPassword());
 
         User result = userRepository.save(user);
-        return result.getProviderId();
+        return result.getId();
     }
 
 
