@@ -11,6 +11,7 @@ import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import com.example.manymanyUsers.vote.service.VoteService;
+import javassist.NotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,5 +69,30 @@ public class VoteServiceTest {
         assertEquals(vote.getFilteredGender(), createVoteRequest.getGender());
         assertEquals(vote.getFilteredAge(), createVoteRequest.getAge());
         assertEquals(vote.getCategory(), createVoteRequest.getCategory());
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void 투표생성_실패_아이디를_가진_유저가_없음() throws Exception {
+
+        //given
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", "", "providerId");
+        Long userId = userService.registerUser(request);
+
+        //when
+        CreateVoteRequest createVoteRequest = new CreateVoteRequest(
+                0L,
+                "투표 제목",
+                "imageA",
+                "imageB",
+                "detailText",
+                Gender.NULL,
+                Age.NULL,
+                Category.NULL);
+
+        voteService.createVote(createVoteRequest);
+
+        //then
+
+
     }
 }
