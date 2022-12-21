@@ -30,7 +30,7 @@ public class VoteController {
         } catch (NotFoundException e) {
             log.info("error",e);
             CreateVoteResponse createVoteResponse = CreateVoteResponse.builder()
-                    .message("이메일로 가입된 유저가 없습니다. 이메일을 다시 확인하세요.")
+                    .message("해당 아이디를 가진 유저가 없습니다. 아이디를 다시 확인하세요.")
                     .build();
             return new ResponseEntity(createVoteResponse, HttpStatus.NOT_FOUND);
         }

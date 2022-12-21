@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class CreateVoteRequest {
 
-    @NotBlank
+
     private Long userId;
 
     @NotBlank
