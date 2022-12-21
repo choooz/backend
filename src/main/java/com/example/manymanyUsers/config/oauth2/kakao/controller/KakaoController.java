@@ -55,13 +55,13 @@ public class KakaoController {
         Optional<User> result = userRepository.findByProviderId(providerId);
         User user = result.get();
         GetUserInfo getUserInfo = GetUserInfo.builder()
-                                    .username(user.getUsername())
-                                    .email(user.getEmail())
-                                    .imageUrl(user.getImageUrl())
-                                    .provider(user.getProvider())
-                                    .providerId(user.getProviderId())
-                                    .message("유저 정보 요청에 성공했습니다.")
-                                    .build();
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .imageUrl(user.getImageUrl())
+                .provider(user.getProvider())
+                .userid(user.getId())
+                .message("유저 정보 요청에 성공했습니다.")
+                .build();
         return new ResponseEntity(getUserInfo, HttpStatus.OK);
     }
 }
