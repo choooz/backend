@@ -15,11 +15,12 @@ import java.io.Serializable;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GetUserInfo implements Serializable {
 
+    private Long userId;
+
     /**
      * 유저 종류 - KAKAO, NAVER, GOOGLE
      */
     private Providers provider;
-
 
     /**
      * Oauth 에서 제공하는 아이디
@@ -39,7 +40,8 @@ public class GetUserInfo implements Serializable {
     private String message;
 
     @Builder
-    public GetUserInfo(Providers provider, String providerId, String username, String email, String imageUrl, String password, Role role, String message) {
+    public GetUserInfo(Long userid,Providers provider, String providerId, String username, String email, String imageUrl, String password, Role role, String message) {
+        this.userId = userid;
         this.provider = provider;
         this.providerId = providerId;
         this.username = username;

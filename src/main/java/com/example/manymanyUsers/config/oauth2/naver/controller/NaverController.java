@@ -33,20 +33,4 @@ public class NaverController {
         return ResponseEntity.ok(accessToken);
     }
 
-    @GetMapping("/naverLogin")
-    public ResponseEntity<GetUserInfo> getUserInfo(@RequestAttribute Claims claims) {
-        //엑세스 토큰안의 유저 이메일로 유저를 찾은 다음 유저정보 리턴해줌
-        String providerId = (String) claims.get("providerId");
-        //provderId로 유저 꺼내기
-        Optional<User> result = userRepository.findByProviderId(providerId);
-        User user = result.get();
-        GetUserInfo getUserInfo = GetUserInfo.builder()
-                .username(user.getUsername())
-                .email(user.getEmail())
-                .imageUrl(user.getImageUrl())
-                .provider(user.getProvider())
-                .providerId(user.getProviderId()).build();
-        return ResponseEntity.ok(getUserInfo);
-    }
-
 }

@@ -89,10 +89,8 @@ public class VoteServiceTest {
                 Age.NULL,
                 Category.NULL);
 
-        voteService.createVote(createVoteRequest);
-
         //then
-
+        voteService.createVote(createVoteRequest);
 
     }
 }
