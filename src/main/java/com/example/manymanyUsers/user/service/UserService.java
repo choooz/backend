@@ -3,6 +3,7 @@ package com.example.manymanyUsers.user.service;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
 import com.example.manymanyUsers.user.dto.SignUpRequest;
+import javassist.NotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,9 +13,9 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository userRepository;
 
-    public Long registerUser(SignUpRequest signUpRequestDto) {
-        if (userRepository.existsByEmail(signUpRequestDto.getEmail())) {
-//            throw new
+    public Long registerUser(SignUpRequest signUpRequestDto) throws Exception{
+        if (userRepository.existsByProviderId(signUpRequestDto.getProviderId())) {
+            throw new Exception("중복된 유저가 존재합니다.");
         }
 
         User user = new User();
@@ -25,4 +26,6 @@ public class UserService {
         User result = userRepository.save(user);
         return result.getId();
     }
+
+
 }
