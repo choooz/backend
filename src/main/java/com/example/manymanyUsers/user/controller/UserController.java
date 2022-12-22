@@ -1,5 +1,6 @@
 package com.example.manymanyUsers.user.controller;
 
+import com.example.manymanyUsers.config.oauth2.kakao.dto.AddInfoRequest;
 import com.example.manymanyUsers.user.dto.SignUpRequest;
 import com.example.manymanyUsers.user.service.UserService;
 import com.example.manymanyUsers.vote.dto.CreateVoteResponse;
@@ -22,7 +23,7 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity registerUser(@Valid @RequestBody SignUpRequest signUpRequestDto) {
         try {
-          userService.registerUser(signUpRequestDto);
+            userService.registerUser(signUpRequestDto);
         } catch (Exception e) {
             CreateVoteResponse response = new CreateVoteResponse("조건을 만족하는 유저가 이미 존재합니다. 다시한번 확인하세요");
             return new ResponseEntity(response, HttpStatus.CONFLICT);
@@ -32,9 +33,8 @@ public class UserController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
+    @PostMapping("/addInfo")
+    public ResponseEntity addUserInfo(@Valid @RequestBody AddInfoRequest addInfoRequest) {
 
-
-
-
-
+    }
 }
