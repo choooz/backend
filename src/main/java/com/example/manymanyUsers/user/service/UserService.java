@@ -1,6 +1,6 @@
 package com.example.manymanyUsers.user.service;
 
-import com.example.manymanyUsers.config.oauth2.kakao.dto.AddInfoRequest;
+import com.example.manymanyUsers.user.dto.AddInfoRequest;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
 import com.example.manymanyUsers.user.dto.SignUpRequest;

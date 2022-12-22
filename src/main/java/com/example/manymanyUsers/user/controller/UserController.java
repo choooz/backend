@@ -1,6 +1,6 @@
 package com.example.manymanyUsers.user.controller;
 
-import com.example.manymanyUsers.config.oauth2.kakao.dto.AddInfoRequest;
+import com.example.manymanyUsers.user.dto.AddInfoRequest;
 import com.example.manymanyUsers.user.dto.SignUpRequest;
 import com.example.manymanyUsers.user.service.UserService;
 import com.example.manymanyUsers.common.dto.CommonResponse;

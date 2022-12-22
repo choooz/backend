@@ -1,4 +1,4 @@
-package com.example.manymanyUsers.config.oauth2.kakao.dto;
+package com.example.manymanyUsers.user.dto;
 
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
@@ -17,12 +17,10 @@ public class AddInfoRequest {
 
     private Long userId;
 
-    @NotBlank
     private MBTI mbti;
 
     private Integer age;
 
-    @NotBlank
     private Gender gender;
 
 }
