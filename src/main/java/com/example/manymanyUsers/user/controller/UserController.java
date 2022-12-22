@@ -37,9 +37,10 @@ public class UserController {
         try {
             userService.addUserInfo(addInfoRequest);
         } catch (NotFoundException e) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            CommonResponse response = new CommonResponse("해당 아이디 값을 가진 유저가 없습니다. 아이디를 다시 한번 확인하세요.");
+            return new ResponseEntity(response, HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity(HttpStatus.OK);
+        CommonResponse response = new CommonResponse("유저 정보 저장에 성공했습니다.");
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 }
