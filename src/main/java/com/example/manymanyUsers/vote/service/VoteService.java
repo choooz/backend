@@ -4,12 +4,9 @@ import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.dto.CreateVoteRequest;
-import com.example.manymanyUsers.vote.dto.CreateVoteResponse;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
