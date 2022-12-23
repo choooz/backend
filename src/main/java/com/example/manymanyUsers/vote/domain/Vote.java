@@ -25,14 +25,14 @@ public class Vote extends BaseTimeEntity {
     /**
      * User 와의 연관관계 주인
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User postedUser;
 
     /**
      * voteResult 와의 연관관계 주인
      */
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "VOTE_RESULT_ID")
     private VoteResult voteResult;
 
