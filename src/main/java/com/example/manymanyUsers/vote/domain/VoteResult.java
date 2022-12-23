@@ -15,7 +15,7 @@ public class VoteResult {
     @Column(name = "VOTE_RESULT_ID")
     private Long id;
 
-    @OneToOne(mappedBy = "voteResult")
+    @OneToOne(mappedBy = "voteResult", fetch = FetchType.LAZY)
     private Vote vote;
 
     /**
