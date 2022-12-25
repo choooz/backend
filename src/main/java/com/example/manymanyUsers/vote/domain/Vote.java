@@ -17,6 +17,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Vote extends BaseTimeEntity {
+
     @Id
     @GeneratedValue
     @Column(name = "VOTE_ID")
@@ -25,14 +26,14 @@ public class Vote extends BaseTimeEntity {
     /**
      * User 와의 연관관계 주인
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User postedUser;
 
     /**
      * voteResult 와의 연관관계 주인
      */
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "VOTE_RESULT_ID")
     private VoteResult voteResult;
 
@@ -56,6 +57,10 @@ public class Vote extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Gender filteredGender;
 
+    /**
+     * 필터링 거는 나이는 10대, 20대, 30대 이므로 여기는 AGE enum을 이용하고
+     * User 엔티티의 나이는 실제 나이를 입력받으므로 INTEGER 로 저장
+     */
     @Column
     @Enumerated(EnumType.STRING)
     private Age filteredAge;
