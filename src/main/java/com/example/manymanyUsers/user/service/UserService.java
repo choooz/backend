@@ -3,6 +3,7 @@ package com.example.manymanyUsers.user.service;
 import com.example.manymanyUsers.user.dto.AddInfoRequest;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
+import com.example.manymanyUsers.user.dto.GetUserNickNameRequest;
 import com.example.manymanyUsers.user.dto.SignUpRequest;
 import javassist.NotFoundException;
 import lombok.AccessLevel;
@@ -50,6 +51,16 @@ public class UserService {
         user.setGender(addInfoRequest.getGender());
         user.setMbti(addInfoRequest.getMbti());
 
+
+
+        userRepository.save(user);
+
+
+
+    }
+
+
+    public GetUserNickNameRequest getUserNickName() {
         URI uri = UriComponentsBuilder
                 .fromUriString("https://nickname.hwanmoo.kr")
                 .queryParam("format", "json")
@@ -61,22 +72,14 @@ public class UserService {
 
         System.out.println("uri = " + uri);
 
-        ResponseEntity
+        ResponseEntity<GetUserNickNameRequest> result = restTemplate.getForEntity(uri, GetUserNickNameRequest.class);
+
+        System.out.println("result = " + result);
 
 
-
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Contene-Type", "application.json");
-
-
-        userRepository.save(user);
-
+        return result.getBody();
 
 
     }
-
-
-    public
 
 }

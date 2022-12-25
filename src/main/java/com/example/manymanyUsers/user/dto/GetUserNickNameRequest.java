@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
  */
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class getUserNickNameRequest {
+public class GetUserNickNameRequest {
 
     private String words;
 
