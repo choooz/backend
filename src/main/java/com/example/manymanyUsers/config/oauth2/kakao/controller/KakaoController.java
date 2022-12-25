@@ -59,7 +59,10 @@ public class KakaoController {
                 .email(user.getEmail())
                 .imageUrl(user.getImageUrl())
                 .provider(user.getProvider())
-                .userid(user.getId())
+                .userId(user.getId())
+                .age(user.getAge())
+                .gender(user.getGender())
+                .mbti(user.getMbti())
                 .message("유저 정보 요청에 성공했습니다.")
                 .build();
         return new ResponseEntity(getUserInfo, HttpStatus.OK);

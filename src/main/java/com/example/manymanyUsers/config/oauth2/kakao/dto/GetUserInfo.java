@@ -2,6 +2,9 @@ package com.example.manymanyUsers.config.oauth2.kakao.dto;
 
 import com.example.manymanyUsers.user.domain.Providers;
 import com.example.manymanyUsers.user.domain.Role;
+import com.example.manymanyUsers.vote.enums.Age;
+import com.example.manymanyUsers.vote.enums.Gender;
+import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.*;
 
 import javax.persistence.*;
@@ -33,22 +36,25 @@ public class GetUserInfo implements Serializable {
 
     private String imageUrl;
 
-    private String password;
+    private Integer age;
 
-    private Role role;
+    private Gender gender;
+
+    private MBTI mbti;
 
     private String message;
 
     @Builder
-    public GetUserInfo(Long userid,Providers provider, String providerId, String username, String email, String imageUrl, String password, Role role, String message) {
-        this.userId = userid;
+    public GetUserInfo(Long userId, Providers provider, String providerId, String username, String email, String imageUrl, Integer age, Gender gender, MBTI mbti, String message) {
+        this.userId = userId;
         this.provider = provider;
         this.providerId = providerId;
         this.username = username;
         this.email = email;
         this.imageUrl = imageUrl;
-        this.password = password;
-        this.role = role;
+        this.age = age;
+        this.gender = gender;
+        this.mbti = mbti;
         this.message = message;
     }
 }
