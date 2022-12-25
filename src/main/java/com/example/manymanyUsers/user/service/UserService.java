@@ -23,7 +23,6 @@ import java.util.Optional;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
-    private final RestTemplate restTemplate;
 
     public Long registerUser(SignUpRequest signUpRequestDto) throws Exception{
         if (userRepository.existsByProviderId(signUpRequestDto.getProviderId())) {
@@ -62,7 +61,7 @@ public class UserService {
 
     public GetUserNickNameRequest getUserNickName() {
         URI uri = UriComponentsBuilder
-                .fromUriString("https://nickname.hwanmoo.kr")
+                .fromUriString("https://nickname.hwanmoo.kr/")
                 .queryParam("format", "json")
                 .queryParam("count", 1)
                 .queryParam("max_length", 8)
@@ -71,6 +70,8 @@ public class UserService {
                 .toUri();
 
         System.out.println("uri = " + uri);
+
+        RestTemplate restTemplate = new RestTemplate();
 
         ResponseEntity<GetUserNickNameRequest> result = restTemplate.getForEntity(uri, GetUserNickNameRequest.class);
 

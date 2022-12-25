@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GetUserNickNameRequest {
 
-    private String words;
+    private String[] words;
 
     private String seed;
 }

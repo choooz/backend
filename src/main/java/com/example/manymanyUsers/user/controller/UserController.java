@@ -1,6 +1,7 @@
 package com.example.manymanyUsers.user.controller;
 
 import com.example.manymanyUsers.user.dto.AddInfoRequest;
+import com.example.manymanyUsers.user.dto.GetUserNickNameRequest;
 import com.example.manymanyUsers.user.dto.SignUpRequest;
 import com.example.manymanyUsers.user.service.UserService;
 import com.example.manymanyUsers.common.dto.CommonResponse;
@@ -42,5 +43,10 @@ public class UserController {
         }
         CommonResponse response = new CommonResponse("유저 정보 저장에 성공했습니다.");
         return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/nickname")
+    public GetUserNickNameRequest getUserNickName() {
+        return userService.getUserNickName();
     }
 }
