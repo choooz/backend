@@ -7,9 +7,14 @@ import com.example.manymanyUsers.user.dto.SignUpRequest;
 import javassist.NotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Optional;
 
 @RequiredArgsConstructor(access = AccessLevel.PUBLIC)
@@ -17,6 +22,7 @@ import java.util.Optional;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
+    private final RestTemplate restTemplate;
 
     public Long registerUser(SignUpRequest signUpRequestDto) throws Exception{
         if (userRepository.existsByProviderId(signUpRequestDto.getProviderId())) {
@@ -44,10 +50,33 @@ public class UserService {
         user.setGender(addInfoRequest.getGender());
         user.setMbti(addInfoRequest.getMbti());
 
+        URI uri = UriComponentsBuilder
+                .fromUriString("https://nickname.hwanmoo.kr")
+                .queryParam("format", "json")
+                .queryParam("count", 1)
+                .queryParam("max_length", 8)
+                .encode()
+                .build()
+                .toUri();
+
+        System.out.println("uri = " + uri);
+
+        ResponseEntity
+
+
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Contene-Type", "application.json");
+
+
         userRepository.save(user);
+
 
 
     }
 
+
+    public
 
 }
