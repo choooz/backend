@@ -50,12 +50,12 @@ public class UserService {
         user.setGender(addInfoRequest.getGender());
         user.setMbti(addInfoRequest.getMbti());
 
+        GetUserNickNameRequest nickNameRequest = getUserNickName();
 
-
+        String[] nickNameRequestWords = nickNameRequest.getWords();
+        user.setUsername(nickNameRequestWords[0]);
         userRepository.save(user);
-
-
-
+        System.out.println("user = " + user);
     }
 
 
@@ -75,8 +75,7 @@ public class UserService {
 
         ResponseEntity<GetUserNickNameRequest> result = restTemplate.getForEntity(uri, GetUserNickNameRequest.class);
 
-        System.out.println("result = " + result);
-
+        System.out.println("result.getStatusCode() = " + result.getStatusCode());
 
         return result.getBody();
 
