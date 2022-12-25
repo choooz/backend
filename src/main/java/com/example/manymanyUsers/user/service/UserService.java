@@ -55,7 +55,6 @@ public class UserService {
         String[] nickNameRequestWords = nickNameRequest.getWords();
         user.setUsername(nickNameRequestWords[0]);
         userRepository.save(user);
-        System.out.println("user = " + user);
     }
 
 
@@ -69,17 +68,11 @@ public class UserService {
                 .build()
                 .toUri();
 
-        System.out.println("uri = " + uri);
-
         RestTemplate restTemplate = new RestTemplate();
 
         ResponseEntity<GetUserNickNameRequest> result = restTemplate.getForEntity(uri, GetUserNickNameRequest.class);
 
-        System.out.println("result.getStatusCode() = " + result.getStatusCode());
-
         return result.getBody();
-
-
     }
 
 }

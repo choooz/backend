@@ -17,6 +17,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Vote extends BaseTimeEntity {
+
     @Id
     @GeneratedValue
     @Column(name = "VOTE_ID")
