@@ -1,4 +1,4 @@
-package com.example.manymanyUsers.vote.dto;
+package com.example.manymanyUsers.common.dto;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CreateVoteResponse {
+public class CommonResponse {
     private String message;
 
     @Builder
-    public CreateVoteResponse(String message) {
+    public CommonResponse(String message) {
         this.message = message;
     }
 }

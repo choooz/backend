@@ -1,6 +1,9 @@
 package com.example.manymanyUsers.user.domain;
 
 import com.example.manymanyUsers.common.domain.BaseTimeEntity;
+import com.example.manymanyUsers.vote.enums.Age;
+import com.example.manymanyUsers.vote.enums.Gender;
+import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.*;
 
 import javax.persistence.*;
@@ -34,16 +37,25 @@ public class User extends BaseTimeEntity {
     @Setter
     private Role role;
 
+    private Integer age;
 
-    @Builder(builderClassName = "OAuth2Register", builderMethodName = "oauth2Register")
-    public User(String username, String password, String email, Role role, Providers provider, String providerId, String imageUrl) {
+    private Gender gender;
+
+    private MBTI mbti;
+
+
+    @Builder
+    public User(Long id, String username, String email, String imageUrl, String password, Providers provider, String providerId, Role role, Integer age, Gender gender, MBTI mbti) {
+        this.id = id;
         this.username = username;
-        this.password = password;
         this.email = email;
-        this.role = role;
+        this.imageUrl = imageUrl;
+        this.password = password;
         this.provider = provider;
         this.providerId = providerId;
-        this.imageUrl = imageUrl;
+        this.role = role;
+        this.age = age;
+        this.gender = gender;
+        this.mbti = mbti;
     }
-
 }
