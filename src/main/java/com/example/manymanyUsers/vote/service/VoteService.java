@@ -20,7 +20,6 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;
 
-    @Transactional
     public void createVote(@Valid CreateVoteRequest createVoteRequest) throws NotFoundException{
         Optional<User> find = userRepository.findById(createVoteRequest.getUserId());
         if(find.isEmpty()){
@@ -43,4 +42,10 @@ public class VoteService {
         voteRepository.save(vote);
 
     }
+
+
+    public void doVote() {
+
+    }
+
 }
