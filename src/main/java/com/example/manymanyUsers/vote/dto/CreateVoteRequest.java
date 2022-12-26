@@ -3,6 +3,7 @@ package com.example.manymanyUsers.vote.dto;
 import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.Gender;
+import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -26,11 +27,16 @@ public class CreateVoteRequest {
     @NotBlank
     private String detail;
 
-    private Gender gender;
+    private Gender FilteredGender;
 
-    private Age age;
+    private Age FilteredAge;
 
-    private Category category;
+    private Category FilteredCategory;
 
+    private MBTI FilteredMbti;
+
+    private String titleA;
+
+    private String titleB;
 
 }

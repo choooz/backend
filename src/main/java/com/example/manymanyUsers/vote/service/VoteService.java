@@ -35,9 +35,9 @@ public class VoteService {
         vote.setImageA(createVoteRequest.getImageA());
         vote.setImageB(createVoteRequest.getImageB());
         vote.setDetail(createVoteRequest.getDetail());
-        vote.setFilteredGender(createVoteRequest.getGender());
-        vote.setFilteredAge(createVoteRequest.getAge());
-        vote.setCategory(createVoteRequest.getCategory());
+        vote.setFilteredGender(createVoteRequest.getFilteredGender());
+        vote.setFilteredAge(createVoteRequest.getFilteredAge());
+        vote.setCategory(createVoteRequest.getFilteredCategory());
 
         voteRepository.save(vote);
 
