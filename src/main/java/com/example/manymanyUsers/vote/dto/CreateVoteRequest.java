@@ -31,7 +31,7 @@ public class CreateVoteRequest {
 
     private Age FilteredAge;
 
-    private Category FilteredCategory;
+    private Category category;
 
     private MBTI FilteredMbti;
 

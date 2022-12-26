@@ -31,13 +31,16 @@ public class VoteService {
         Vote vote = new Vote();
 
         vote.setPostedUser(user);
-        vote.setTitle(createVoteRequest.getTitle());
+        vote.setTotalTitle(createVoteRequest.getTitle());
         vote.setImageA(createVoteRequest.getImageA());
         vote.setImageB(createVoteRequest.getImageB());
+        vote.setTitleA();
+        vote.setTitleB();
         vote.setDetail(createVoteRequest.getDetail());
         vote.setFilteredGender(createVoteRequest.getFilteredGender());
         vote.setFilteredAge(createVoteRequest.getFilteredAge());
-        vote.setCategory(createVoteRequest.getFilteredCategory());
+        vote.setCategory(createVoteRequest.getCategory());
+        vote.setFilteredMbti(createVoteRequest.getFilteredMbti());
 
         voteRepository.save(vote);
 
