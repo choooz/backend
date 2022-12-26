@@ -84,7 +84,7 @@ public class VoteServiceTest {
 
         //when
         CreateVoteRequest createVoteRequest = new CreateVoteRequest(
-                userId,
+                0L,
                 "투표 제목",
                 "imageA",
                 "imageB",
