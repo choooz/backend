@@ -16,7 +16,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 @RequiredArgsConstructor(access = AccessLevel.PUBLIC)
 @Service
@@ -73,6 +76,13 @@ public class UserService {
         ResponseEntity<GetUserNickNameRequest> result = restTemplate.getForEntity(uri, GetUserNickNameRequest.class);
 
         return result.getBody();
+    }
+
+
+    /**
+     * 유저 정보 기입 이후에 호출되며 유저가 관심이 있는 카테고리를 추가 해주는 메서드
+     */
+    public void AddInterestCategory() {
     }
 
 }
