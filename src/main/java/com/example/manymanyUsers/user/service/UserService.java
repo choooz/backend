@@ -83,6 +83,7 @@ public class UserService {
      * 유저 정보 기입 이후에 호출되며 유저가 관심이 있는 카테고리를 추가 해주는 메서드
      */
     public void AddInterestCategory() {
+        
     }
 
 }
