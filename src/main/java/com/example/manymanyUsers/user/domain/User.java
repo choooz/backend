@@ -7,6 +7,7 @@ import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -45,14 +46,13 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MBTI mbti;
 
-
-
-//    @Enumerated(EnumType.STRING)
-//    private List<CategoryList> categories;
+    @OneToMany()
+    @JoinColumn(name = "CATEGORY_ID")
+    private List<Category> categoryLists = new ArrayList<>();
 
 
     @Builder
-    public User(Long id, String username, String email, String imageUrl, String password, Providers provider, String providerId, Role role, Integer age, Gender gender, MBTI mbti) {
+    public User(Long id, String username, String email, String imageUrl, String password, Providers provider, String providerId, Role role, Integer age, Gender gender, MBTI mbti, List<Category> categoryLists) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -64,5 +64,6 @@ public class User extends BaseTimeEntity {
         this.age = age;
         this.gender = gender;
         this.mbti = mbti;
+        this.categoryLists = categoryLists;
     }
 }
