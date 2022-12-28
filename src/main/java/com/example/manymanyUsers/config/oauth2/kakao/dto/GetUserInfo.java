@@ -1,13 +1,10 @@
 package com.example.manymanyUsers.config.oauth2.kakao.dto;
 
-import com.example.manymanyUsers.user.domain.Providers;
-import com.example.manymanyUsers.user.domain.Role;
-import com.example.manymanyUsers.vote.enums.Age;
+import com.example.manymanyUsers.user.enums.Providers;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.*;
 
-import javax.persistence.*;
 import java.io.Serializable;
 
 /**

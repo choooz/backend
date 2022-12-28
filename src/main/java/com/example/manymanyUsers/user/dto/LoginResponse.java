@@ -1,6 +1,6 @@
 package com.example.manymanyUsers.user.dto;
 
-import com.example.manymanyUsers.user.domain.Role;
+import com.example.manymanyUsers.user.enums.Role;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,8 @@
 package com.example.manymanyUsers.user.domain;
 
 import com.example.manymanyUsers.common.domain.BaseTimeEntity;
-import com.example.manymanyUsers.vote.enums.CategoryList;
+import com.example.manymanyUsers.user.enums.Providers;
+import com.example.manymanyUsers.user.enums.Role;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.*;
