@@ -51,7 +51,7 @@ public class UserController {
         return userService.getUserNickName();
     }
 
-    @PutMapping("/addInterestCategory")
+    @PatchMapping("/addInterestCategory")
     public ResponseEntity AddInterestCategory(@RequestBody AddInterestCategoryRequest addInterestCategoryRequest) {
         try {
             userService.addInterestCategory(addInterestCategoryRequest);
