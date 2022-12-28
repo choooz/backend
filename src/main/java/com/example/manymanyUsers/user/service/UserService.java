@@ -36,7 +36,7 @@ public class UserService {
         }
 
         User user = new User();
-        user.setUsername(signUpRequestDto.getName());
+        user.setNickname(signUpRequestDto.getName());
         user.setEmail(signUpRequestDto.getEmail());
         user.setPassword(signUpRequestDto.getPassword());
 
@@ -59,7 +59,7 @@ public class UserService {
         GetUserNickNameRequest nickNameRequest = getUserNickName();
 
         String[] nickNameRequestWords = nickNameRequest.getWords();
-        user.setUsername(nickNameRequestWords[0]);
+        user.setNickname(nickNameRequestWords[0]);
         userRepository.save(user);
     }
 
