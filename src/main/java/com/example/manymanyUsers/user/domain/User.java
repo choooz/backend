@@ -2,6 +2,7 @@ package com.example.manymanyUsers.user.domain;
 
 import com.example.manymanyUsers.common.domain.BaseTimeEntity;
 import com.example.manymanyUsers.vote.enums.Age;
+import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.*;
@@ -34,14 +35,18 @@ public class User extends BaseTimeEntity {
     private String providerId;  // oauth2를 이용할 경우 아이디값
 
     @Enumerated(EnumType.STRING)
-    @Setter
     private Role role;
 
     private Integer age;
 
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @Enumerated(EnumType.STRING)
     private MBTI mbti;
+
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
 
     @Builder
