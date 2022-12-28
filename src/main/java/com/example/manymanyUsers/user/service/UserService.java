@@ -1,11 +1,13 @@
 package com.example.manymanyUsers.user.service;
 
+import com.example.manymanyUsers.user.domain.Category;
 import com.example.manymanyUsers.user.dto.AddInfoRequest;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
 import com.example.manymanyUsers.user.dto.AddInterestCategoryRequest;
 import com.example.manymanyUsers.user.dto.GetUserNickNameRequest;
 import com.example.manymanyUsers.user.dto.SignUpRequest;
+import com.example.manymanyUsers.vote.enums.CategoryList;
 import javassist.NotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -94,9 +96,15 @@ public class UserService {
         }
 
         User user = byId.get();
+        List<Category> categoryLists = user.getCategoryLists();
+        List<CategoryList> lists = addInterestCategoryRequest.getCategoryLists();
+        for (CategoryList list : lists) {
+            Category category = new Category();
+            category.setCategoryList(list);
+            categoryLists.add(category);
+        }
 
-
-
+        userRepository.save(user);
     }
 
 }
