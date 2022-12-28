@@ -1,13 +1,13 @@
 package com.example.manymanyUsers.user.domain;
 
 import com.example.manymanyUsers.common.domain.BaseTimeEntity;
-import com.example.manymanyUsers.vote.enums.Age;
-import com.example.manymanyUsers.vote.enums.Category;
+import com.example.manymanyUsers.vote.enums.CategoryList;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -45,8 +45,10 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MBTI mbti;
 
-    @Enumerated(EnumType.STRING)
-    private Category category;
+
+
+//    @Enumerated(EnumType.STRING)
+//    private List<CategoryList> categories;
 
 
     @Builder

@@ -3,7 +3,7 @@ package com.example.manymanyUsers.vote.domain;
 import com.example.manymanyUsers.common.domain.BaseTimeEntity;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.vote.enums.Age;
-import com.example.manymanyUsers.vote.enums.Category;
+import com.example.manymanyUsers.vote.enums.CategoryList;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.AccessLevel;
@@ -58,7 +58,7 @@ public class Vote extends BaseTimeEntity {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Category category;
+    private CategoryList category;
 
     @Column
     @Enumerated(EnumType.STRING)

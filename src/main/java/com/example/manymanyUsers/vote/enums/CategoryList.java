@@ -2,7 +2,7 @@ package com.example.manymanyUsers.vote.enums;
 
 import com.example.manymanyUsers.common.enums.EnumModel;
 
-public enum Category implements EnumModel {
+public enum CategoryList implements EnumModel {
 
     FOODS("음식"),
     CARRIER("진로"),
@@ -13,7 +13,7 @@ public enum Category implements EnumModel {
 
     private String value;
 
-    Category(String value) {
+    CategoryList(String value) {
         this.value = value;
     }
 
