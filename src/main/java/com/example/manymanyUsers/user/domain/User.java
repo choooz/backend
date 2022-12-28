@@ -47,7 +47,7 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MBTI mbti;
 
-    @OneToMany()
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "CATEGORY_ID")
     private List<Category> categoryLists = new ArrayList<>();
 
