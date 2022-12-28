@@ -1,6 +1,7 @@
 package com.example.manymanyUsers.user.controller;
 
 import com.example.manymanyUsers.user.dto.AddInfoRequest;
+import com.example.manymanyUsers.user.dto.AddInterestCategoryRequest;
 import com.example.manymanyUsers.user.dto.GetUserNickNameRequest;
 import com.example.manymanyUsers.user.dto.SignUpRequest;
 import com.example.manymanyUsers.user.service.UserService;
@@ -48,5 +49,17 @@ public class UserController {
     @GetMapping("/nickname")
     public GetUserNickNameRequest getUserNickName() {
         return userService.getUserNickName();
+    }
+
+    @PutMapping("/addInterestCategory")
+    public ResponseEntity AddInterestCategory(@RequestBody AddInterestCategoryRequest addInterestCategoryRequest) {
+        try {
+            userService.addInterestCategory(addInterestCategoryRequest);
+        } catch (NotFoundException e) {
+            CommonResponse response = new CommonResponse("해당 아이디 값을 가진 유저가 없습니다. 아이디를 다시 한번 확인하세요.");
+            return new ResponseEntity(response, HttpStatus.NOT_FOUND);
+        }
+        CommonResponse response = new CommonResponse("유저 관심사 카테고리 추가에 성공했습니다.");
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 }

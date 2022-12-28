@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class AddInterestCategoryRequest {
 
+
     private Long userId;
 
     private List<CategoryList> categoryLists = new ArrayList<>();
