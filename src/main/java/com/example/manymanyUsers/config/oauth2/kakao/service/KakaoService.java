@@ -1,7 +1,7 @@
 package com.example.manymanyUsers.config.oauth2.kakao.service;
 
 import com.example.manymanyUsers.config.jwt.JwtTokenProvider;
-import com.example.manymanyUsers.user.domain.Providers;
+import com.example.manymanyUsers.user.enums.Providers;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
