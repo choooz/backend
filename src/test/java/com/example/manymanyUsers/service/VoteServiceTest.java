@@ -7,7 +7,7 @@ import com.example.manymanyUsers.user.service.UserService;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.dto.CreateVoteRequest;
 import com.example.manymanyUsers.vote.enums.Age;
-import com.example.manymanyUsers.vote.enums.CategoryList;
+import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
@@ -49,7 +49,7 @@ public class VoteServiceTest {
                 "detailText",
                 Gender.NULL,
                 Age.NULL,
-                CategoryList.NULL,
+                Category.NULL,
                 MBTI.ENFJ,
                 "titleA",
                 "titleB");
@@ -91,7 +91,7 @@ public class VoteServiceTest {
                 "detailText",
                 Gender.NULL,
                 Age.NULL,
-                CategoryList.NULL,
+                Category.NULL,
                 MBTI.ENFJ,
                 "titleA",
                 "titleB");

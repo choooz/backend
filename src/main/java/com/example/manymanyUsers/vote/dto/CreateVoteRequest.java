@@ -1,7 +1,7 @@
 package com.example.manymanyUsers.vote.dto;
 
 import com.example.manymanyUsers.vote.enums.Age;
-import com.example.manymanyUsers.vote.enums.CategoryList;
+import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.*;
@@ -31,7 +31,7 @@ public class CreateVoteRequest {
 
     private Age FilteredAge;
 
-    private CategoryList category;
+    private Category category;
 
     private MBTI FilteredMbti;
 

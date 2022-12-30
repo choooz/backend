@@ -1,17 +1,16 @@
 package com.example.manymanyUsers.user.service;
 
-import com.example.manymanyUsers.user.domain.Category;
+import com.example.manymanyUsers.user.domain.CategoryEntity;
 import com.example.manymanyUsers.user.dto.AddInfoRequest;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
 import com.example.manymanyUsers.user.dto.AddInterestCategoryRequest;
 import com.example.manymanyUsers.user.dto.GetUserNickNameRequest;
 import com.example.manymanyUsers.user.dto.SignUpRequest;
-import com.example.manymanyUsers.vote.enums.CategoryList;
+import com.example.manymanyUsers.vote.enums.Category;
 import javassist.NotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,10 +18,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
 
 @RequiredArgsConstructor(access = AccessLevel.PUBLIC)
 @Service
@@ -96,10 +93,10 @@ public class UserService {
         }
 
         User user = byId.get();
-        List<Category> categoryLists = user.getCategoryLists();
-        List<CategoryList> lists = addInterestCategoryRequest.getCategoryLists();
-        for (CategoryList list : lists) {
-            Category category = new Category();
+        List<CategoryEntity> categoryLists = user.getCategoryLists();
+        List<Category> lists = addInterestCategoryRequest.getCategoryLists();
+        for (Category list : lists) {
+            CategoryEntity category = new CategoryEntity();
             category.setCategoryList(list);
             categoryLists.add(category);
         }

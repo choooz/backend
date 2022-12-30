@@ -1,6 +1,6 @@
 package com.example.manymanyUsers.user.domain;
 
-import com.example.manymanyUsers.vote.enums.CategoryList;
+import com.example.manymanyUsers.vote.enums.Category;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-public class Category {
+public class CategoryEntity {
 
     @Id
     @GeneratedValue
@@ -21,6 +21,6 @@ public class Category {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private CategoryList categoryList;
+    private Category categoryList;
 
 }

@@ -1,13 +1,15 @@
 package com.example.manymanyUsers.service;
 
+import com.example.manymanyUsers.user.domain.CategoryEntity;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
 import com.example.manymanyUsers.user.dto.AddInfoRequest;
+import com.example.manymanyUsers.user.dto.AddInterestCategoryRequest;
 import com.example.manymanyUsers.user.dto.SignUpRequest;
 import com.example.manymanyUsers.user.service.UserService;
+import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -52,5 +55,35 @@ public class UserServiceTest {
         assertEquals(changedUser.getGender(), addInfoRequest.getGender());
         assertEquals(changedUser.getMbti(), addInfoRequest.getMbti());
 
+    }
+
+    @Test
+    public void 유저관심카테고리추가_성공() throws Exception {
+        //given
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", "", "providerId");
+        Long userId = userService.registerUser(request);
+
+        AddInterestCategoryRequest addInterestCategoryRequest = new AddInterestCategoryRequest();
+        addInterestCategoryRequest.setUserId(userId);
+
+        List<CategoryEntity> categoryLists = addInterestCategoryRequest.getCategoryLists();
+        categoryLists.add(Category.LOVE);
+        categoryLists.add(Category.FASHION);
+        System.out.println("addInterestCategoryRequest = " + addInterestCategoryRequest.getCategoryLists());
+
+        //when
+        userService.addInterestCategory(addInterestCategoryRequest);
+
+        Optional<User> byId = userRepository.findById(userId);
+        User result = byId.get();
+        List<CategoryEntity> resultList = result.getCategoryLists();
+
+        //then
+        CategoryEntity category1 = resultList.get(0);
+        System.out.println("category1 = " + category1);
+        CategoryEntity category2 = resultList.get(1);
+        System.out.println("category2 = " + category2);
+        assertEquals(category1.getCategoryList(), Category.LOVE);
+        assertEquals(category2, Category.FASHION);
     }
 }

@@ -49,11 +49,11 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
-    private List<Category> categoryLists = new ArrayList<>();
+    private List<CategoryEntity> categoryLists = new ArrayList<>();
 
 
     @Builder
-    public User(Long id, String nickname, String email, String imageUrl, String password, Providers provider, String providerId, Role role, Integer age, Gender gender, MBTI mbti, List<Category> categoryLists) {
+    public User(Long id, String nickname, String email, String imageUrl, String password, Providers provider, String providerId, Role role, Integer age, Gender gender, MBTI mbti, List<CategoryEntity> categoryLists) {
         this.id = id;
         this.nickname = nickname;
         this.email = email;
