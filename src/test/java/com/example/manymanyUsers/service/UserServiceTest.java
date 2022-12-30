@@ -58,6 +58,26 @@ public class UserServiceTest {
 
     }
 
+    @Test(expected = NotFoundException.class)
+    public void 유저정보추가_실패() throws Exception {
+        //given
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", "", "providerId");
+        Long userId = userService.registerUser(request);
+
+        AddInfoRequest addInfoRequest = new AddInfoRequest();
+
+        addInfoRequest.setUserId(0L);
+        addInfoRequest.setAge(26);
+        addInfoRequest.setGender(Gender.MALE);
+        addInfoRequest.setMbti(MBTI.INFJ);
+
+        //when
+        userService.addUserInfo(addInfoRequest);
+
+        //then
+
+    }
+
     @Test
     public void 유저관심카테고리추가_성공() throws Exception {
         //given
