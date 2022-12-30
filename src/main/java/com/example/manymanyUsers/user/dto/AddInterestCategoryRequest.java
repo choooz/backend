@@ -1,6 +1,7 @@
 package com.example.manymanyUsers.user.dto;
 
 import com.example.manymanyUsers.user.domain.CategoryEntity;
+import com.example.manymanyUsers.vote.enums.Category;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,5 +16,5 @@ public class AddInterestCategoryRequest {
 
     private Long userId;
 
-    private List<CategoryEntity> categoryLists = new ArrayList<>();
+    private List<Category> categoryLists = new ArrayList<>();
 }

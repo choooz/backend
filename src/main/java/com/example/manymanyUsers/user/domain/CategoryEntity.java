@@ -21,6 +21,6 @@ public class CategoryEntity {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private Category categoryList;
+    private Category category;
 
 }

@@ -1,6 +1,7 @@
 package com.example.manymanyUsers.user.service;
 
 import com.example.manymanyUsers.user.domain.CategoryEntity;
+import com.example.manymanyUsers.user.domain.CategoryRespository;
 import com.example.manymanyUsers.user.dto.AddInfoRequest;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
@@ -26,6 +27,7 @@ import java.util.Optional;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
+    private final CategoryRespository categoryRespository;
 
     public Long registerUser(SignUpRequest signUpRequestDto) throws Exception{
         if (userRepository.existsByProviderId(signUpRequestDto.getProviderId())) {
@@ -97,7 +99,9 @@ public class UserService {
         List<Category> lists = addInterestCategoryRequest.getCategoryLists();
         for (Category list : lists) {
             CategoryEntity category = new CategoryEntity();
-            category.setCategoryList(list);
+            category.setCategory(list);
+            categoryRespository.save(category);
+
             categoryLists.add(category);
         }
 

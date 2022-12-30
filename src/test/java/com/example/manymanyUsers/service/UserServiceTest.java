@@ -66,10 +66,9 @@ public class UserServiceTest {
         AddInterestCategoryRequest addInterestCategoryRequest = new AddInterestCategoryRequest();
         addInterestCategoryRequest.setUserId(userId);
 
-        List<CategoryEntity> categoryLists = addInterestCategoryRequest.getCategoryLists();
+        List<Category> categoryLists = addInterestCategoryRequest.getCategoryLists();
         categoryLists.add(Category.LOVE);
         categoryLists.add(Category.FASHION);
-        System.out.println("addInterestCategoryRequest = " + addInterestCategoryRequest.getCategoryLists());
 
         //when
         userService.addInterestCategory(addInterestCategoryRequest);
@@ -80,10 +79,8 @@ public class UserServiceTest {
 
         //then
         CategoryEntity category1 = resultList.get(0);
-        System.out.println("category1 = " + category1);
         CategoryEntity category2 = resultList.get(1);
-        System.out.println("category2 = " + category2);
-        assertEquals(category1.getCategoryList(), Category.LOVE);
-        assertEquals(category2, Category.FASHION);
+        assertEquals(category1.getCategory(), Category.LOVE);
+        assertEquals(category2.getCategory(), Category.FASHION);
     }
 }
