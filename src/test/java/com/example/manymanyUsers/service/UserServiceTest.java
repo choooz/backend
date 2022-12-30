@@ -79,7 +79,32 @@ public class UserServiceTest {
     }
 
     @Test
-    public void 유저관심카테고리추가_성공() throws Exception {
+    public void 유저관심_카테고리_한개_추가_성공() throws Exception {
+        //given
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", "", "providerId");
+        Long userId = userService.registerUser(request);
+
+        AddInterestCategoryRequest addInterestCategoryRequest = new AddInterestCategoryRequest();
+        addInterestCategoryRequest.setUserId(userId);
+
+        List<Category> categoryLists = addInterestCategoryRequest.getCategoryLists();
+        categoryLists.add(Category.LOVE);
+
+        //when
+        userService.addInterestCategory(addInterestCategoryRequest);
+
+        Optional<User> byId = userRepository.findById(userId);
+        User result = byId.get();
+        List<CategoryEntity> resultList = result.getCategoryLists();
+
+        //then
+        CategoryEntity category1 = resultList.get(0);
+        assertEquals(category1.getCategory(), Category.LOVE);
+    }
+
+
+    @Test
+    public void 유저관심_카테고리_여러개_추가_성공() throws Exception {
         //given
         SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", "", "providerId");
         Long userId = userService.registerUser(request);
