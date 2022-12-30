@@ -10,6 +10,7 @@ import com.example.manymanyUsers.user.service.UserService;
 import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
+import javassist.NotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,5 +83,25 @@ public class UserServiceTest {
         CategoryEntity category2 = resultList.get(1);
         assertEquals(category1.getCategory(), Category.LOVE);
         assertEquals(category2.getCategory(), Category.FASHION);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void 유저관심카테고리추가_실패_유저를찾을수없음() throws Exception {
+        //given
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", "", "providerId");
+        Long userId = userService.registerUser(request);
+
+        AddInterestCategoryRequest addInterestCategoryRequest = new AddInterestCategoryRequest();
+        addInterestCategoryRequest.setUserId(0L);
+
+        List<Category> categoryLists = addInterestCategoryRequest.getCategoryLists();
+        categoryLists.add(Category.LOVE);
+        categoryLists.add(Category.FASHION);
+
+        //when
+        userService.addInterestCategory(addInterestCategoryRequest);
+
+        //then
+
     }
 }
