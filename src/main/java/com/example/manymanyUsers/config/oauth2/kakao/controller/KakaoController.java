@@ -55,7 +55,7 @@ public class KakaoController {
         Optional<User> result = userRepository.findByProviderId(providerId);
         User user = result.get();
         GetUserInfo getUserInfo = GetUserInfo.builder()
-                .username(user.getUsername())
+                .username(user.getNickname())
                 .email(user.getEmail())
                 .imageUrl(user.getImageUrl())
                 .provider(user.getProvider())

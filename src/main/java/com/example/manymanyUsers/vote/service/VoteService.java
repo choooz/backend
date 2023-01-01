@@ -20,7 +20,6 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;
 
-    @Transactional
     public void createVote(@Valid CreateVoteRequest createVoteRequest) throws NotFoundException{
         Optional<User> find = userRepository.findById(createVoteRequest.getUserId());
         if(find.isEmpty()){
@@ -32,15 +31,24 @@ public class VoteService {
         Vote vote = new Vote();
 
         vote.setPostedUser(user);
-        vote.setTitle(createVoteRequest.getTitle());
+        vote.setTotalTitle(createVoteRequest.getTitle());
         vote.setImageA(createVoteRequest.getImageA());
         vote.setImageB(createVoteRequest.getImageB());
+        vote.setTitleA(createVoteRequest.getTitleA());
+        vote.setTitleB(createVoteRequest.getTitleB());
         vote.setDetail(createVoteRequest.getDetail());
-        vote.setFilteredGender(createVoteRequest.getGender());
-        vote.setFilteredAge(createVoteRequest.getAge());
+        vote.setFilteredGender(createVoteRequest.getFilteredGender());
+        vote.setFilteredAge(createVoteRequest.getFilteredAge());
         vote.setCategory(createVoteRequest.getCategory());
+        vote.setFilteredMbti(createVoteRequest.getFilteredMbti());
 
         voteRepository.save(vote);
 
     }
+
+
+    public void doVote() {
+
+    }
+
 }

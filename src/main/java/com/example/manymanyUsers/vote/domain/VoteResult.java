@@ -21,7 +21,7 @@ public class VoteResult {
     /**
      * User 와의 연관관계 주인
      */
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User votedUser;
 

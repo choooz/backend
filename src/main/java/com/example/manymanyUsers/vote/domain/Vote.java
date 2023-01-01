@@ -5,6 +5,7 @@ import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.Gender;
+import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,13 +39,19 @@ public class Vote extends BaseTimeEntity {
     private VoteResult voteResult;
 
     @Column
-    private String title;
+    private String totalTitle;
 
     @Column
-    private String ImageA;
+    private String imageA;
 
     @Column
-    private String ImageB;
+    private String imageB;
+
+    @Column
+    private String titleA;
+
+    @Column
+    private String titleB;
 
     @Column
     private String detail;
@@ -64,4 +71,8 @@ public class Vote extends BaseTimeEntity {
     @Column
     @Enumerated(EnumType.STRING)
     private Age filteredAge;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private MBTI filteredMbti;
 }

@@ -4,7 +4,11 @@ import com.example.manymanyUsers.common.enums.EnumModel;
 
 public enum Category implements EnumModel {
 
-    TEXT("텍스트"),
+    FOODS("음식"),
+    CARRIER("진로"),
+    LOVE("연애"),
+    FASHION("패션"),
+    INTEREST("재미"),
     NULL("null");
 
     private String value;

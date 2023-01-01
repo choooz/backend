@@ -1,12 +1,15 @@
 package com.example.manymanyUsers.user.domain;
 
 import com.example.manymanyUsers.common.domain.BaseTimeEntity;
-import com.example.manymanyUsers.vote.enums.Age;
+import com.example.manymanyUsers.user.enums.Providers;
+import com.example.manymanyUsers.user.enums.Role;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -19,7 +22,7 @@ public class User extends BaseTimeEntity {
     private Long id;
 
     @Column
-    private String username;
+    private String nickname;
 
     @Column
     private String email;
@@ -34,20 +37,25 @@ public class User extends BaseTimeEntity {
     private String providerId;  // oauth2를 이용할 경우 아이디값
 
     @Enumerated(EnumType.STRING)
-    @Setter
     private Role role;
 
     private Integer age;
 
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    @Enumerated(EnumType.STRING)
     private MBTI mbti;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private List<CategoryEntity> categoryLists = new ArrayList<>();
 
 
     @Builder
-    public User(Long id, String username, String email, String imageUrl, String password, Providers provider, String providerId, Role role, Integer age, Gender gender, MBTI mbti) {
+    public User(Long id, String nickname, String email, String imageUrl, String password, Providers provider, String providerId, Role role, Integer age, Gender gender, MBTI mbti, List<CategoryEntity> categoryLists) {
         this.id = id;
-        this.username = username;
+        this.nickname = nickname;
         this.email = email;
         this.imageUrl = imageUrl;
         this.password = password;
@@ -57,5 +65,6 @@ public class User extends BaseTimeEntity {
         this.age = age;
         this.gender = gender;
         this.mbti = mbti;
+        this.categoryLists = categoryLists;
     }
 }

@@ -9,6 +9,7 @@ import com.example.manymanyUsers.vote.dto.CreateVoteRequest;
 import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.Gender;
+import com.example.manymanyUsers.vote.enums.MBTI;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import com.example.manymanyUsers.vote.service.VoteService;
 import javassist.NotFoundException;
@@ -48,7 +49,10 @@ public class VoteServiceTest {
                 "detailText",
                 Gender.NULL,
                 Age.NULL,
-                Category.NULL);
+                Category.NULL,
+                MBTI.ENFJ,
+                "titleA",
+                "titleB");
 
         voteService.createVote(createVoteRequest);
 
@@ -61,13 +65,13 @@ public class VoteServiceTest {
 
         //then
         assertEquals(vote.getPostedUser(), user);
-        assertEquals(vote.getTitle(), createVoteRequest.getTitle());
+        assertEquals(vote.getTotalTitle(), createVoteRequest.getTitle());
         assertEquals(vote.getCategory(), createVoteRequest.getCategory());
         assertEquals(vote.getDetail(), createVoteRequest.getDetail());
         assertEquals(vote.getImageA(), createVoteRequest.getImageA());
         assertEquals(vote.getImageB(), createVoteRequest.getImageB());
-        assertEquals(vote.getFilteredGender(), createVoteRequest.getGender());
-        assertEquals(vote.getFilteredAge(), createVoteRequest.getAge());
+        assertEquals(vote.getFilteredGender(), createVoteRequest.getFilteredGender());
+        assertEquals(vote.getFilteredAge(), createVoteRequest.getFilteredAge());
         assertEquals(vote.getCategory(), createVoteRequest.getCategory());
     }
 
@@ -87,7 +91,10 @@ public class VoteServiceTest {
                 "detailText",
                 Gender.NULL,
                 Age.NULL,
-                Category.NULL);
+                Category.NULL,
+                MBTI.ENFJ,
+                "titleA",
+                "titleB");
 
         //then
         voteService.createVote(createVoteRequest);
