@@ -51,4 +51,8 @@ public class VoteService {
 
     }
 
+    public void getVoteList() {
+
+    }
+
 }
