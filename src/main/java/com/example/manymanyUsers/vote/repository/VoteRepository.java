@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface VoteRepository extends JpaRepository<Vote, Long> {
     Optional<Vote> findByPostedUser(User postedUser);
 
-    Slice<Vote> findSlice(Pageable pageable);
+    Slice<Vote> findSliceBy(Pageable pageable);
 }

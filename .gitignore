@@ -11,6 +11,7 @@ build/
 src/main/resources/application.properties
 *.yml
 src/main/resources/templates/login.html
+/Users/chujonghyun/Desktop/manymanyUsers/src/main/resources/voteDate.sql
 
 !**/src/main/**/build/
 !**/src/test/**/build/
