@@ -34,7 +34,6 @@ public class NaverController {
         String accessToken = naverService.NaverLogin(code, state);
         TokenResponse tokenResponse = TokenResponse.builder()
                 .token(accessToken)
-                .message("엑세스 토큰")
                 .build();
         return new ResponseEntity(tokenResponse, HttpStatus.OK);
     }

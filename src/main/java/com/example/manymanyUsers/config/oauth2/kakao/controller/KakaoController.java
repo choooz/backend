@@ -40,7 +40,6 @@ public class KakaoController {
         String accessToken = kakaoService.KakaoLogin(code, redirectUrl);
         TokenResponse tokenResponse = TokenResponse.builder()
                 .token(accessToken)
-                .message("엑세스 토큰")
                 .build();
         return new ResponseEntity(tokenResponse, HttpStatus.OK);
     }
