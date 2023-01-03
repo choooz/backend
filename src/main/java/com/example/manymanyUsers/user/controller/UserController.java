@@ -62,4 +62,5 @@ public class UserController {
         CommonResponse response = new CommonResponse("유저 관심사 카테고리 추가에 성공했습니다.");
         return new ResponseEntity(response, HttpStatus.OK);
     }
+
 }

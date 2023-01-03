@@ -34,20 +34,19 @@ public class KakaoController {
      * @throws ParseException
      */
     @PostMapping("/kakao")
-    public ResponseEntity getKaKaoToken(@Valid @RequestBody GetkakaoToken getkakaoToken) throws IOException, ParseException {
+    public ResponseEntity<TokenResponse> getKaKaoToken(@Valid @RequestBody GetkakaoToken getkakaoToken) throws IOException, ParseException {
         String code = getkakaoToken.getCode();
         String redirectUrl = getkakaoToken.getRedirectUrl();
         String accessToken = kakaoService.KakaoLogin(code, redirectUrl);
         TokenResponse tokenResponse = TokenResponse.builder()
                 .token(accessToken)
-                .message("엑세스 토큰")
                 .build();
         return new ResponseEntity(tokenResponse, HttpStatus.OK);
     }
 
 
     @GetMapping("/login")
-    public ResponseEntity getUserInfo(@RequestAttribute Claims claims) {
+    public ResponseEntity<GetUserInfo> getUserInfo(@RequestAttribute Claims claims) {
         //엑세스 토큰안의 유저 이메일로 유저를 찾은 다음 유저정보 리턴해줌
         String providerId = (String) claims.get("providerId");
         System.out.println("providerId = " + providerId);

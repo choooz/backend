@@ -7,10 +7,14 @@ import com.example.manymanyUsers.vote.dto.CreateVoteRequest;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -49,6 +53,20 @@ public class VoteService {
 
     public void doVote() {
 
+    }
+
+    public Slice<Vote> getVoteList() {
+
+        PageRequest page = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC,"id"));
+        Slice<Vote> voteSlice = voteRepository.findSliceBy(page);
+        System.out.println("voteSlice = " + voteSlice);
+        return voteSlice;
+    }
+
+    public List<Vote>  findAll() {
+        List<Vote> all = voteRepository.findAll();
+        System.out.println("all = " + all);
+        return all;
     }
 
 }
