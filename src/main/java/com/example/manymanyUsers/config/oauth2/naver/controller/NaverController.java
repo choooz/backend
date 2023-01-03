@@ -23,7 +23,6 @@ import java.util.Optional;
 @RequestMapping("/api/oauth")
 public class NaverController {
 
-    private final UserRepository userRepository;
     private final NaverService naverService;
 
 

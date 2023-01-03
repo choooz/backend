@@ -23,7 +23,7 @@ public class VoteController {
     private final VoteService voteService;
 
     @PostMapping("/createVote")
-    public ResponseEntity createVote(@Valid @RequestBody CreateVoteRequest createVoteRequest) {
+    public ResponseEntity<CommonResponse> createVote(@Valid @RequestBody CreateVoteRequest createVoteRequest) {
 
         try {
             voteService.createVote(createVoteRequest);
@@ -43,13 +43,13 @@ public class VoteController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity getVoteList() {
+    public ResponseEntity<Slice<Vote>> getVoteList() {
         Slice<Vote> voteList = voteService.getVoteList();
         return new ResponseEntity(voteList, HttpStatus.OK);
     }
 
     @GetMapping("/vote")
-    public ResponseEntity findAll() {
+    public ResponseEntity<List<Vote>> findAll() {
         List<Vote> all = voteService.findAll();
         return new ResponseEntity(all,HttpStatus.OK);
     }
