@@ -7,7 +7,11 @@ import lombok.*;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
-public class getVoteListRequest {
+public class GetVoteListRequest {
 
     private SortBy sortBy;
+
+    private int page;
+
+    private int size;
 }

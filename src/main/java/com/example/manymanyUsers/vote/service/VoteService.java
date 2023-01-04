@@ -4,6 +4,8 @@ import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.dto.CreateVoteRequest;
+import com.example.manymanyUsers.vote.dto.GetVoteListRequest;
+import com.example.manymanyUsers.vote.enums.SortBy;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -55,8 +57,20 @@ public class VoteService {
 
     }
 
-    public Slice<Vote> getVoteList() {
-        PageRequest page = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC,"id"));
+    public Slice<Vote> getVoteList(GetVoteListRequest getVoteListRequest) throws Exception {
+        String sort;
+        switch (getVoteListRequest.getSortBy()) {
+            case ByTime:
+                sort = "createdDate";
+                break;
+            case ByPopularity:
+                sort = "";
+                break;
+            default:
+                throw new Exception("분류기준에 이상한 값이 입력되었습니다. 다시 한번 확인하세요");
+        }
+
+        PageRequest page = PageRequest.of(getVoteListRequest.getPage(), getVoteListRequest.getSize(), Sort.by(Sort.Direction.DESC,sort));
         Slice<Vote> voteSlice = voteRepository.findSliceBy(page);
         return voteSlice;
     }
