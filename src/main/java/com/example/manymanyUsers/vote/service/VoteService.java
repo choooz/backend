@@ -63,10 +63,4 @@ public class VoteService {
         return voteSlice;
     }
 
-    public List<Vote>  findAll() {
-        List<Vote> all = voteRepository.findAll();
-        System.out.println("all = " + all);
-        return all;
-    }
-
 }

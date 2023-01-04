@@ -47,10 +47,4 @@ public class VoteController {
         Slice<Vote> voteList = voteService.getVoteList();
         return new ResponseEntity(voteList, HttpStatus.OK);
     }
-
-    @GetMapping("/vote")
-    public ResponseEntity<List<Vote>> findAll() {
-        List<Vote> all = voteService.findAll();
-        return new ResponseEntity(all,HttpStatus.OK);
-    }
 }
