@@ -3,7 +3,7 @@ package com.example.manymanyUsers.vote.enums;
 import com.example.manymanyUsers.common.enums.EnumModel;
 
 public enum SortBy implements EnumModel {
-    ByTime("시간순"),
+    ByTime("createdDate"),
     ByPopularity("인기순");
 
     private String value;

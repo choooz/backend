@@ -5,6 +5,7 @@ import com.example.manymanyUsers.vote.dto.CreateVoteRequest;
 import com.example.manymanyUsers.common.dto.CommonResponse;
 import com.example.manymanyUsers.vote.dto.GetVoteListRequest;
 import com.example.manymanyUsers.vote.dto.VoteResponse;
+import com.example.manymanyUsers.vote.enums.SortBy;
 import com.example.manymanyUsers.vote.service.VoteService;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -45,18 +46,11 @@ public class VoteController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<VoteResponse> getVoteList(GetVoteListRequest getVoteListRequest) {
-        try {
-            Slice<Vote> voteList = voteService.getVoteList(getVoteListRequest);
-            VoteResponse voteResponse = VoteResponse.builder()
-                    .voteSlice(voteList)
-                    .build();
-            return new ResponseEntity(voteResponse, HttpStatus.OK);
-        } catch (Exception e) {
-            VoteResponse voteResponse = VoteResponse.builder()
-                    .message("오류가 발생했습니다 요청을 다시 한번 확인하세요")
-                    .build();
-            return new ResponseEntity(voteResponse, HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<VoteResponse> getVoteList(@RequestParam SortBy sortBy, @RequestParam int page, @RequestParam int size) {
+        Slice<Vote> voteList = voteService.getVoteList(sortBy, page, size);
+        VoteResponse voteResponse = VoteResponse.builder()
+                .voteSlice(voteList)
+                .build();
+        return new ResponseEntity(voteResponse, HttpStatus.OK);
     }
 }

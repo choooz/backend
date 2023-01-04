@@ -57,21 +57,10 @@ public class VoteService {
 
     }
 
-    public Slice<Vote> getVoteList(GetVoteListRequest getVoteListRequest) throws Exception {
-        String sort;
-        switch (getVoteListRequest.getSortBy()) {
-            case ByTime:
-                sort = "createdDate";
-                break;
-            case ByPopularity:
-                sort = "";
-                break;
-            default:
-                throw new Exception("분류기준에 이상한 값이 입력되었습니다. 다시 한번 확인하세요");
-        }
+    public Slice<Vote> getVoteList(SortBy soryBy, Integer page, Integer size){
 
-        PageRequest page = PageRequest.of(getVoteListRequest.getPage(), getVoteListRequest.getSize(), Sort.by(Sort.Direction.DESC,sort));
-        Slice<Vote> voteSlice = voteRepository.findSliceBy(page);
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, soryBy.getKey()));
+        Slice<Vote> voteSlice = voteRepository.findSliceBy(pageRequest);
         return voteSlice;
     }
 
