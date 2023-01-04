@@ -56,11 +56,10 @@ public class VoteService {
     }
 
     public Slice<Vote> getVoteList() {
-
         PageRequest page = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC,"id"));
         Slice<Vote> voteSlice = voteRepository.findSliceBy(page);
-        System.out.println("voteSlice = " + voteSlice);
         return voteSlice;
     }
+
 
 }
