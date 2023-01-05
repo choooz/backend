@@ -4,6 +4,7 @@ import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.dto.CreateVoteRequest;
 import com.example.manymanyUsers.common.dto.CommonResponse;
 import com.example.manymanyUsers.vote.dto.GetVoteListRequest;
+import com.example.manymanyUsers.vote.dto.VoteListData;
 import com.example.manymanyUsers.vote.dto.VoteResponse;
 import com.example.manymanyUsers.vote.enums.SortBy;
 import com.example.manymanyUsers.vote.service.VoteService;
@@ -47,9 +48,9 @@ public class VoteController {
 
     @GetMapping("/get")
     public ResponseEntity<VoteResponse> getVoteList(@RequestParam SortBy sortBy, @RequestParam int page, @RequestParam int size) {
-        Slice<Vote> voteList = voteService.getVoteList(sortBy, page, size);
+        Slice<VoteListData> voteListData = voteService.getVoteList(sortBy, page, size);
         VoteResponse voteResponse = VoteResponse.builder()
-                .voteSlice(voteList)
+                .voteSlice(voteListData)
                 .build();
         return new ResponseEntity(voteResponse, HttpStatus.OK);
     }

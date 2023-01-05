@@ -10,12 +10,12 @@ import org.springframework.data.domain.Slice;
 @NoArgsConstructor
 public class VoteResponse {
 
-    private Slice<Vote> voteSlice;
+    private Slice<VoteListData> voteSlice;
 
     private String message;
 
     @Builder
-    public VoteResponse(Slice<Vote> voteSlice, String message) {
+    public VoteResponse(Slice<VoteListData> voteSlice, String message) {
         this.voteSlice = voteSlice;
         this.message = message;
     }

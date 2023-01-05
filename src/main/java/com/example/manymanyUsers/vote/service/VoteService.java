@@ -5,6 +5,7 @@ import com.example.manymanyUsers.user.domain.UserRepository;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.dto.CreateVoteRequest;
 import com.example.manymanyUsers.vote.dto.GetVoteListRequest;
+import com.example.manymanyUsers.vote.dto.VoteListData;
 import com.example.manymanyUsers.vote.enums.SortBy;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import javassist.NotFoundException;
@@ -57,12 +58,12 @@ public class VoteService {
 
     }
 
-    public Slice<Vote> getVoteList(SortBy soryBy, Integer page, Integer size){
+    public Slice<VoteListData> getVoteList(SortBy soryBy, Integer page, Integer size){
 
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, soryBy.getKey()));
         Slice<Vote> voteSlice = voteRepository.findSliceBy(pageRequest);
-
-        return voteSlice;
+        Slice<VoteListData> voteListData = voteSlice.map(vote -> new VoteListData(vote));
+        return voteListData;
     }
 
 
