@@ -11,10 +11,11 @@ build/
 src/main/resources/application.properties
 *.yml
 src/main/resources/templates/login.html
-/Users/chujonghyun/Desktop/manymanyUsers/src/main/resources/sql
 
 !**/src/main/**/build/
 !**/src/test/**/build/
+
+/Users/chujonghyun/Desktop/manymanyUsers/src/main/java/com/example/manymanyUsers/test
 
 src/main/java/com/example/manymanyUsers/MainClass.java
 
