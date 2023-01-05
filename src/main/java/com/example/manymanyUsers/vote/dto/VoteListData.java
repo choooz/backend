@@ -1,6 +1,5 @@
 package com.example.manymanyUsers.vote.dto;
 
-import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.dto.UserData;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.enums.Age;
@@ -12,27 +11,27 @@ import lombok.Getter;
 @Getter
 public class VoteListData {
 
-    private Long voteId;
+    private final Long voteId;
 
-    private UserData userData;
+    private final UserData userData;
 
-    private String totalTitle;
+    private final String totalTitle;
 
-    private Category category;
+    private final Category category;
 
-    private Gender filteredGender;
+    private final Gender filteredGender;
 
-    private Age filteredAge;
+    private final Age filteredAge;
 
-    private MBTI filteredMbti;
+    private final MBTI filteredMbti;
 
     public VoteListData(final Vote vote) {
         this.voteId = vote.getId();
-        this.totalTitle = totalTitle;
-        this.category = category;
-        this.filteredGender = filteredGender;
-        this.filteredAge = filteredAge;
-        this.filteredMbti = filteredMbti;
+        this.totalTitle = vote.getTotalTitle();
+        this.category = vote.getCategory();
+        this.filteredGender = vote.getFilteredGender();
+        this.filteredAge = vote.getFilteredAge();
+        this.filteredMbti = vote.getFilteredMbti();
 
         UserData userData = new UserData(vote.getPostedUser());
         this.userData = userData;

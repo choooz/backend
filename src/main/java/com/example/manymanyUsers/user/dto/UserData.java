@@ -11,7 +11,6 @@ public class UserData {
 
     private String imageUrl;
 
-
     public UserData(User user) {
         this.userid = user.getId();
         this.nickname = user.getNickname();
