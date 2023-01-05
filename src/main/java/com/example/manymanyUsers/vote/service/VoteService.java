@@ -61,6 +61,7 @@ public class VoteService {
 
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, soryBy.getKey()));
         Slice<Vote> voteSlice = voteRepository.findSliceBy(pageRequest);
+
         return voteSlice;
     }
 
