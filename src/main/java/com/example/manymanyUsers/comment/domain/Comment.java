@@ -45,6 +45,9 @@ public class Comment {
     @Column
     private Gender gender;
 
+    @Column
+    private String nickname;
+
     public void update(CommentRequest commentRequest) {
         this.content = commentRequest.getContent();
     }

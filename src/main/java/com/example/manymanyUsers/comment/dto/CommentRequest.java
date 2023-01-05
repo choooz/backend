@@ -21,9 +21,9 @@ import java.time.format.DateTimeFormatter;
 @AllArgsConstructor
 public class CommentRequest {
 
-    private Long userId;
-
     private Long voteId;
+
+    private Long userId;
 
     private String content;
 
