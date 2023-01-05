@@ -14,16 +14,17 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class UpdateVoteRequest {
 
+    @NotBlank
+    private Long voteId;
+
     private Long userId;
 
-    @NotBlank
     private String title;
 
     private String ImageA;
 
     private String ImageB;
 
-    @NotBlank
     private String detail;
 
     private Gender FilteredGender;
@@ -37,5 +38,4 @@ public class UpdateVoteRequest {
     private String titleA;
 
     private String titleB;
-
 }
