@@ -13,7 +13,7 @@ public class VoteListData {
 
     private final Long voteId;
 
-    private final UserData userData;
+    private final UserData writer;
 
     private final String totalTitle;
 
@@ -34,6 +34,6 @@ public class VoteListData {
         this.filteredMbti = vote.getFilteredMbti();
 
         UserData userData = new UserData(vote.getPostedUser());
-        this.userData = userData;
+        this.writer = userData;
     }
 }
