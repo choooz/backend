@@ -22,7 +22,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity registerUser(@Valid @RequestBody SignUpRequest signUpRequestDto) {
+    public ResponseEntity<CommonResponse> registerUser(@Valid @RequestBody SignUpRequest signUpRequestDto) {
         try {
             userService.registerUser(signUpRequestDto);
         } catch (Exception e) {
