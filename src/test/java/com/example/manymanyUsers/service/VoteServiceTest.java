@@ -101,4 +101,13 @@ public class VoteServiceTest {
         voteService.createVote(createVoteRequest);
 
     }
+
+//    @Test
+//    public void 투표리스트_조회_성공() throws Exception {
+//        //given
+//
+//        //when
+//
+//        //then
+//    }
 }
