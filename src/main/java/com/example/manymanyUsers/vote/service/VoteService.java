@@ -4,6 +4,9 @@ import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.dto.CreateVoteRequest;
+import com.example.manymanyUsers.vote.dto.GetVoteListRequest;
+import com.example.manymanyUsers.vote.dto.VoteListData;
+import com.example.manymanyUsers.vote.enums.SortBy;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -55,18 +58,16 @@ public class VoteService {
 
     }
 
-    public Slice<Vote> getVoteList() {
+    public Slice<VoteListData> getVoteList(SortBy soryBy, Integer page, Integer size){
 
-        PageRequest page = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC,"id"));
-        Slice<Vote> voteSlice = voteRepository.findSliceBy(page);
-        System.out.println("voteSlice = " + voteSlice);
-        return voteSlice;
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, soryBy.getValue()));
+        Slice<Vote> voteSlice = voteRepository.findSliceBy(pageRequest);
+        Slice<VoteListData> voteListData = voteSlice.map(vote -> {
+            User postedUser = vote.getPostedUser();//프록시 처리된 user 엔티티 가져오기 위함
+            return new VoteListData(vote);
+        });
+        return voteListData;
     }
 
-    public List<Vote>  findAll() {
-        List<Vote> all = voteRepository.findAll();
-        System.out.println("all = " + all);
-        return all;
-    }
 
 }

@@ -1,5 +1,6 @@
 package com.example.manymanyUsers.user.dto;
 
+import com.example.manymanyUsers.user.enums.Providers;
 import lombok.*;
 
 import javax.validation.constraints.Email;
@@ -19,7 +20,7 @@ public class SignUpRequest {
     @NotBlank
     private String password;
 
-    private String provider;
+    private Providers provider;
 
     private String providerId;
 }

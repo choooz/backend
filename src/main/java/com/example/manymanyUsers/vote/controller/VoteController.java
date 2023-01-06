@@ -3,6 +3,10 @@ package com.example.manymanyUsers.vote.controller;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.dto.CreateVoteRequest;
 import com.example.manymanyUsers.common.dto.CommonResponse;
+import com.example.manymanyUsers.vote.dto.GetVoteListRequest;
+import com.example.manymanyUsers.vote.dto.VoteListData;
+import com.example.manymanyUsers.vote.dto.VoteResponse;
+import com.example.manymanyUsers.vote.enums.SortBy;
 import com.example.manymanyUsers.vote.service.VoteService;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -43,14 +47,11 @@ public class VoteController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<Slice<Vote>> getVoteList() {
-        Slice<Vote> voteList = voteService.getVoteList();
-        return new ResponseEntity(voteList, HttpStatus.OK);
-    }
-
-    @GetMapping("/vote")
-    public ResponseEntity<List<Vote>> findAll() {
-        List<Vote> all = voteService.findAll();
-        return new ResponseEntity(all,HttpStatus.OK);
+    public ResponseEntity<VoteResponse> getVoteList(@RequestParam SortBy sortBy, @RequestParam int page, @RequestParam int size) {
+        Slice<VoteListData> voteListData = voteService.getVoteList(sortBy, page, size);
+        VoteResponse voteResponse = VoteResponse.builder()
+                .voteSlice(voteListData)
+                .build();
+        return new ResponseEntity(voteResponse, HttpStatus.OK);
     }
 }
