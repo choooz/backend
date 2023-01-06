@@ -3,6 +3,7 @@ package com.example.manymanyUsers.service;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
 import com.example.manymanyUsers.user.dto.SignUpRequest;
+import com.example.manymanyUsers.user.enums.Providers;
 import com.example.manymanyUsers.user.service.UserService;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.dto.CreateVoteRequest;
@@ -37,7 +38,7 @@ public class VoteServiceTest {
     @Test
     public void 투표생성_성공() throws Exception {
         //given
-        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", "", "providerId");
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
         Long userId = userService.registerUser(request);
 
         //when
@@ -79,7 +80,7 @@ public class VoteServiceTest {
     public void 투표생성_실패_아이디를_가진_유저가_없음() throws Exception {
 
         //given
-        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", "", "providerId");
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
         Long userId = userService.registerUser(request);
 
         //when
@@ -100,4 +101,13 @@ public class VoteServiceTest {
         voteService.createVote(createVoteRequest);
 
     }
+
+//    @Test
+//    public void 투표리스트_조회_성공() throws Exception {
+//        //given
+//
+//        //when
+//
+//        //then
+//    }
 }

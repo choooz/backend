@@ -6,6 +6,7 @@ import com.example.manymanyUsers.user.domain.UserRepository;
 import com.example.manymanyUsers.user.dto.AddInfoRequest;
 import com.example.manymanyUsers.user.dto.AddInterestCategoryRequest;
 import com.example.manymanyUsers.user.dto.SignUpRequest;
+import com.example.manymanyUsers.user.enums.Providers;
 import com.example.manymanyUsers.user.service.UserService;
 import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.Gender;
@@ -35,7 +36,7 @@ public class UserServiceTest {
     @Test
     public void 유저정보추가_성공() throws Exception {
         //given
-        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", "", "providerId");
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
         Long userId = userService.registerUser(request);
 
         AddInfoRequest addInfoRequest = new AddInfoRequest();
@@ -61,7 +62,7 @@ public class UserServiceTest {
     @Test(expected = NotFoundException.class)
     public void 유저정보추가_실패() throws Exception {
         //given
-        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", "", "providerId");
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
         Long userId = userService.registerUser(request);
 
         AddInfoRequest addInfoRequest = new AddInfoRequest();
@@ -81,7 +82,7 @@ public class UserServiceTest {
     @Test
     public void 유저관심_카테고리_한개_추가_성공() throws Exception {
         //given
-        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", "", "providerId");
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
         Long userId = userService.registerUser(request);
 
         AddInterestCategoryRequest addInterestCategoryRequest = new AddInterestCategoryRequest();
@@ -106,7 +107,7 @@ public class UserServiceTest {
     @Test
     public void 유저관심_카테고리_여러개_추가_성공() throws Exception {
         //given
-        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", "", "providerId");
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
         Long userId = userService.registerUser(request);
 
         AddInterestCategoryRequest addInterestCategoryRequest = new AddInterestCategoryRequest();
@@ -133,7 +134,7 @@ public class UserServiceTest {
     @Test(expected = NotFoundException.class)
     public void 유저관심카테고리추가_실패_유저를찾을수없음() throws Exception {
         //given
-        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", "", "providerId");
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
         Long userId = userService.registerUser(request);
 
         AddInterestCategoryRequest addInterestCategoryRequest = new AddInterestCategoryRequest();
