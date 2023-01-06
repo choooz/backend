@@ -39,14 +39,13 @@ public class Comment {
     @Column
     private String age;
 
+    @Enumerated(EnumType.STRING)
     @Column
     private MBTI mbti;
 
+    @Enumerated(EnumType.STRING)
     @Column
     private Gender gender;
-
-    @Column
-    private String nickname;
 
     public void update(CommentRequest commentRequest) {
         this.content = commentRequest.getContent();

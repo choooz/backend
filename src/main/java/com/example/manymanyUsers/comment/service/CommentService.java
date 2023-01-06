@@ -37,19 +37,20 @@ public class CommentService {
                 .commentUser(user)
                 .mbti(user.getMbti())
                 .gender(user.getGender())
-                .nickname(user.getNickname())
                 .build();
         comment.setAge(comment.ClassifyAge(user.getAge()));
         commentRepository.save(comment);
     }
 
 
-    public void getComments(Long voteId) {
+    public List<Comment> getComments(Long voteId) {
+        List<Comment> comments = commentRepository.findAllByVoteId(voteId);
 
+        return comments;
     }
 
 
-    public void updateComment(Long voteId, Long commentId ,CommentRequest commentRequest) {
+    public void updateComment(Long commentId ,CommentRequest commentRequest) {
         Optional<Comment> byId = commentRepository.findById(commentId);
         Comment comment = byId.get();
         comment.update(commentRequest);

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.yaml.snakeyaml.tokens.CommentToken;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequestMapping("/api/comment")
@@ -29,7 +30,7 @@ public class CommentController {
     private final CommentRepository commentRepository;
 
     @PostMapping("/create")
-    public ResponseEntity<CommonResponse> commentSave(@RequestBody @Valid CommentRequest commentRequest){
+    public ResponseEntity<CommonResponse> createComment(@RequestBody @Valid CommentRequest commentRequest){
         commentService.createComment(commentRequest);
 
         CommonResponse createVoteResponse = CommonResponse.builder()
@@ -39,9 +40,31 @@ public class CommentController {
         return new ResponseEntity(createVoteResponse, HttpStatus.OK);
     }
 
-    @PatchMapping("/update/{voteId}/{commentId}")
-    public ResponseEntity<CommonResponse> updateComment(@PathVariable Long voteId , @PathVariable Long commentId,@Valid @RequestBody CommentRequest commentRequest){
-        commentService.updateComment(voteId,commentId,commentRequest);
+
+    @GetMapping("/list/{voteId}")
+    public ResponseEntity<List<CommentResponse>> getComment(@PathVariable Long voteId){
+        List<Comment> comments = commentService.getComments(voteId);
+        List<CommentResponse> commentResponses = new ArrayList<>();
+
+        for (Comment comment : comments) {
+            CommentResponse dto = CommentResponse.builder()
+                    .id(comment.getId())
+                    .content(comment.getContent())
+                    .Gender(comment.getGender())
+                    .imageUrl(comment.getCommentUser().getImageUrl())
+                    .Age(comment.getAge())
+                    .Mbti(comment.getMbti())
+                    .nickName(comment.getCommentUser().getNickname())
+                    .build();
+            commentResponses.add(dto); //
+        }
+        return new ResponseEntity(commentResponses,HttpStatus.OK);
+
+    }
+
+    @PatchMapping("/update/{commentId}")
+    public ResponseEntity<CommonResponse> updateComment(@PathVariable Long commentId,@Valid @RequestBody CommentRequest commentRequest){
+        commentService.updateComment(commentId,commentRequest);
 
         CommonResponse createVoteResponse = CommonResponse.builder()
                 .message("댓글 수정에 성공했습니다.")
@@ -57,7 +80,7 @@ public class CommentController {
         commentService.deleteComment(voteId,commentId);
 
         CommonResponse createVoteResponse = CommonResponse.builder()
-                .message("댓글 수정에 성공했습니다.")
+                .message("댓글 삭제에 성공했습니다.")
                 .build();
 
         return new ResponseEntity(createVoteResponse, HttpStatus.OK);
