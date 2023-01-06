@@ -18,7 +18,9 @@ import org.yaml.snakeyaml.tokens.CommentToken;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/api/comment")
 @RestController
@@ -42,7 +44,7 @@ public class CommentController {
 
 
     @GetMapping("/list/{voteId}")
-    public ResponseEntity<List<CommentResponse>> getComment(@PathVariable Long voteId){
+    public ResponseEntity<Map<String,Object>> getComment(@PathVariable Long voteId) {
         List<Comment> comments = commentService.getComments(voteId);
         List<CommentResponse> commentResponses = new ArrayList<>();
 
@@ -56,10 +58,14 @@ public class CommentController {
                     .Mbti(comment.getMbti())
                     .nickName(comment.getCommentUser().getNickname())
                     .build();
-            commentResponses.add(dto); //
-        }
-        return new ResponseEntity(commentResponses,HttpStatus.OK);
+            commentResponses.add(dto);
 
+        }
+        Map<String,Object> result = new HashMap<>();
+        result.put("data", commentResponses);
+        result.put("count", commentResponses.size());
+
+        return ResponseEntity.ok().body(result);
     }
 
     @PatchMapping("/update/{commentId}")

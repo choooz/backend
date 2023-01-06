@@ -3,6 +3,7 @@ package com.example.manymanyUsers.comment.domain;
 
 import com.example.manymanyUsers.comment.dto.CommentRequest;
 import com.example.manymanyUsers.comment.repository.CommentRepository;
+import com.example.manymanyUsers.common.domain.BaseTimeEntity;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.enums.Age;
@@ -20,7 +21,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Comment {
+public class Comment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
