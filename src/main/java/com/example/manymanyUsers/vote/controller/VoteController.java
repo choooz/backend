@@ -2,16 +2,15 @@ package com.example.manymanyUsers.vote.controller;
 
 import com.example.manymanyUsers.vote.dto.CreateVoteRequest;
 import com.example.manymanyUsers.common.dto.CommonResponse;
+import com.example.manymanyUsers.vote.dto.UpdateVoteRequest;
 import com.example.manymanyUsers.vote.service.VoteService;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -40,5 +39,25 @@ public class VoteController {
                 .build();
 
         return new ResponseEntity(createVoteResponse, HttpStatus.OK);
+    }
+
+    @PatchMapping("/updateVote")
+    public ResponseEntity<CommonResponse> updateVote(@Valid @RequestBody UpdateVoteRequest updateVoteRequest) {
+
+        try {
+            voteService.updateVote(updateVoteRequest);
+        } catch (NotFoundException e) {
+            log.info("error",e);
+            CommonResponse createVoteResponse = CommonResponse.builder()
+                    .message("해당 아이디를 가진 투표가 없습니다. 아이디를 다시 확인하세요.")
+                    .build();
+            return new ResponseEntity(createVoteResponse, HttpStatus.NOT_FOUND);
+        }
+
+        CommonResponse updateVoteResponse = CommonResponse.builder()
+                .message("투표 수정에 성공했습니다")
+                .build();
+
+        return new ResponseEntity(updateVoteResponse, HttpStatus.OK);
     }
 }
