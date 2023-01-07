@@ -3,6 +3,7 @@ package com.example.manymanyUsers.service;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
 import com.example.manymanyUsers.user.dto.SignUpRequest;
+import com.example.manymanyUsers.user.enums.Providers;
 import com.example.manymanyUsers.user.service.UserService;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.dto.CreateVoteRequest;
@@ -38,7 +39,7 @@ public class VoteServiceTest {
     @Test
     public void 투표생성_성공() throws Exception {
         //given
-        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", "", "providerId");
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.NAVER, "providerId");
         Long userId = userService.registerUser(request);
 
         //when
@@ -80,7 +81,7 @@ public class VoteServiceTest {
     public void 투표생성_실패_아이디를_가진_유저가_없음() throws Exception {
 
         //given
-        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", "", "providerId");
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.NAVER, "providerId");
         Long userId = userService.registerUser(request);
 
         //when
@@ -106,7 +107,7 @@ public class VoteServiceTest {
     public void 투표수정_성공() throws Exception {
         //given
 
-        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", "", "providerId");
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.NAVER, "providerId");
         Long userId = userService.registerUser(request);
 
         CreateVoteRequest createVoteRequest = new CreateVoteRequest(
@@ -174,11 +175,11 @@ public class VoteServiceTest {
     public void 투표생성_실패_아이디를_가진_투표가_없음() throws Exception {
 
         //given
-        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", "", "providerId");
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.NAVER, "providerId");
         Long userId = userService.registerUser(request);
 
         CreateVoteRequest createVoteRequest = new CreateVoteRequest(
-                0L,
+                userId,
                 "투표 제목",
                 "imageA",
                 "imageB",
@@ -191,10 +192,34 @@ public class VoteServiceTest {
                 "titleB");
 
         voteService.createVote(createVoteRequest);
+        Optional<User> userRepositoryByProviderId = userRepository.findById(createVoteRequest.getUserId());
+        User user = userRepositoryByProviderId.get();
 
+        Optional<Vote> byProviderId = voteRepository.findByPostedUser(user);
+        Vote vote = byProviderId.get();
+        System.out.println("수정 전 타이틀: " + vote.getTotalTitle());
+        System.out.println("수정 전 이미지: " + vote.getImageA());
+        System.out.println("수정 전 이미지: " + vote.getImageB());
+        System.out.println("수정 전 타이틀A " + vote.getTitleA());
+        System.out.println("수정 전 타이틀B " + vote.getTitleB());
+
+        System.out.println("vote.getId(): " + vote.getId());
 
         //when
+        UpdateVoteRequest updateVoteRequest = new UpdateVoteRequest(
+                100L,
+                "title, titleA 만 바꾸겠습니다",
+                "imageA",
+                "imageB",
+                "detailText",
+                Gender.NULL,
+                Age.NULL,
+                Category.NULL,
+                MBTI.ENFJ,
+                "title, titleA 만 바꾸겠습니다",
+                "titleB");
 
+        voteService.updateVote(updateVoteRequest);
 
         //then
 
