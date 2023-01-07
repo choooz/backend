@@ -14,10 +14,23 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class UpdateVoteRequest {
 
+//    @Builder
+//    public UpdateVoteRequest(Long voteId, String title, String imageA, String imageB, String detail, Gender filteredGender, Age filteredAge, Category category, MBTI filteredMbti, String titleA, String titleB) {
+//        this.voteId = voteId;
+//        this.title = title;
+//        ImageA = imageA;
+//        ImageB = imageB;
+//        this.detail = detail;
+//        FilteredGender = filteredGender;
+//        FilteredAge = filteredAge;
+//        this.category = category;
+//        FilteredMbti = filteredMbti;
+//        this.titleA = titleA;
+//        this.titleB = titleB;
+//    }
+
     @NotBlank
     private Long voteId;
-
-    private Long userId;
 
     private String title;
 
