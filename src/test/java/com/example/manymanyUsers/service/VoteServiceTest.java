@@ -169,4 +169,38 @@ public class VoteServiceTest {
         System.out.println("수정 후 타이틀A " + vote.getTitleA());
         System.out.println("수정 후 타이틀B " + vote.getTitleB());
     }
+
+    @Test(expected = NotFoundException.class)
+    public void 투표생성_실패_아이디를_가진_투표가_없음() throws Exception {
+
+        //given
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", "", "providerId");
+        Long userId = userService.registerUser(request);
+
+        CreateVoteRequest createVoteRequest = new CreateVoteRequest(
+                0L,
+                "투표 제목",
+                "imageA",
+                "imageB",
+                "detailText",
+                Gender.NULL,
+                Age.NULL,
+                Category.NULL,
+                MBTI.ENFJ,
+                "titleA",
+                "titleB");
+
+        voteService.createVote(createVoteRequest);
+
+
+        //when
+
+
+        //then
+
+
+    }
+
 }
+
+
