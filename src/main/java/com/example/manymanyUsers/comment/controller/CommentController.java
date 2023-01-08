@@ -35,12 +35,13 @@ public class CommentController {
     public ResponseEntity<CommonResponse> createComment(@RequestBody @Valid CommentRequest commentRequest){
         commentService.createComment(commentRequest);
 
-        CommonResponse createVoteResponse = CommonResponse.builder()
+        CommonResponse commentResponse = CommonResponse.builder()
                 .message("댓글 생성에 성공했습니다.")
                 .build();
 
-        return new ResponseEntity(createVoteResponse, HttpStatus.OK);
+        return new ResponseEntity(commentResponse, HttpStatus.OK);
     }
+
 
 
     @GetMapping("/list/{voteId}")
@@ -57,6 +58,7 @@ public class CommentController {
                     .Age(comment.getAge())
                     .Mbti(comment.getMbti())
                     .nickName(comment.getCommentUser().getNickname())
+                    .createdDate(comment.getCreatedDate())
                     .build();
             commentResponses.add(dto);
 
@@ -72,24 +74,24 @@ public class CommentController {
     public ResponseEntity<CommonResponse> updateComment(@PathVariable Long commentId,@Valid @RequestBody CommentRequest commentRequest){
         commentService.updateComment(commentId,commentRequest);
 
-        CommonResponse createVoteResponse = CommonResponse.builder()
+        CommonResponse commentResponse = CommonResponse.builder()
                 .message("댓글 수정에 성공했습니다.")
                 .build();
 
-        return new ResponseEntity(createVoteResponse, HttpStatus.OK);
+        return new ResponseEntity(commentResponse, HttpStatus.OK);
     }
 
 
 
-    @DeleteMapping("/delete/{voteId}/{commentId}")
+    @DeleteMapping("/delete/{commentId}")
     public ResponseEntity<CommonResponse> deleteComment(@PathVariable Long voteId, @PathVariable Long commentId){
-        commentService.deleteComment(voteId,commentId);
+        commentService.deleteComment(commentId);
 
-        CommonResponse createVoteResponse = CommonResponse.builder()
+        CommonResponse commentResponse = CommonResponse.builder()
                 .message("댓글 삭제에 성공했습니다.")
                 .build();
 
-        return new ResponseEntity(createVoteResponse, HttpStatus.OK);
+        return new ResponseEntity(commentResponse, HttpStatus.OK);
     }
 
 

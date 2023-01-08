@@ -12,8 +12,11 @@ import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.*;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.util.Lazy;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -48,6 +51,28 @@ public class Comment extends BaseTimeEntity {
     @Column
     private Gender gender;
 
+    @Column
+    private Long likeCount;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "comment", cascade = CascadeType.REMOVE)
+    private List<CommentLike> postLikeList = new ArrayList<>();
+
+
+    public void addCommentLike(CommentLike commentLike) {
+        this.postLikeList.add(commentLike);
+    }
+
+    public void updateLikeCount() {
+        this.likeCount = (long) this.postLikeList.size();
+    }
+
+    public void discountLike(CommentLike commentLike) {
+        this.postLikeList.remove(commentLike);
+
+    }
+
+
+
     public void update(CommentRequest commentRequest) {
         this.content = commentRequest.getContent();
     }
@@ -55,6 +80,9 @@ public class Comment extends BaseTimeEntity {
     public String ClassifyAge(Integer age){
         String ageGroup = "";
         switch (age/10){
+            case 0:
+                ageGroup = "10대 미만";
+                break;
             case 1:
                 ageGroup = "10대";
                 break;
@@ -81,6 +109,9 @@ public class Comment extends BaseTimeEntity {
                 break;
             case 9:
                 ageGroup = "90대";
+                break;
+            default:
+                ageGroup = "90대 이상";
                 break;
         }
         return ageGroup;

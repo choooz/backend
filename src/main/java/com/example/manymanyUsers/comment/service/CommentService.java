@@ -56,8 +56,7 @@ public class CommentService {
         comment.update(commentRequest);
     }
 
-    public void deleteComment(Long voteId,Long commentId){
-
+    public void deleteComment(Long commentId){
         commentRepository.deleteById(commentId);
     }
 }
