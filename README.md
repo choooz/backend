@@ -23,6 +23,10 @@
 
 <br>
 
+## 프로젝트 순서도
+
+![img.png](img.png)
+
 ## 데이터베이스 ERD
 
 <img width="958" alt="스크린샷 2023-01-08 오후 11 30 27" src="https://user-images.githubusercontent.com/67010993/211201859-36bf4a74-1243-42b1-881d-9ecb2b863cb2.png">
