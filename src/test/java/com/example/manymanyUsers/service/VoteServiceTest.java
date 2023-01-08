@@ -22,6 +22,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -223,6 +224,47 @@ public class VoteServiceTest {
 
         //then
 
+
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void 투표삭제_성공() throws Exception {
+
+        //given
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.NAVER, "providerId");
+        Long userId = userService.registerUser(request);
+
+        CreateVoteRequest createVoteRequest = new CreateVoteRequest(
+                userId,
+                "투표 제목",
+                "imageA",
+                "imageB",
+                "detailText",
+                Gender.NULL,
+                Age.NULL,
+                Category.NULL,
+                MBTI.ENFJ,
+                "titleA",
+                "titleB");
+
+        voteService.createVote(createVoteRequest);
+
+        Optional<User> userRepositoryByProviderId = userRepository.findById(createVoteRequest.getUserId());
+        User user = userRepositoryByProviderId.get();
+
+        Optional<Vote> byProviderId = voteRepository.findByPostedUser(user);
+        Vote vote = byProviderId.get();
+
+        //when
+
+        voteService.deleteVote(vote.getId());
+
+        //then
+
+        Optional<Vote> removedVote = voteRepository.findById(vote.getId());
+
+        System.out.println("removedVote.Id(): " + removedVote.getClass());
+        Vote removedVote2 = removedVote.get();  //투표를 찾을 수 없음 (NoSuchElementException)
 
     }
 
