@@ -199,8 +199,8 @@ public class VoteServiceTest {
                 return 0;
             }
         });
+        int i =0;
         for (VoteListData voteListData : voteResultList) {
-            int i =0;
             System.out.println("voteListData.getVoteId() = " + voteListData.getVoteId());
             System.out.println("voteTestList.get(i).getId() = " + voteTestList.get(i).getId());
             System.out.println("i = " + i);
