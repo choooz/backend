@@ -149,7 +149,7 @@ public class KakaoService {
         String KakaoaccessToken = this.getKakaoToken(code, redirectUrl);// 인가 코드로 카카오 서버에 카카오 엑세스 토큰 요청
         Map<String, String> userInfo = this.getKaKaoUserInfo(KakaoaccessToken);  //카카오 서버에 카카오 엑세스 토큰으로 유저정보 요청
         Optional<User> id = findByProviderId(userInfo.get("id"));
-        if (findByProviderId(userInfo.get("id")).isEmpty()) { // 카카오 계정은 이매일이 카카오에서 주는 아이디값
+        if (id.isEmpty()) { // 카카오 계정은 이매일이 카카오에서 주는 아이디값
             User user = new User();
             user.setProviderId(userInfo.get("id"));
             user.setProvider(Providers.KAKAO);
