@@ -6,6 +6,7 @@ import com.example.manymanyUsers.user.dto.GetUserNickNameRequest;
 import com.example.manymanyUsers.user.dto.SignUpRequest;
 import com.example.manymanyUsers.user.service.UserService;
 import com.example.manymanyUsers.common.dto.CommonResponse;
+import io.jsonwebtoken.Claims;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -35,7 +36,7 @@ public class UserController {
     }
 
     @PostMapping("/addInfo")
-    public ResponseEntity addUserInfo(@Valid @RequestBody AddInfoRequest addInfoRequest) {
+    public ResponseEntity addUserInfo(@Valid @RequestBody AddInfoRequest addInfoRequest, @RequestAttribute Claims claims) {
         try {
             userService.addUserInfo(addInfoRequest);
         } catch (NotFoundException e) {
