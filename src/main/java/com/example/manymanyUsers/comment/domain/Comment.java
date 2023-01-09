@@ -55,19 +55,19 @@ public class Comment extends BaseTimeEntity {
     private Long likeCount;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "comment", cascade = CascadeType.REMOVE)
-    private List<CommentLike> postLikeList = new ArrayList<>();
+    private List<CommentLike> commentLikeList = new ArrayList<>();
 
 
-    public void addCommentLike(CommentLike commentLike) {
-        this.postLikeList.add(commentLike);
+    public void mappingCommentLike(CommentLike commentLike){
+        this.commentLikeList.add(commentLike);
     }
 
     public void updateLikeCount() {
-        this.likeCount = (long) this.postLikeList.size();
+        this.likeCount = (long) this.commentLikeList.size();
     }
 
     public void discountLike(CommentLike commentLike) {
-        this.postLikeList.remove(commentLike);
+        this.commentLikeList.remove(commentLike);
 
     }
 

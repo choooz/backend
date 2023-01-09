@@ -59,6 +59,7 @@ public class CommentController {
                     .Mbti(comment.getMbti())
                     .nickName(comment.getCommentUser().getNickname())
                     .createdDate(comment.getCreatedDate())
+                    .likeCount(comment.getLikeCount())
                     .build();
             commentResponses.add(dto);
 
@@ -93,6 +94,19 @@ public class CommentController {
 
         return new ResponseEntity(commentResponse, HttpStatus.OK);
     }
+
+
+    @GetMapping("like/{commentId}/{userId}")
+    public ResponseEntity<CommonResponse> likeComment(@PathVariable Long commentId,@PathVariable Long userId) {
+        commentService.likeComment(commentId,userId);
+
+        CommonResponse commentResponse = CommonResponse.builder()
+                .message("좋아요 클릭 완료.")
+                .build();
+
+        return new ResponseEntity(commentResponse, HttpStatus.OK);
+    }
+
 
 
 }

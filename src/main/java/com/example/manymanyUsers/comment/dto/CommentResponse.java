@@ -35,5 +35,7 @@ public class CommentResponse {
 
     private LocalDateTime createdDate;  //만든 시간 말고 수정 시간을 보내줘야 하나?
 
+    private Long likeCount;
+
 
 }
