@@ -57,12 +57,33 @@ public class SecurityConfig{
                 .and()
                 .csrf().disable();
 
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .antMatcher("/api/oauth/login");
-//                .antMatcher("/api/user/addInfo");
+                http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                    .antMatcher("/api/**");
+//
+//                .authorizeRequests()
+//                .antMatchers("/api/oauth/login","/api/user/addInfo")
+//                .authenticated();
+
 
         return http.build();
     }
+
+//    @Bean
+//    @Order(1)
+//    public SecurityFilterChain jwtFilterChain(HttpSecurity http) throws Exception {
+//
+//        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+//                .csrf()
+//                .ignoringAntMatchers("/api/**").
+//                 and()
+//                .authorizeRequests()
+//                .antMatchers("/api/oauth/login","/api/user/addInfo")
+//                .permitAll();
+//
+//
+//        return http.build();
+
+//    }
 
     //passwordEncoder
     @Bean
