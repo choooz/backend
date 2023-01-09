@@ -26,7 +26,6 @@ public class JwtTokenProvider {
     public String
     makeJwtToken(Long userId, int minutes) {
         Date now = new Date();
-
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setIssuer(jwtProperties.getIssuer())

@@ -38,10 +38,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                 HashMap<String, Object> parseJwtTokenMap = jwtTokenProvider.parseJwtToken(authorizationHeader);
                 Claims claims = (Claims)parseJwtTokenMap.get("claims");
                 String token = (String) parseJwtTokenMap.get("token");
-
                 request.setAttribute("claims", claims); // jwt 정보 컨트롤러에서 사용할 수 있게 request에 담기
                 request.setAttribute("token",token);
-
             } catch (ExpiredJwtException jwtException) {
                 throw jwtException;
             }
