@@ -1,9 +1,6 @@
 package com.example.manymanyUsers.user.controller;
 
-import com.example.manymanyUsers.user.dto.AddInfoRequest;
-import com.example.manymanyUsers.user.dto.AddInterestCategoryRequest;
-import com.example.manymanyUsers.user.dto.GetUserNickNameRequest;
-import com.example.manymanyUsers.user.dto.SignUpRequest;
+import com.example.manymanyUsers.user.dto.*;
 import com.example.manymanyUsers.user.service.UserService;
 import com.example.manymanyUsers.common.dto.CommonResponse;
 import io.jsonwebtoken.Claims;
@@ -36,16 +33,17 @@ public class UserController {
     }
 
     @PostMapping("/addInfo")
-    public ResponseEntity<CommonResponse> addUserInfo(@Valid @RequestBody AddInfoRequest addInfoRequest, @RequestAttribute Claims claims) {
+    public ResponseEntity<AddNewInfoResponse> addUserInfo(@Valid @RequestBody AddInfoRequest addInfoRequest, @RequestAttribute Claims claims) {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
+        boolean isNewUser;
         try {
-            boolean isNewUser = userService.addUserInfo(addInfoRequest, longId);
+             isNewUser = userService.addUserInfo(addInfoRequest, longId);
         } catch (NotFoundException e) {
-            CommonResponse response = new CommonResponse("해당 아이디 값을 가진 유저가 없습니다. 아이디를 다시 한번 확인하세요.");
+            AddNewInfoResponse response = AddNewInfoResponse.builder().message("해당 아이디 값을 가진 유저가 없습니다. 아이디를 다시 한번 확인하세요.").build();
             return new ResponseEntity(response, HttpStatus.NOT_FOUND);
         }
-        CommonResponse response = new CommonResponse("유저 정보 저장에 성공했습니다.");
+        AddNewInfoResponse response = AddNewInfoResponse.builder().isNewUser(isNewUser).message("유저 정보 추가에 성공했습니다.").build();
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
