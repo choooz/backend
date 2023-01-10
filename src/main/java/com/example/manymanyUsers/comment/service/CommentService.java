@@ -65,7 +65,7 @@ public class CommentService {
     }
 
 
-    public void likeComment(Long commentId, Long userId) {
+    public Long likeComment(Long commentId, Long userId) {
         Optional<Comment> byIdComment = commentRepository.findById(commentId);
         Comment comment = byIdComment.get();
 
@@ -93,5 +93,7 @@ public class CommentService {
                     commentLikeRepository.save(commentLike);
                 }
         );
+
+        return comment.getLikeCount();
     }
 }

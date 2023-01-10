@@ -97,16 +97,14 @@ public class CommentController {
 
 
     @GetMapping("like/{commentId}/{userId}")
-    public ResponseEntity<CommonResponse> likeComment(@PathVariable Long commentId,@PathVariable Long userId) {
-        commentService.likeComment(commentId,userId);
+    public ResponseEntity<Map<String,Object>> likeComment(@PathVariable Long commentId,@PathVariable Long userId) {
+        Long likeCount = commentService.likeComment(commentId,userId);
 
-        CommonResponse commentResponse = CommonResponse.builder()
-                .message("좋아요 클릭 완료.")
-                .build();
+        Map<String,Object> result = new HashMap<>();
+        result.put("message","성공 코드." );
+        result.put("count", likeCount);
 
-        return new ResponseEntity(commentResponse, HttpStatus.OK);
+        return ResponseEntity.ok().body(result);
     }
-
-
 
 }
