@@ -4,6 +4,8 @@ import com.example.manymanyUsers.config.jwt.JwtTokenProvider;
 import com.example.manymanyUsers.user.enums.Providers;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
+import com.example.manymanyUsers.vote.enums.Gender;
+import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -130,6 +132,9 @@ public class NaverService {
             User user = new User();
             user.setProviderId(userInfo.get("id"));
             user.setProvider(Providers.NAVER);
+            user.setAge(0);
+            user.setMbti(MBTI.NULL);
+            user.setGender(Gender.NULL);
             userRepository.save(user);
             return this.jwtTokenProvider.makeJwtToken(user.getId(), 30);
         }
