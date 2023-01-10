@@ -1,5 +1,6 @@
 package com.example.manymanyUsers.user.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -7,8 +8,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddNewInfoResponse {
     private boolean isNewUser;
+    private String message;
 
-    public AddNewInfoResponse(boolean isNewUser) {
+    @Builder
+    public AddNewInfoResponse(boolean isNewUser, String message) {
         this.isNewUser = isNewUser;
+        this.message = message;
     }
 }
