@@ -56,7 +56,7 @@ public class UserService {
 
         boolean isNewUser = false;
 
-        if(user.getAge().equals(Age.NULL) && user.getGender().equals(Gender.NULL) && user.getMbti().equals(MBTI.NULL) ){
+        if(user.getAge().equals(0) && user.getGender().equals(Gender.NULL) && user.getMbti().equals(MBTI.NULL) ){
             // 새로운 유저일때 닉네임 랜덤으로 생성
             GetUserNickNameRequest nickNameRequest = getUserNickName();
 
