@@ -14,8 +14,6 @@ import lombok.*;
 @AllArgsConstructor
 public class AddInfoRequest {
 
-    private Long userId;
-
     private MBTI mbti;
 
     private Integer age;

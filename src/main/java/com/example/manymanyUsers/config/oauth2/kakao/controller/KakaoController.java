@@ -50,7 +50,6 @@ public class KakaoController {
         //엑세스 토큰안의 유저 아이디로 유저를 찾은 다음 유저정보 리턴해줌
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
-        System.out.println("userId = " + userId);
         //userId로 유저 꺼내기
         Optional<User> result = userRepository.findById(longId);
         User user = result.get();
