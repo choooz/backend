@@ -43,8 +43,8 @@ public class UserService {
         return result.getId();
     }
 
-    public void addUserInfo(AddInfoRequest addInfoRequest) throws NotFoundException{
-        Optional<User> byId = userRepository.findById(addInfoRequest.getUserId());
+    public void addUserInfo(AddInfoRequest addInfoRequest, Long userId) throws NotFoundException{
+        Optional<User> byId = userRepository.findById(userId);
         if (byId.isEmpty()) {
             throw new NotFoundException("해당 아이디 값을 가진 유저가 없습니다. 아이디를 다시 한번 확인하세요.");
         }

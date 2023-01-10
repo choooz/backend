@@ -148,13 +148,16 @@ public class KakaoService {
     public String KakaoLogin(String code, String redirectUrl) throws IOException, ParseException {
         String KakaoaccessToken = this.getKakaoToken(code, redirectUrl);// 인가 코드로 카카오 서버에 카카오 엑세스 토큰 요청
         Map<String, String> userInfo = this.getKaKaoUserInfo(KakaoaccessToken);  //카카오 서버에 카카오 엑세스 토큰으로 유저정보 요청
-        if (findByProviderId(userInfo.get("id")).isEmpty()) { // 카카오 계정은 이매일이 카카오에서 주는 아이디값
+        Optional<User> id = findByProviderId(userInfo.get("id"));
+        if (id.isEmpty()) { // 카카오 계정은 이매일이 카카오에서 주는 아이디값
             User user = new User();
             user.setProviderId(userInfo.get("id"));
             user.setProvider(Providers.KAKAO);
             userRepository.save(user);
+            return this.jwtTokenProvider.makeJwtToken(user.getId(), 30);
         }
-        return this.jwtTokenProvider.makeJwtToken(userInfo.get("id"),30); // 카카오 계정은 이매일이 카카오에서 주는 아이디값이라 아이디 값으로 대체
+        User findUser = id.get();
+        return this.jwtTokenProvider.makeJwtToken(findUser.getId(),30); // 카카오 계정은 이매일이 카카오에서 주는 아이디값이라 아이디 값으로 대체
     }
 
 

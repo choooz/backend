@@ -19,20 +19,19 @@ public class JwtTokenProvider {
 
     /**
      * JwtToken 생성 메서드
-     * @param providerId     : 유저 Oauth 아이디
+     * @param userId         : 유저  아이디
      * @param minutes        : jwt 유효시간
      * @return               : jwt 토큰
      */
     public String
-    makeJwtToken(String providerId, int minutes) {
+    makeJwtToken(Long userId, int minutes) {
         Date now = new Date();
-
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setIssuer(jwtProperties.getIssuer())
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + Duration.ofMinutes(minutes).toMillis()))
-                .claim("providerId",providerId)
+                .claim("userId",userId)
                 .signWith(SignatureAlgorithm.HS512, jwtProperties.getSecretKey())
                 .compact();
     }
