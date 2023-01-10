@@ -68,7 +68,6 @@ public class Comment extends BaseTimeEntity {
 
     public void discountLike(CommentLike commentLike) {
         this.commentLikeList.remove(commentLike);
-
     }
 
 

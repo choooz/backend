@@ -79,6 +79,8 @@ public class CommentService {
                 commentLike -> {
                     commentLikeRepository.delete(commentLike);
                     comment.discountLike(commentLike);
+                    comment.updateLikeCount();
+
                 },
                 // 좋아요가 없을 경우 좋아요 추가
                 () -> {
