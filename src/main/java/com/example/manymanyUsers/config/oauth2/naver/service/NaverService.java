@@ -125,13 +125,16 @@ public class NaverService {
     public String NaverLogin(String code, String state) throws IOException, ParseException {
         String NaveraccessToken = this.getNaverToken(code, state);// 인가 코드로 네이버 서버에 카카오 엑세스 토큰 요청
         Map<String, String> userInfo = this.getNaverUserInfo(NaveraccessToken);  //네이버 서버에 네이버 엑세스 토큰으로 유저정보 요청
-        if (getUserByEmail(userInfo.get("id")).isEmpty()) {
+        Optional<User> id = getUserByEmail(userInfo.get("id"));
+        if (id.isEmpty()) {
             User user = new User();
             user.setProviderId(userInfo.get("id"));
             user.setProvider(Providers.NAVER);
             userRepository.save(user);
+            return this.jwtTokenProvider.makeJwtToken(user.getId(), 30);
         }
-        return this.jwtTokenProvider.makeJwtToken(userInfo.get("id"),30);
+        User findUser = id.get();
+        return this.jwtTokenProvider.makeJwtToken(findUser.getId(),30);
     }
 
 

@@ -27,7 +27,7 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;
 
-    public void createVote(@Valid CreateVoteRequest createVoteRequest) throws NotFoundException{
+    public Vote createVote(@Valid CreateVoteRequest createVoteRequest) throws NotFoundException{
         Optional<User> find = userRepository.findById(createVoteRequest.getUserId());
         if(find.isEmpty()){
             throw new NotFoundException("해당 아이디를 가진 유저가 없습니다. 아이디 값을 다시 한번 확인하세요.");
@@ -49,7 +49,7 @@ public class VoteService {
         vote.setCategory(createVoteRequest.getCategory());
         vote.setFilteredMbti(createVoteRequest.getFilteredMbti());
 
-        voteRepository.save(vote);
+        return voteRepository.save(vote);
 
     }
 
@@ -63,7 +63,7 @@ public class VoteService {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, soryBy.getValue()));
         Slice<Vote> voteSlice = voteRepository.findSliceBy(pageRequest);
         Slice<VoteListData> voteListData = voteSlice.map(vote -> {
-            User postedUser = vote.getPostedUser();//프록시 처리된 user 엔티티 가져오기 위함
+            vote.getPostedUser(); //프록시 처리된 user 엔티티 가져오기 위함
             return new VoteListData(vote);
         });
         return voteListData;
