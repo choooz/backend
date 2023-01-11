@@ -33,17 +33,16 @@ public class UserController {
     }
 
     @PatchMapping("/addInfo")
-    public ResponseEntity<AddNewInfoResponse> addUserInfo(@Valid @RequestBody AddInfoRequest addInfoRequest, @RequestAttribute Claims claims) {
+    public ResponseEntity<CommonResponse> addUserInfo(@Valid @RequestBody AddInfoRequest addInfoRequest, @RequestAttribute Claims claims) {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
-        boolean isNewUser;
         try {
-             isNewUser = userService.addUserInfo(addInfoRequest, longId);
+             userService.addUserInfo(addInfoRequest, longId);
         } catch (NotFoundException e) {
-            AddNewInfoResponse response = AddNewInfoResponse.builder().message("해당 아이디 값을 가진 유저가 없습니다. 아이디를 다시 한번 확인하세요.").build();
+            CommonResponse response = new CommonResponse("해당 아이디 값을 가진 유저가 없습니다. 아이디를 다시 한번 확인하세요.");
             return new ResponseEntity(response, HttpStatus.NOT_FOUND);
         }
-        AddNewInfoResponse response = AddNewInfoResponse.builder().isNewUser(isNewUser).message("유저 정보 추가에 성공했습니다.").build();
+        CommonResponse response = new CommonResponse("유저 정보 추가에 성공했습니다.");
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
