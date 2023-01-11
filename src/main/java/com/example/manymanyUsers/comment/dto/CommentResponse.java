@@ -21,6 +21,8 @@ public class CommentResponse {
 
     private Long id;
 
+    private Long userid;
+
     private String content;
 
     private Gender Gender;

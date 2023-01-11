@@ -1,18 +1,12 @@
 package com.example.manymanyUsers.comment.domain;
 
 
-import com.example.manymanyUsers.comment.dto.CommentRequest;
-import com.example.manymanyUsers.comment.repository.CommentRepository;
+import com.example.manymanyUsers.comment.dto.CommentUpdateRequest;
 import com.example.manymanyUsers.common.domain.BaseTimeEntity;
 import com.example.manymanyUsers.user.domain.User;
-import com.example.manymanyUsers.vote.domain.Vote;
-import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.*;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.util.Lazy;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -72,8 +66,8 @@ public class Comment extends BaseTimeEntity {
 
 
 
-    public void update(CommentRequest commentRequest) {
-        this.content = commentRequest.getContent();
+    public void update(CommentUpdateRequest commentUpdateRequest) {
+        this.content = commentUpdateRequest.getContent();
     }
 
     public String ClassifyAge(Integer age){
