@@ -10,6 +10,8 @@ import com.example.manymanyUsers.comment.repository.CommentLikeRepository;
 import com.example.manymanyUsers.comment.repository.CommentRepository;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
+import com.example.manymanyUsers.vote.enums.Gender;
+import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,8 +46,17 @@ public class CommentService {
     }
 
 
-    public List<Comment> getComments(Long voteId) {
-        List<Comment> comments = commentRepository.findAllByVoteId(voteId);
+    public List<Comment> getComments(Long voteId ,String gender,String age,String mbti) {
+        Gender getGender = null;
+        if(gender != null) {
+            getGender = Gender.valueOf(gender);
+        }
+
+        MBTI getMbti = null;
+        if (mbti != null){
+            getMbti = MBTI.valueOf(mbti);
+        }
+        List<Comment> comments = commentRepository.filteredComments(voteId,getGender,age,getMbti);
 
         return comments;
     }
@@ -58,7 +69,6 @@ public class CommentService {
     }
 
     public void deleteComment(Long commentId, CommentDeleteRequest commentDeleteRequest) {
-
         commentRepository.deleteById(commentId);
     }
 

@@ -9,6 +9,7 @@ import com.example.manymanyUsers.comment.dto.CommentResponse;
 import com.example.manymanyUsers.comment.repository.CommentRepository;
 import com.example.manymanyUsers.comment.service.CommentService;
 import com.example.manymanyUsers.common.dto.CommonResponse;
+import com.example.manymanyUsers.vote.enums.Gender;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -36,24 +37,23 @@ public class CommentController {
     public ResponseEntity<CommonResponse> createComment(@RequestBody @Valid CommentCreateRequest commentCreateRequest){
         commentService.createComment(commentCreateRequest);
 
-        CommonResponse commentResponse = CommonResponse.builder()
+        CommonResponse commonResponse = CommonResponse.builder()
                 .message("댓글 생성에 성공했습니다.")
                 .build();
 
-        return new ResponseEntity(commentResponse, HttpStatus.OK);
+        return new ResponseEntity(commonResponse, HttpStatus.OK);
     }
 
 
 
-    @GetMapping("votes/{voteId}/comments/")
-    public ResponseEntity<Map<String,Object>> getComment(@PathVariable Long voteId) {
-        List<Comment> comments = commentService.getComments(voteId);
+    @GetMapping("votes/{voteId}/comments")
+    public ResponseEntity<Map<String,Object>> getComment(@PathVariable Long voteId , @RequestParam(name = "gender", required = false) String gender, @RequestParam(name = "age", required = false)  String age, @RequestParam(name = "mbti" , required = false) String mbti) {
+        List<Comment> comments = commentService.getComments(voteId,gender,age,mbti);
         List<CommentResponse> commentResponses = new ArrayList<>();
 
         for (Comment comment : comments) {
             CommentResponse dto = CommentResponse.builder()
                     .id(comment.getId())
-                    .userid(comment.getCommentUser().getId())
                     .content(comment.getContent())
                     .Gender(comment.getGender())
                     .imageUrl(comment.getCommentUser().getImageUrl())

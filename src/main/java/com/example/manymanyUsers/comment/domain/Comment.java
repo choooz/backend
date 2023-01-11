@@ -77,31 +77,31 @@ public class Comment extends BaseTimeEntity {
                 ageGroup = "10대 미만";
                 break;
             case 1:
-                ageGroup = "10대";
+                ageGroup = "10";
                 break;
             case 2:
-                ageGroup = "20대";
+                ageGroup = "20";
                 break;
             case 3:
-                ageGroup = "30대";
+                ageGroup = "30";
                 break;
             case 4:
-                ageGroup = "40대";
+                ageGroup = "40";
                 break;
             case 5:
-                ageGroup = "50대";
+                ageGroup = "50";
                 break;
             case 6:
-                ageGroup = "60대";
+                ageGroup = "60";
                 break;
             case 7:
-                ageGroup = "70대";
+                ageGroup = "70";
                 break;
             case 8:
-                ageGroup = "80대";
+                ageGroup = "80";
                 break;
             case 9:
-                ageGroup = "90대";
+                ageGroup = "90";
                 break;
             default:
                 ageGroup = "90대 이상";
