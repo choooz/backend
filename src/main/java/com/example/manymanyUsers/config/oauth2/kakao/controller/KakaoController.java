@@ -6,6 +6,8 @@ import com.example.manymanyUsers.config.oauth2.kakao.dto.TokenResponse;
 import com.example.manymanyUsers.config.oauth2.kakao.service.KakaoService;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
+import com.example.manymanyUsers.vote.enums.Gender;
+import com.example.manymanyUsers.vote.enums.MBTI;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
@@ -53,6 +55,11 @@ public class KakaoController {
         //userId로 유저 꺼내기
         Optional<User> result = userRepository.findById(longId);
         User user = result.get();
+        boolean isNewUser = false;
+        if(user.getAge().equals(0) && user.getGender().equals(Gender.NULL) && user.getMbti().equals(MBTI.NULL)){
+            isNewUser = true;
+        }
+
         GetUserInfo getUserInfo = GetUserInfo.builder()
                 .username(user.getNickname())
                 .email(user.getEmail())
@@ -62,8 +69,10 @@ public class KakaoController {
                 .age(user.getAge())
                 .gender(user.getGender())
                 .mbti(user.getMbti())
+                .isNewUser(isNewUser)
                 .message("유저 정보 요청에 성공했습니다.")
                 .build();
+
         return new ResponseEntity(getUserInfo, HttpStatus.OK);
     }
 }

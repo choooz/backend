@@ -39,10 +39,12 @@ public class GetUserInfo implements Serializable {
 
     private MBTI mbti;
 
+    private boolean isNewUser;
+
     private String message;
 
     @Builder
-    public GetUserInfo(Long userId, Providers provider, String providerId, String username, String email, String imageUrl, Integer age, Gender gender, MBTI mbti, String message) {
+    public GetUserInfo(Long userId, Providers provider, String providerId, String username, String email, String imageUrl, Integer age, Gender gender, MBTI mbti, String message, boolean isNewUser) {
         this.userId = userId;
         this.provider = provider;
         this.providerId = providerId;
@@ -53,5 +55,6 @@ public class GetUserInfo implements Serializable {
         this.gender = gender;
         this.mbti = mbti;
         this.message = message;
+        this.isNewUser = isNewUser;
     }
 }
