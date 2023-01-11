@@ -55,10 +55,6 @@ public class KakaoController {
         //userId로 유저 꺼내기
         Optional<User> result = userRepository.findById(longId);
         User user = result.get();
-        boolean isNewUser = false;
-        if(user.getAge().equals(0) && user.getGender().equals(Gender.NULL) && user.getMbti().equals(MBTI.NULL)){
-            isNewUser = true;
-        }
 
         GetUserInfo getUserInfo = GetUserInfo.builder()
                 .username(user.getNickname())
@@ -69,7 +65,6 @@ public class KakaoController {
                 .age(user.getAge())
                 .gender(user.getGender())
                 .mbti(user.getMbti())
-                .isNewUser(isNewUser)
                 .message("유저 정보 요청에 성공했습니다.")
                 .build();
 
