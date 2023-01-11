@@ -6,14 +6,14 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class GetLoginToken {
+public class GetLoginTokenResponse {
 
     private String token;
 
     private boolean isNewUser;
 
     @Builder
-    public GetLoginToken(String token, boolean isNewUser) {
+    public GetLoginTokenResponse(String token, boolean isNewUser) {
         this.token = token;
         this.isNewUser = isNewUser;
     }

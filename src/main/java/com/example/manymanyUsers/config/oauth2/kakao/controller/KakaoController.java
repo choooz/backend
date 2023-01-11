@@ -1,13 +1,11 @@
 package com.example.manymanyUsers.config.oauth2.kakao.controller;
 
+import com.example.manymanyUsers.config.oauth2.kakao.dto.GetLoginTokenResponse;
 import com.example.manymanyUsers.config.oauth2.kakao.dto.GetUserInfo;
 import com.example.manymanyUsers.config.oauth2.kakao.dto.GetkakaoToken;
-import com.example.manymanyUsers.config.oauth2.kakao.dto.TokenResponse;
 import com.example.manymanyUsers.config.oauth2.kakao.service.KakaoService;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
-import com.example.manymanyUsers.vote.enums.Gender;
-import com.example.manymanyUsers.vote.enums.MBTI;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
@@ -36,14 +34,11 @@ public class KakaoController {
      * @throws ParseException
      */
     @PostMapping("/kakao")
-    public ResponseEntity<TokenResponse> getKaKaoToken(@Valid @RequestBody GetkakaoToken getkakaoToken) throws IOException, ParseException {
+    public ResponseEntity<GetLoginTokenResponse> getKaKaoToken(@Valid @RequestBody GetkakaoToken getkakaoToken) throws IOException, ParseException {
         String code = getkakaoToken.getCode();
         String redirectUrl = getkakaoToken.getRedirectUrl();
-        String accessToken = kakaoService.KakaoLogin(code, redirectUrl);
-        TokenResponse tokenResponse = TokenResponse.builder()
-                .token(accessToken)
-                .build();
-        return new ResponseEntity(tokenResponse, HttpStatus.OK);
+        GetLoginTokenResponse getLoginToken = kakaoService.KakaoLogin(code, redirectUrl);
+        return new ResponseEntity(getLoginToken, HttpStatus.OK);
     }
 
 

@@ -1,10 +1,10 @@
 package com.example.manymanyUsers.config.oauth2.kakao.service;
 
 import com.example.manymanyUsers.config.jwt.JwtTokenProvider;
+import com.example.manymanyUsers.config.oauth2.kakao.dto.GetLoginTokenResponse;
 import com.example.manymanyUsers.user.enums.Providers;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
-import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.RequiredArgsConstructor;
@@ -148,7 +148,7 @@ public class KakaoService {
     }
 
 
-    public String KakaoLogin(String code, String redirectUrl) throws IOException, ParseException {
+    public GetLoginTokenResponse KakaoLogin(String code, String redirectUrl) throws IOException, ParseException {
         String KakaoaccessToken = this.getKakaoToken(code, redirectUrl);// 인가 코드로 카카오 서버에 카카오 엑세스 토큰 요청
         Map<String, String> userInfo = this.getKaKaoUserInfo(KakaoaccessToken);  //카카오 서버에 카카오 엑세스 토큰으로 유저정보 요청
         Optional<User> id = findByProviderId(userInfo.get("id"));
@@ -162,10 +162,11 @@ public class KakaoService {
             user.setGender(Gender.NULL);
             userRepository.save(user);
             isNewUser = true;
-            return this.jwtTokenProvider.makeJwtToken(user.getId(), 30);
+            return new GetLoginTokenResponse(this.jwtTokenProvider.makeJwtToken(user.getId(), 30), isNewUser);
+
         }
         User findUser = id.get();
-        return this.jwtTokenProvider.makeJwtToken(findUser.getId(),30); // 카카오 계정은 이매일이 카카오에서 주는 아이디값이라 아이디 값으로 대체
+        return new GetLoginTokenResponse(this.jwtTokenProvider.makeJwtToken(findUser.getId(), 30), isNewUser); // 카카오 계정은 이매일이 카카오에서 주는 아이디값이라 아이디 값으로 대체
     }
 
 
