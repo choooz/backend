@@ -49,7 +49,7 @@ public class UserController {
 
 
     @PatchMapping("/addInterestCategory")
-    public ResponseEntity AddInterestCategory(@RequestBody AddInterestCategoryRequest addInterestCategoryRequest) {
+    public ResponseEntity<CommonResponse> AddInterestCategory(@RequestBody AddInterestCategoryRequest addInterestCategoryRequest) {
         try {
             userService.addInterestCategory(addInterestCategoryRequest);
         } catch (NotFoundException e) {
