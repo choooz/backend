@@ -8,13 +8,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetLoginTokenResponse {
 
-    private String token;
+    private String accessToken;
 
     private boolean isNewUser;
 
     @Builder
-    public GetLoginTokenResponse(String token, boolean isNewUser) {
-        this.token = token;
+    public GetLoginTokenResponse(String accessToken, boolean isNewUser) {
+        this.accessToken = accessToken;
         this.isNewUser = isNewUser;
     }
 }
