@@ -32,7 +32,7 @@ public class UserController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @PostMapping("/addInfo")
+    @PatchMapping("/addInfo")
     public ResponseEntity<AddNewInfoResponse> addUserInfo(@Valid @RequestBody AddInfoRequest addInfoRequest, @RequestAttribute Claims claims) {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
