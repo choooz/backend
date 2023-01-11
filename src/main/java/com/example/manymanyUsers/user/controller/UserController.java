@@ -47,10 +47,6 @@ public class UserController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-//    @GetMapping("/nickname")
-//    public GetUserNickNameRequest getUserNickName() {
-//        return userService.getUserNickName();
-//    }
 
     @PatchMapping("/addInterestCategory")
     public ResponseEntity AddInterestCategory(@RequestBody AddInterestCategoryRequest addInterestCategoryRequest) {
