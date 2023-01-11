@@ -42,6 +42,10 @@ public class UserService {
         user.setEmail(signUpRequestDto.getEmail());
         user.setPassword(signUpRequestDto.getPassword());
 
+        user.setMbti(MBTI.NULL);
+        user.setGender(Gender.NULL);
+        user.setAge(0);
+
         User result = userRepository.save(user);
         return result.getId();
     }
