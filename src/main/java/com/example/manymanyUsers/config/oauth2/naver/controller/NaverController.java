@@ -1,6 +1,7 @@
 package com.example.manymanyUsers.config.oauth2.naver.controller;
 
 
+import com.example.manymanyUsers.config.oauth2.kakao.dto.GetLoginTokenResponse;
 import com.example.manymanyUsers.config.oauth2.kakao.dto.GetUserInfo;
 import com.example.manymanyUsers.config.oauth2.kakao.dto.TokenResponse;
 import com.example.manymanyUsers.config.oauth2.naver.dto.GetnaverToken;
@@ -27,14 +28,11 @@ public class NaverController {
 
 
     @PostMapping("/naver")
-    public ResponseEntity<TokenResponse> getNaverToken(@Valid @RequestBody GetnaverToken getnaverToken) throws IOException, ParseException {
+    public ResponseEntity<GetLoginTokenResponse> getNaverToken(@Valid @RequestBody GetnaverToken getnaverToken) throws IOException, ParseException {
         String code = getnaverToken.getCode();
         String state = getnaverToken.getState();
-        String accessToken = naverService.NaverLogin(code, state);
-        TokenResponse tokenResponse = TokenResponse.builder()
-                .token(accessToken)
-                .build();
-        return new ResponseEntity(tokenResponse, HttpStatus.OK);
+        GetLoginTokenResponse getLoginTokenResponse = naverService.NaverLogin(code, state);
+        return new ResponseEntity(getLoginTokenResponse, HttpStatus.OK);
     }
 
 }

@@ -41,13 +41,12 @@ public class UserServiceTest {
 
         AddInfoRequest addInfoRequest = new AddInfoRequest();
 
-        addInfoRequest.setUserId(userId);
         addInfoRequest.setAge(26);
         addInfoRequest.setGender(Gender.MALE);
         addInfoRequest.setMbti(MBTI.INFJ);
 
         //when
-        userService.addUserInfo(addInfoRequest);
+        userService.addUserInfo(addInfoRequest,userId);
 
         //then
         Optional<User> byId = userRepository.findById(userId);
@@ -67,13 +66,12 @@ public class UserServiceTest {
 
         AddInfoRequest addInfoRequest = new AddInfoRequest();
 
-        addInfoRequest.setUserId(0L);
         addInfoRequest.setAge(26);
         addInfoRequest.setGender(Gender.MALE);
         addInfoRequest.setMbti(MBTI.INFJ);
 
         //when
-        userService.addUserInfo(addInfoRequest);
+        userService.addUserInfo(addInfoRequest, 0L);
 
         //then
 

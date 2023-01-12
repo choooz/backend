@@ -1,11 +1,9 @@
 package com.example.manymanyUsers.user.controller;
 
-import com.example.manymanyUsers.user.dto.AddInfoRequest;
-import com.example.manymanyUsers.user.dto.AddInterestCategoryRequest;
-import com.example.manymanyUsers.user.dto.GetUserNickNameRequest;
-import com.example.manymanyUsers.user.dto.SignUpRequest;
+import com.example.manymanyUsers.user.dto.*;
 import com.example.manymanyUsers.user.service.UserService;
 import com.example.manymanyUsers.common.dto.CommonResponse;
+import io.jsonwebtoken.Claims;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -34,25 +32,23 @@ public class UserController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @PostMapping("/addInfo")
-    public ResponseEntity addUserInfo(@Valid @RequestBody AddInfoRequest addInfoRequest) {
+    @PatchMapping("/addInfo")
+    public ResponseEntity<CommonResponse> addUserInfo(@Valid @RequestBody AddInfoRequest addInfoRequest, @RequestAttribute Claims claims) {
+        Integer userId = (int) claims.get("userId");
+        Long longId = Long.valueOf(userId);
         try {
-            userService.addUserInfo(addInfoRequest);
+             userService.addUserInfo(addInfoRequest, longId);
         } catch (NotFoundException e) {
             CommonResponse response = new CommonResponse("해당 아이디 값을 가진 유저가 없습니다. 아이디를 다시 한번 확인하세요.");
             return new ResponseEntity(response, HttpStatus.NOT_FOUND);
         }
-        CommonResponse response = new CommonResponse("유저 정보 저장에 성공했습니다.");
+        CommonResponse response = new CommonResponse("유저 정보 추가에 성공했습니다.");
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @GetMapping("/nickname")
-    public GetUserNickNameRequest getUserNickName() {
-        return userService.getUserNickName();
-    }
 
     @PatchMapping("/addInterestCategory")
-    public ResponseEntity AddInterestCategory(@RequestBody AddInterestCategoryRequest addInterestCategoryRequest) {
+    public ResponseEntity<CommonResponse> AddInterestCategory(@RequestBody AddInterestCategoryRequest addInterestCategoryRequest) {
         try {
             userService.addInterestCategory(addInterestCategoryRequest);
         } catch (NotFoundException e) {

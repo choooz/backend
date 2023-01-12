@@ -1,8 +1,8 @@
 package com.example.manymanyUsers.config.oauth2.kakao.controller;
 
+import com.example.manymanyUsers.config.oauth2.kakao.dto.GetLoginTokenResponse;
 import com.example.manymanyUsers.config.oauth2.kakao.dto.GetUserInfo;
 import com.example.manymanyUsers.config.oauth2.kakao.dto.GetkakaoToken;
-import com.example.manymanyUsers.config.oauth2.kakao.dto.TokenResponse;
 import com.example.manymanyUsers.config.oauth2.kakao.service.KakaoService;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
@@ -34,25 +34,23 @@ public class KakaoController {
      * @throws ParseException
      */
     @PostMapping("/kakao")
-    public ResponseEntity<TokenResponse> getKaKaoToken(@Valid @RequestBody GetkakaoToken getkakaoToken) throws IOException, ParseException {
+    public ResponseEntity<GetLoginTokenResponse> getKaKaoToken(@Valid @RequestBody GetkakaoToken getkakaoToken) throws IOException, ParseException {
         String code = getkakaoToken.getCode();
         String redirectUrl = getkakaoToken.getRedirectUrl();
-        String accessToken = kakaoService.KakaoLogin(code, redirectUrl);
-        TokenResponse tokenResponse = TokenResponse.builder()
-                .token(accessToken)
-                .build();
-        return new ResponseEntity(tokenResponse, HttpStatus.OK);
+        GetLoginTokenResponse getLoginToken = kakaoService.KakaoLogin(code, redirectUrl);
+        return new ResponseEntity(getLoginToken, HttpStatus.OK);
     }
 
 
     @GetMapping("/login")
     public ResponseEntity<GetUserInfo> getUserInfo(@RequestAttribute Claims claims) {
-        //엑세스 토큰안의 유저 이메일로 유저를 찾은 다음 유저정보 리턴해줌
-        String providerId = (String) claims.get("providerId");
-        System.out.println("providerId = " + providerId);
-        //provderId로 유저 꺼내기
-        Optional<User> result = userRepository.findByProviderId(providerId);
+        //엑세스 토큰안의 유저 아이디로 유저를 찾은 다음 유저정보 리턴해줌
+        Integer userId = (int) claims.get("userId");
+        Long longId = Long.valueOf(userId);
+        //userId로 유저 꺼내기
+        Optional<User> result = userRepository.findById(longId);
         User user = result.get();
+
         GetUserInfo getUserInfo = GetUserInfo.builder()
                 .username(user.getNickname())
                 .email(user.getEmail())
@@ -64,6 +62,7 @@ public class KakaoController {
                 .mbti(user.getMbti())
                 .message("유저 정보 요청에 성공했습니다.")
                 .build();
+
         return new ResponseEntity(getUserInfo, HttpStatus.OK);
     }
 }
