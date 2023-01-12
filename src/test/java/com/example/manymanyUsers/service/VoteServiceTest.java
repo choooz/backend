@@ -47,7 +47,6 @@ public class VoteServiceTest {
 
         //when
         CreateVoteRequest createVoteRequest = new CreateVoteRequest(
-                userId,
                 "투표 제목",
                 "imageA",
                 "imageB",
@@ -59,9 +58,9 @@ public class VoteServiceTest {
                 "titleA",
                 "titleB");
 
-        voteService.createVote(createVoteRequest);
+        voteService.createVote(createVoteRequest,userId);
 
-        Optional<User> userRepositoryByProviderId = userRepository.findById(createVoteRequest.getUserId());
+        Optional<User> userRepositoryByProviderId = userRepository.findById(userId);
         User user = userRepositoryByProviderId.get();
 
         Optional<Vote> byProviderId = voteRepository.findByPostedUser(user);
