@@ -88,7 +88,6 @@ public class VoteServiceTest {
 
         //when
         CreateVoteRequest createVoteRequest = new CreateVoteRequest(
-                0L,
                 "투표 제목",
                 "imageA",
                 "imageB",
@@ -101,7 +100,7 @@ public class VoteServiceTest {
                 "titleB");
 
         //then
-        voteService.createVote(createVoteRequest);
+        voteService.createVote(createVoteRequest,0L);
 
     }
 
