@@ -21,7 +21,6 @@ public class CreateVoteRequest {
 
     private String ImageB;
 
-    @NotBlank
     private String detail;
 
     private Gender FilteredGender;
