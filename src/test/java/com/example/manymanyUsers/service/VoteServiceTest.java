@@ -328,7 +328,61 @@ public class VoteServiceTest {
 
     }
 
+    @Test(expected = NotFoundException.class)
+    public void 투표수정_실패_아이디를_가진_투표가_없음() throws Exception {
 
+        //given
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
+        Long userId = userService.registerUser(request);
+
+        CreateVoteRequest createVoteRequest = new CreateVoteRequest(
+                "투표 제목",
+                "imageA",
+                "imageB",
+                "detailText",
+                Gender.NULL,
+                Age.NULL,
+                Category.NULL,
+                MBTI.ENFJ,
+                "titleA",
+                "titleB");
+
+        voteService.createVote(createVoteRequest,userId);
+
+        Optional<User> userRepositoryByProviderId = userRepository.findById(userId);
+        User user = userRepositoryByProviderId.get();
+
+        Optional<Vote> byProviderId = voteRepository.findByPostedUser(user);
+        Vote vote = byProviderId.get();
+
+        //when
+        UpdateVoteRequest updateVoteRequest = new UpdateVoteRequest(
+                100L,
+                "title, titleA 만 바꾸겠습니다",
+                "imageA",
+                "imageB",
+                "detailText",
+                Gender.NULL,
+                Age.NULL,
+                Category.NULL,
+                MBTI.ENFJ,
+                "title, titleA 만 바꾸겠습니다",
+                "titleB");
+
+        voteService.updateVote(updateVoteRequest, userId);
+
+        //then
+        assertEquals(vote.getPostedUser(), user);
+        assertEquals(vote.getTotalTitle(), updateVoteRequest.getTitle());
+        assertEquals(vote.getCategory(), updateVoteRequest.getCategory());
+        assertEquals(vote.getDetail(), updateVoteRequest.getDetail());
+        assertEquals(vote.getImageA(), updateVoteRequest.getImageA());
+        assertEquals(vote.getImageB(), updateVoteRequest.getImageB());
+        assertEquals(vote.getFilteredGender(), updateVoteRequest.getFilteredGender());
+        assertEquals(vote.getFilteredAge(), updateVoteRequest.getFilteredAge());
+        assertEquals(vote.getCategory(), updateVoteRequest.getCategory());
+
+    }
 
 //    @Test(expected = NoSuchElementException.class)
 //    public void 투표삭제_성공() throws Exception {
