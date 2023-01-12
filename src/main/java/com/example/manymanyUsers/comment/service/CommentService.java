@@ -10,6 +10,7 @@ import com.example.manymanyUsers.comment.repository.CommentLikeRepository;
 import com.example.manymanyUsers.comment.repository.CommentRepository;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
+import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.RequiredArgsConstructor;
@@ -41,22 +42,14 @@ public class CommentService {
                 .mbti(user.getMbti())
                 .gender(user.getGender())
                 .build();
-        comment.setAge(comment.ClassifyAge(user.getAge()));
+        comment.ClassifyAge(user.getAge());   //comment의 Age 정보는 user 정보와 상이하기 때문에 ClassifyAge를 사용하여 따로 저장해주었음.
         commentRepository.save(comment);
     }
 
 
-    public List<Comment> getComments(Long voteId ,String gender,String age,String mbti) {
-        Gender getGender = null;
-        if(gender != null) {
-            getGender = Gender.valueOf(gender);
-        }
+    public List<Comment> getComments(Long voteId, Gender gender, Age age, MBTI mbti) {
 
-        MBTI getMbti = null;
-        if (mbti != null){
-            getMbti = MBTI.valueOf(mbti);
-        }
-        List<Comment> comments = commentRepository.filteredComments(voteId,getGender,age,getMbti);
+        List<Comment> comments = commentRepository.filteredComments(voteId,gender,age,mbti);
 
         return comments;
     }

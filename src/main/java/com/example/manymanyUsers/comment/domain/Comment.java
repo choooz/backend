@@ -4,6 +4,7 @@ package com.example.manymanyUsers.comment.domain;
 import com.example.manymanyUsers.comment.dto.CommentUpdateRequest;
 import com.example.manymanyUsers.common.domain.BaseTimeEntity;
 import com.example.manymanyUsers.user.domain.User;
+import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.*;
@@ -34,8 +35,9 @@ public class Comment extends BaseTimeEntity {
     @Column
     private String content;
 
+    @Enumerated(EnumType.STRING)
     @Column
-    private String age;
+    private Age age;
 
     @Enumerated(EnumType.STRING)
     @Column
@@ -48,7 +50,7 @@ public class Comment extends BaseTimeEntity {
     @Column
     private Long likeCount;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "comment", cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "comment")
     private List<CommentLike> commentLikeList = new ArrayList<>();
 
 
@@ -70,44 +72,29 @@ public class Comment extends BaseTimeEntity {
         this.content = commentUpdateRequest.getContent();
     }
 
-    public String ClassifyAge(Integer age){
-        String ageGroup = "";
+    public void ClassifyAge(Integer age){
+        Age ageGroup;
         switch (age/10){
-            case 0:
-                ageGroup = "10대 미만";
-                break;
             case 1:
-                ageGroup = "10";
+                ageGroup = Age.teenager;
                 break;
             case 2:
-                ageGroup = "20";
+                ageGroup = Age.twenties;
                 break;
             case 3:
-                ageGroup = "30";
+                ageGroup = Age.thirties;
                 break;
             case 4:
-                ageGroup = "40";
+                ageGroup = Age.tourties;
                 break;
             case 5:
-                ageGroup = "50";
-                break;
-            case 6:
-                ageGroup = "60";
-                break;
-            case 7:
-                ageGroup = "70";
-                break;
-            case 8:
-                ageGroup = "80";
-                break;
-            case 9:
-                ageGroup = "90";
+                ageGroup = Age.fifties;
                 break;
             default:
-                ageGroup = "90대 이상";
+                ageGroup = Age.NULL;
                 break;
         }
-        return ageGroup;
+        this.age = ageGroup;
     }
 
 }

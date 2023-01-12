@@ -12,8 +12,6 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 public class CommentLike {
     @Id
     @GeneratedValue

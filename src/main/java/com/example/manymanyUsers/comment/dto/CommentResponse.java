@@ -25,13 +25,13 @@ public class CommentResponse {
 
     private String content;
 
-    private Gender Gender;
+    private Gender gender;
 
     private String imageUrl;
 
-    private String Age;
+    private Age age;
 
-    private MBTI Mbti;
+    private MBTI mbti;
 
     private String nickName;
 
