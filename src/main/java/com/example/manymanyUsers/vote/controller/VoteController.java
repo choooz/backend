@@ -74,5 +74,14 @@ public class VoteController {
         return new ResponseEntity(updateVoteResponse, HttpStatus.OK);
     }
 
+    @DeleteMapping("/deleteVote/{voteId}")
+    public ResponseEntity<CommonResponse> deleteVote(@PathVariable("voteId") Long voteId) {
+        voteService.deleteVote(voteId);
 
+        CommonResponse updateVoteResponse = CommonResponse.builder()
+                .message("투표 수정에 성공했습니다")
+                .build();
+
+        return new ResponseEntity(updateVoteResponse, HttpStatus.OK);
+    }
 }
