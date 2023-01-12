@@ -177,8 +177,8 @@ public class VoteServiceTest {
                 }
                 String titleA = "titleA" + i;
                 String titleB = "titleB" + i;
-                CreateVoteRequest createVoteRequest = new CreateVoteRequest(userid, voteTitle, imageA, imageB, detail, filteredGender, filteredAge, category, filteredMbti, titleA, titleB);
-                Vote vote = voteService.createVote(createVoteRequest);
+                CreateVoteRequest createVoteRequest = new CreateVoteRequest(voteTitle, imageA, imageB, detail, filteredGender, filteredAge, category, filteredMbti, titleA, titleB);
+                Vote vote = voteService.createVote(createVoteRequest, userid);
                 voteTestList.add(vote);
             } catch (Exception e) {
                 System.out.println("e = " + e);
