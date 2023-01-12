@@ -55,10 +55,13 @@ public class VoteController {
     }
 
     @PatchMapping("/updateVote")
-    public ResponseEntity<CommonResponse> updateVote(@Valid @RequestBody UpdateVoteRequest updateVoteRequest) {
+    public ResponseEntity<CommonResponse> updateVote(@Valid @RequestBody UpdateVoteRequest updateVoteRequest, @RequestAttribute Claims claims) {
+
+        Integer userId = (int) claims.get("userId");
+        Long longId = Long.valueOf(userId);
 
         try {
-            voteService.updateVote(updateVoteRequest);
+            voteService.updateVote(updateVoteRequest, longId);
         } catch (NotFoundException e) {
             log.info("error",e);
             CommonResponse createVoteResponse = CommonResponse.builder()
