@@ -32,7 +32,7 @@ public class VoteController {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
         try {
-            voteService.createVote(createVoteRequest);
+            voteService.createVote(createVoteRequest, longId);
         } catch (NotFoundException e) {
             log.info("error", e);
             CommonResponse createVoteResponse = CommonResponse.builder()
