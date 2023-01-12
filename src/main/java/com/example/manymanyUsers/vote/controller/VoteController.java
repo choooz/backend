@@ -78,8 +78,20 @@ public class VoteController {
     }
 
     @DeleteMapping("/deleteVote/{voteId}")
-    public ResponseEntity<CommonResponse> deleteVote(@PathVariable("voteId") Long voteId) {
-        voteService.deleteVote(voteId);
+    public ResponseEntity<CommonResponse> deleteVote(@PathVariable("voteId") Long voteId, @RequestAttribute Claims claims) throws NotFoundException {
+
+        Integer userId = (int) claims.get("userId");
+        Long longId = Long.valueOf(userId);
+
+        try {
+            voteService.deleteVote(voteId, longId);
+        } catch (NotFoundException e) {
+            log.info("error",e);
+            CommonResponse createVoteResponse = CommonResponse.builder()
+                    .message("해당 아이디를 가진 투표가 없습니다. 아이디를 다시 확인하세요.")
+                    .build();
+            return new ResponseEntity(createVoteResponse, HttpStatus.NOT_FOUND);
+        }
 
         CommonResponse updateVoteResponse = CommonResponse.builder()
                 .message("투표 수정에 성공했습니다")
