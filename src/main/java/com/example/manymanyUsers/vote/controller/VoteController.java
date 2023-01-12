@@ -8,6 +8,7 @@ import com.example.manymanyUsers.vote.dto.VoteListData;
 import com.example.manymanyUsers.vote.dto.VoteResponse;
 import com.example.manymanyUsers.vote.enums.SortBy;
 import com.example.manymanyUsers.vote.service.VoteService;
+import io.jsonwebtoken.Claims;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,10 +28,11 @@ public class VoteController {
     private final VoteService voteService;
 
     @PostMapping("/createVote")
-    public ResponseEntity<CommonResponse> createVote(@Valid @RequestBody CreateVoteRequest createVoteRequest) {
-
+    public ResponseEntity<CommonResponse> createVote(@Valid @RequestBody CreateVoteRequest createVoteRequest, @RequestAttribute Claims claims) {
+        Integer userId = (int) claims.get("userId");
+        Long longId = Long.valueOf(userId);
         try {
-            voteService.createVote(createVoteRequest);
+            voteService.createVote(createVoteRequest, longId);
         } catch (NotFoundException e) {
             log.info("error", e);
             CommonResponse createVoteResponse = CommonResponse.builder()
