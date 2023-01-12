@@ -50,7 +50,7 @@ public class UserService {
         return result.getId();
     }
 
-    public boolean addUserInfo(AddInfoRequest addInfoRequest, Long userId) throws NotFoundException{
+    public void addUserInfo(AddInfoRequest addInfoRequest, Long userId) throws NotFoundException{
         Optional<User> byId = userRepository.findById(userId);
         if (byId.isEmpty()) {
             throw new NotFoundException("해당 아이디 값을 가진 유저가 없습니다. 아이디를 다시 한번 확인하세요.");
@@ -58,18 +58,13 @@ public class UserService {
 
         User user = byId.get();
 
-        boolean isNewUser = false;
-
         if(user.getAge().equals(0) && user.getGender().equals(Gender.NULL) && user.getMbti().equals(MBTI.NULL) ){
             // 새로운 유저일때 닉네임 랜덤으로 생성
             GetUserNickNameRequest nickNameRequest = getUserNickName();
 
             String[] nickNameRequestWords = nickNameRequest.getWords();
             user.setNickname(nickNameRequestWords[0]);
-            isNewUser = true;
         }
-
-
 
         user.setAge(addInfoRequest.getAge());
         user.setGender(addInfoRequest.getGender());
@@ -78,7 +73,6 @@ public class UserService {
 
         userRepository.save(user);
 
-        return isNewUser;
     }
 
 

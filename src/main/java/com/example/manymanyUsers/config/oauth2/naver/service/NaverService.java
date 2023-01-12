@@ -1,6 +1,7 @@
 package com.example.manymanyUsers.config.oauth2.naver.service;
 
 import com.example.manymanyUsers.config.jwt.JwtTokenProvider;
+import com.example.manymanyUsers.config.oauth2.kakao.dto.GetLoginTokenResponse;
 import com.example.manymanyUsers.user.enums.Providers;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
@@ -123,10 +124,11 @@ public class NaverService {
 
     }
 
-    public String NaverLogin(String code, String state) throws IOException, ParseException {
+    public GetLoginTokenResponse NaverLogin(String code, String state) throws IOException, ParseException {
         String NaveraccessToken = this.getNaverToken(code, state);// 인가 코드로 네이버 서버에 카카오 엑세스 토큰 요청
         Map<String, String> userInfo = this.getNaverUserInfo(NaveraccessToken);  //네이버 서버에 네이버 엑세스 토큰으로 유저정보 요청
         Optional<User> id = getUserByEmail(userInfo.get("id"));
+        boolean isNewUser = false;
         if (id.isEmpty()) {
             User user = new User();
             user.setProviderId(userInfo.get("id"));
@@ -135,10 +137,11 @@ public class NaverService {
             user.setMbti(MBTI.NULL);
             user.setGender(Gender.NULL);
             userRepository.save(user);
-            return this.jwtTokenProvider.makeJwtToken(user.getId(), 30);
+            isNewUser = true;
+            return new GetLoginTokenResponse(this.jwtTokenProvider.makeJwtToken(user.getId(), 30), isNewUser);
         }
         User findUser = id.get();
-        return this.jwtTokenProvider.makeJwtToken(findUser.getId(),30);
+        return new GetLoginTokenResponse(this.jwtTokenProvider.makeJwtToken(findUser.getId(), 30), isNewUser);
     }
 
 
