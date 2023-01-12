@@ -6,7 +6,7 @@ public enum Age implements EnumModel {
     teenager("10대"),
     twenties("20대"),
     thirties("30대"),
-    tourties("40대"),
+    fourties("40대"),
     fifties("50대"),
     NULL("null");
 

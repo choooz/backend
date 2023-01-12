@@ -14,8 +14,6 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class CreateVoteRequest {
 
-    private Long userId;
-
     @NotBlank
     private String title;
 
@@ -23,7 +21,6 @@ public class CreateVoteRequest {
 
     private String ImageB;
 
-    @NotBlank
     private String detail;
 
     private Gender FilteredGender;
