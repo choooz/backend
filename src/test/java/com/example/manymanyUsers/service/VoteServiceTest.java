@@ -7,6 +7,7 @@ import com.example.manymanyUsers.user.enums.Providers;
 import com.example.manymanyUsers.user.service.UserService;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.dto.CreateVoteRequest;
+import com.example.manymanyUsers.vote.dto.UpdateVoteRequest;
 import com.example.manymanyUsers.vote.dto.VoteListData;
 import com.example.manymanyUsers.vote.enums.*;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
@@ -22,10 +23,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -206,4 +204,112 @@ public class VoteServiceTest {
             i++;
         }
     }
+
+    @Test
+    public void 투표수정_성공() throws Exception {
+        //given
+
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
+        Long userId = userService.registerUser(request);
+
+        CreateVoteRequest createVoteRequest = new CreateVoteRequest(
+                "투표 제목",
+                "imageA",
+                "imageB",
+                "detailText",
+                Gender.NULL,
+                Age.NULL,
+                Category.NULL,
+                MBTI.ENFJ,
+                "titleA",
+                "titleB");
+
+        voteService.createVote(createVoteRequest,userId);
+
+        Optional<User> userRepositoryByProviderId = userRepository.findById(userId);
+        User user = userRepositoryByProviderId.get();
+
+        Optional<Vote> byProviderId = voteRepository.findByPostedUser(user);
+        Vote vote = byProviderId.get();
+        System.out.println("수정 전 타이틀: " + vote.getTotalTitle());
+        System.out.println("수정 전 이미지: " + vote.getImageA());
+        System.out.println("수정 전 이미지: " + vote.getImageB());
+        System.out.println("수정 전 타이틀A " + vote.getTitleA());
+        System.out.println("수정 전 타이틀B " + vote.getTitleB());
+
+        //when
+        UpdateVoteRequest updateVoteRequest = new UpdateVoteRequest(
+                vote.getId(),
+                "title, titleA 만 바꾸겠습니다",
+                "imageA",
+                "imageB",
+                "detailText",
+                Gender.NULL,
+                Age.NULL,
+                Category.NULL,
+                MBTI.ENFJ,
+                "title, titleA 만 바꾸겠습니다",
+                "titleB");
+
+        voteService.updateVote(updateVoteRequest, userId);
+
+        //then
+
+        assertEquals(vote.getPostedUser(), user);
+        assertEquals(vote.getTotalTitle(), updateVoteRequest.getTitle());
+        assertEquals(vote.getCategory(), updateVoteRequest.getCategory());
+        assertEquals(vote.getDetail(), updateVoteRequest.getDetail());
+        assertEquals(vote.getImageA(), updateVoteRequest.getImageA());
+        assertEquals(vote.getImageB(), updateVoteRequest.getImageB());
+        assertEquals(vote.getFilteredGender(), updateVoteRequest.getFilteredGender());
+        assertEquals(vote.getFilteredAge(), updateVoteRequest.getFilteredAge());
+        assertEquals(vote.getCategory(), updateVoteRequest.getCategory());
+
+        System.out.println("수정 후 타이틀: " + vote.getTotalTitle());
+        System.out.println("수정 후 이미지: " + vote.getImageA());
+        System.out.println("수정 후 이미지: " + vote.getImageB());
+        System.out.println("수정 후 타이틀A " + vote.getTitleA());
+        System.out.println("수정 후 타이틀B " + vote.getTitleB());
+    }
+
+//    @Test(expected = NoSuchElementException.class)
+//    public void 투표삭제_성공() throws Exception {
+//
+//        //given
+//        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.NAVER, "providerId");
+//        Long userId = userService.registerUser(request);
+//
+//        CreateVoteRequest createVoteRequest = new CreateVoteRequest(
+//                userId,
+//                "투표 제목",
+//                "imageA",
+//                "imageB",
+//                "detailText",
+//                Gender.NULL,
+//                Age.NULL,
+//                Category.NULL,
+//                MBTI.ENFJ,
+//                "titleA",
+//                "titleB");
+//
+//        voteService.createVote(createVoteRequest);
+//
+//        Optional<User> userRepositoryByProviderId = userRepository.findById(createVoteRequest.getUserId());
+//        User user = userRepositoryByProviderId.get();
+//
+//        Optional<Vote> byProviderId = voteRepository.findByPostedUser(user);
+//        Vote vote = byProviderId.get();
+//
+//        //when
+//
+//        voteService.deleteVote(vote.getId());
+//
+//        //then
+//
+//        Optional<Vote> removedVote = voteRepository.findById(vote.getId());
+//
+//        System.out.println("removedVote.Id(): " + removedVote.getClass());
+//        Vote removedVote2 = removedVote.get();  //투표를 찾을 수 없음 (NoSuchElementException)
+//
+//    }
 }
