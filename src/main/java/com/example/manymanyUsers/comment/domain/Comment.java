@@ -15,7 +15,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -85,7 +84,7 @@ public class Comment extends BaseTimeEntity {
                 ageGroup = Age.thirties;
                 break;
             case 4:
-                ageGroup = Age.tourties;
+                ageGroup = Age.fourties;
                 break;
             case 5:
                 ageGroup = Age.fifties;
