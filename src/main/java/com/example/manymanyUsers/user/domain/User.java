@@ -1,5 +1,6 @@
 package com.example.manymanyUsers.user.domain;
 
+import com.example.manymanyUsers.comment.domain.CommentLike;
 import com.example.manymanyUsers.common.domain.BaseTimeEntity;
 import com.example.manymanyUsers.user.enums.Providers;
 import com.example.manymanyUsers.user.enums.Role;
@@ -51,6 +52,13 @@ public class User extends BaseTimeEntity {
     @JoinColumn(name = "USER_ID")
     private List<CategoryEntity> categoryLists = new ArrayList<>();
 
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<CommentLike> commentLikeList = new ArrayList<>();
+
+    public void mappingCommentLike(CommentLike commentLike) {
+        this.commentLikeList.add(commentLike);
+    }
 
     @Builder
     public User(Long id, String nickname, String email, String imageUrl, String password, Providers provider, String providerId, Role role, Integer age, Gender gender, MBTI mbti, List<CategoryEntity> categoryLists) {
