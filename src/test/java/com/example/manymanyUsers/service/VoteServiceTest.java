@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Slice;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -425,5 +426,86 @@ public class VoteServiceTest {
 
     }
 
+    @Test(expected = EmptyResultDataAccessException.class)
+    public void 투표삭제_실패_아이디를_가진_투표가_없음() throws Exception {
+
+        //given
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
+        Long userId = userService.registerUser(request);
+
+        CreateVoteRequest createVoteRequest = new CreateVoteRequest(
+                "투표 제목",
+                "imageA",
+                "imageB",
+                "detailText",
+                Gender.NULL,
+                Age.NULL,
+                Category.NULL,
+                MBTI.ENFJ,
+                "titleA",
+                "titleB");
+
+        voteService.createVote(createVoteRequest,userId);
+
+        Optional<User> userRepositoryByProviderId = userRepository.findById(userId);
+        User user = userRepositoryByProviderId.get();
+
+        Optional<Vote> byProviderId = voteRepository.findByPostedUser(user);
+        Vote vote = byProviderId.get();
+
+
+        //when
+
+        voteService.deleteVote(100L, userId);
+
+        //then
+
+        Optional<Vote> removedVote = voteRepository.findById(vote.getId());
+
+        System.out.println("removedVote.Id(): " + removedVote.getClass());
+        Vote removedVote2 = removedVote.get();  //투표를 찾을 수 없음 (NoSuchElementException)
+
+    }
+
+    @Test(expected = EmptyResultDataAccessException.class)
+    public void 투표삭제_실패_아이디를_가진_투표가_없음() throws Exception {
+
+        //given
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
+        Long userId = userService.registerUser(request);
+
+        CreateVoteRequest createVoteRequest = new CreateVoteRequest(
+                "투표 제목",
+                "imageA",
+                "imageB",
+                "detailText",
+                Gender.NULL,
+                Age.NULL,
+                Category.NULL,
+                MBTI.ENFJ,
+                "titleA",
+                "titleB");
+
+        voteService.createVote(createVoteRequest,userId);
+
+        Optional<User> userRepositoryByProviderId = userRepository.findById(userId);
+        User user = userRepositoryByProviderId.get();
+
+        Optional<Vote> byProviderId = voteRepository.findByPostedUser(user);
+        Vote vote = byProviderId.get();
+
+
+        //when
+
+        voteService.deleteVote(100L, userId);
+
+        //then
+
+        Optional<Vote> removedVote = voteRepository.findById(vote.getId());
+
+        System.out.println("removedVote.Id(): " + removedVote.getClass());
+        Vote removedVote2 = removedVote.get();  //투표를 찾을 수 없음 (NoSuchElementException)
+
+    }
 
 }
