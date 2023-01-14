@@ -9,6 +9,7 @@ import com.example.manymanyUsers.vote.dto.VoteResponse;
 import com.example.manymanyUsers.vote.enums.SortBy;
 import com.example.manymanyUsers.vote.service.VoteService;
 import io.jsonwebtoken.Claims;
+import io.swagger.v3.oas.annotations.Operation;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ import java.util.List;
 public class VoteController {
     private final VoteService voteService;
 
+    @Operation(description = "투표 생성")
     @PostMapping("/createVote")
     public ResponseEntity<CommonResponse> createVote(@Valid @RequestBody CreateVoteRequest createVoteRequest, @RequestAttribute Claims claims) {
         Integer userId = (int) claims.get("userId");
@@ -48,6 +50,7 @@ public class VoteController {
         return new ResponseEntity(createVoteResponse, HttpStatus.OK);
     }
 
+    @Operation(description = "투표 리스트 조회")
     @GetMapping("/get")
     public ResponseEntity<VoteResponse> getVoteList(@RequestParam SortBy sortBy, @RequestParam int page, @RequestParam int size) {
         Slice<VoteListData> voteListData = voteService.getVoteList(sortBy, page, size);
