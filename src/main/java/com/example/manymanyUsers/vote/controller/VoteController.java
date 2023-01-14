@@ -94,7 +94,7 @@ public class VoteController {
         }
 
         CommonResponse updateVoteResponse = CommonResponse.builder()
-                .message("투표 수정에 성공했습니다")
+                .message("투표 삭제에 성공했습니다")
                 .build();
 
         return new ResponseEntity(updateVoteResponse, HttpStatus.OK);
