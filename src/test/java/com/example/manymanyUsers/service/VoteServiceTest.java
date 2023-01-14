@@ -467,8 +467,8 @@ public class VoteServiceTest {
 
     }
 
-    @Test(expected = EmptyResultDataAccessException.class)
-    public void 투표삭제_실패_아이디를_가진_투표가_없음() throws Exception {
+    @Test(expected = NotFoundException.class)
+    public void 투표삭제_실패_아이디를_가진_유저가_없음() throws Exception {
 
         //given
         SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
@@ -497,7 +497,7 @@ public class VoteServiceTest {
 
         //when
 
-        voteService.deleteVote(100L, userId);
+        voteService.deleteVote(vote.getId(), 100L);
 
         //then
 
