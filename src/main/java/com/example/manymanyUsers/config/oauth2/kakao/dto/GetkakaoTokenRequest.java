@@ -6,7 +6,7 @@ import lombok.Getter;
 import javax.validation.constraints.NotBlank;
 
 @Getter
-public class GetkakaoToken {
+public class GetkakaoTokenRequest {
     /**
      * 인가 코드 (인가코드는 1회용으로 요청을 한번 보냈으면 에러가 나기 때문에 요청을 다시 받아야함)
      */

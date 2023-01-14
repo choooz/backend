@@ -2,7 +2,7 @@ package com.example.manymanyUsers.config.oauth2.kakao.controller;
 
 import com.example.manymanyUsers.config.oauth2.kakao.dto.GetLoginTokenResponse;
 import com.example.manymanyUsers.config.oauth2.kakao.dto.GetUserInfoResponse;
-import com.example.manymanyUsers.config.oauth2.kakao.dto.GetkakaoToken;
+import com.example.manymanyUsers.config.oauth2.kakao.dto.GetkakaoTokenRequest;
 import com.example.manymanyUsers.config.oauth2.kakao.service.KakaoService;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
@@ -34,7 +34,7 @@ public class KakaoController {
      * @throws ParseException
      */
     @PostMapping("/kakao")
-    public ResponseEntity<GetLoginTokenResponse> getKaKaoToken(@Valid @RequestBody GetkakaoToken getkakaoToken) throws IOException, ParseException {
+    public ResponseEntity<GetLoginTokenResponse> getKaKaoToken(@Valid @RequestBody GetkakaoTokenRequest getkakaoToken) throws IOException, ParseException {
         String code = getkakaoToken.getCode();
         String redirectUrl = getkakaoToken.getRedirectUrl();
         GetLoginTokenResponse getLoginToken = kakaoService.KakaoLogin(code, redirectUrl);
