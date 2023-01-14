@@ -6,7 +6,7 @@ import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -29,7 +29,7 @@ public class UpdateVoteRequest {
 //        this.titleB = titleB;
 //    }
 
-    @NotBlank
+    @NotNull
     private Long voteId;
 
     private String title;
