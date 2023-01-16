@@ -2,6 +2,7 @@ package com.example.manymanyUsers.vote.controller;
 
 import com.example.manymanyUsers.vote.dto.*;
 import com.example.manymanyUsers.common.dto.CommonResponse;
+import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.SortBy;
 import com.example.manymanyUsers.vote.service.VoteService;
 import io.jsonwebtoken.Claims;
@@ -48,8 +49,8 @@ public class VoteController {
 
     @Operation(description = "투표 리스트 조회")
     @GetMapping("/get")
-    public ResponseEntity<GetVoteListResponse> getVoteList(@RequestParam SortBy sortBy, @RequestParam int page, @RequestParam int size) {
-        Slice<VoteListData> voteListData = voteService.getVoteList(sortBy, page, size);
+    public ResponseEntity<GetVoteListResponse> getVoteList(@RequestParam SortBy sortBy, @RequestParam int page, @RequestParam int size, @RequestParam Category category) {
+        Slice<VoteListData> voteListData = voteService.getVoteList(sortBy, page, size, category);
         GetVoteListResponse voteResponse = GetVoteListResponse.builder()
                 .voteSlice(voteListData)
                 .build();

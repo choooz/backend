@@ -177,14 +177,16 @@ public class VoteServiceTest {
                 String titleA = "titleA" + i;
                 String titleB = "titleB" + i;
                 CreateVoteRequest createVoteRequest = new CreateVoteRequest(voteTitle, imageA, imageB, detail, filteredGender, filteredAge, category, filteredMbti, titleA, titleB);
-                Vote vote = voteService.createVote(createVoteRequest, userid);
+                Long voteId = voteService.createVote(createVoteRequest, userid);
+                Optional<Vote> byId = voteRepository.findById(voteId);
+                Vote vote = byId.get();
                 voteTestList.add(vote);
             } catch (Exception e) {
                 System.out.println("e = " + e);
             }
         }
         //when
-        Slice<VoteListData> voteSlice = voteService.getVoteList(SortBy.ByTime, 0, 10);
+        Slice<VoteListData> voteSlice = voteService.getVoteList(SortBy.ByTime, 0, 10, Category.FASHION);
         List<VoteListData> voteResultList = voteSlice.getContent();
         //then
         voteTestList.sort((v1,v2)-> {
