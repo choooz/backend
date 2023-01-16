@@ -13,7 +13,7 @@ import java.io.Serializable;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GetUserInfo implements Serializable {
+public class GetUserInfoResponse implements Serializable {
 
     private Long userId;
 
@@ -42,7 +42,7 @@ public class GetUserInfo implements Serializable {
     private String message;
 
     @Builder
-    public GetUserInfo(Long userId, Providers provider, String providerId, String username, String email, String imageUrl, Integer age, Gender gender, MBTI mbti, String message) {
+    public GetUserInfoResponse(Long userId, Providers provider, String providerId, String username, String email, String imageUrl, Integer age, Gender gender, MBTI mbti, String message) {
         this.userId = userId;
         this.provider = provider;
         this.providerId = providerId;
