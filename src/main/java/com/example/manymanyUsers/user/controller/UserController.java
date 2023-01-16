@@ -4,6 +4,7 @@ import com.example.manymanyUsers.user.dto.*;
 import com.example.manymanyUsers.user.service.UserService;
 import com.example.manymanyUsers.common.dto.CommonResponse;
 import io.jsonwebtoken.Claims;
+import io.swagger.v3.oas.annotations.Operation;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -32,6 +33,7 @@ public class UserController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
+    @Operation(description = "유저 정보 추가, 헤더에 토큰담고 바디에 AddInfoRequest 행태로 넣어주셔야 합나디.")
     @PatchMapping("/addInfo")
     public ResponseEntity<CommonResponse> addUserInfo(@Valid @RequestBody AddInfoRequest addInfoRequest, @RequestAttribute Claims claims) {
         Integer userId = (int) claims.get("userId");

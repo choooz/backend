@@ -25,17 +25,9 @@ public class CreateVoteRequest {
     @Schema(description = "B 이미지")
     private String ImageB;
 
-    @Schema(description = "A 항목의 제목")
-    private String titleA;
-
-    @Schema(description = "B 항목의 제목")
-    private String titleB;
-
     @Schema(description = "투표 상세글")
     private String detail;
 
-    @Schema(description = "투표 카테고리")
-    private Category category;
 
     @Schema(description = "투표 받고 싶은 성별")
     private Gender FilteredGender;
@@ -43,6 +35,16 @@ public class CreateVoteRequest {
     @Schema(description = "투표 받고 싶은 나이대")
     private Age FilteredAge;
 
+    @Schema(description = "투표 카테고리")
+    private Category category;
+
     @Schema(description = "투표 받고 싶은 MBTI")
     private MBTI FilteredMbti;
+
+    @Schema(description = "A 항목의 제목")
+    private String titleA;
+
+    @Schema(description = "B 항목의 제목")
+    private String titleB;
+
 }
