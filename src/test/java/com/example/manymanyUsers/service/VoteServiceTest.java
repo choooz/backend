@@ -177,14 +177,16 @@ public class VoteServiceTest {
                 String titleA = "titleA" + i;
                 String titleB = "titleB" + i;
                 CreateVoteRequest createVoteRequest = new CreateVoteRequest(voteTitle, imageA, imageB, detail, filteredGender, filteredAge, category, filteredMbti, titleA, titleB);
-                Vote vote = voteService.createVote(createVoteRequest, userid);
+                Long voteId = voteService.createVote(createVoteRequest, userid);
+                Optional<Vote> byId = voteRepository.findById(voteId);
+                Vote vote = byId.get();
                 voteTestList.add(vote);
             } catch (Exception e) {
                 System.out.println("e = " + e);
             }
         }
         //when
-        Slice<VoteListData> voteSlice = voteService.getVoteList(SortBy.ByTime, 0, 10);
+        Slice<VoteListData> voteSlice = voteService.getVoteList(SortBy.ByTime, 0, 10, Category.FASHION);
         List<VoteListData> voteResultList = voteSlice.getContent();
         //then
         voteTestList.sort((v1,v2)-> {
@@ -198,9 +200,10 @@ public class VoteServiceTest {
         });
         int i =0;
         for (VoteListData voteListData : voteResultList) {
-            System.out.println("voteListData.getVoteId() = " + voteListData.getVoteId());
-            System.out.println("voteTestList.get(i).getId() = " + voteTestList.get(i).getId());
             System.out.println("i = " + i);
+            System.out.println("voteListData.getVoteId() = " + voteListData.getVoteId());
+            System.out.println("voteTestList = " + voteTestList);
+            System.out.println("voteTestList.get(i).getId() = " + voteTestList.get(i).getId());
             assertEquals(voteListData.getVoteId(),voteTestList.get(i).getId());
             i++;
         }
