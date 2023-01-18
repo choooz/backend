@@ -7,6 +7,7 @@ import com.example.manymanyUsers.vote.dto.CreateVoteRequest;
 import com.example.manymanyUsers.vote.dto.GetVoteListRequest;
 import com.example.manymanyUsers.vote.dto.UpdateVoteRequest;
 import com.example.manymanyUsers.vote.dto.VoteListData;
+import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.SortBy;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import javassist.NotFoundException;
@@ -28,7 +29,7 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;
 
-    public Vote createVote(@Valid CreateVoteRequest createVoteRequest, Long userid) throws NotFoundException{
+    public Long createVote(@Valid CreateVoteRequest createVoteRequest, Long userid) throws NotFoundException{
         Optional<User> find = userRepository.findById(userid);
         if(find.isEmpty()){
             throw new NotFoundException("해당 아이디를 가진 유저가 없습니다. 아이디 값을 다시 한번 확인하세요.");
@@ -50,7 +51,9 @@ public class VoteService {
         vote.setCategory(createVoteRequest.getCategory());
         vote.setFilteredMbti(createVoteRequest.getFilteredMbti());
 
-        return voteRepository.save(vote);
+        voteRepository.save(vote);
+
+        return vote.getId();
 
     }
 
@@ -59,7 +62,7 @@ public class VoteService {
 
     }
 
-    public Slice<VoteListData> getVoteList(SortBy soryBy, Integer page, Integer size){
+    public Slice<VoteListData> getVoteList(SortBy soryBy, Integer page, Integer size, Category category){
 
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, soryBy.getValue()));
         Slice<Vote> voteSlice = voteRepository.findSliceBy(pageRequest);
