@@ -1,4 +1,4 @@
-package com.example.manymanyUsers.comment.controller;
+package com.example.manymanyUsers.comment.domain.controller;
 
 
 import com.example.manymanyUsers.comment.domain.Comment;
@@ -51,25 +51,25 @@ public class CommentController {
 
     @GetMapping("votes/{voteId}/comments")
     public ResponseEntity<Map<String,Object>> getComment(@PathVariable Long voteId , @RequestParam(name = "gender", required = false) Gender gender, @RequestParam(name = "age", required = false)Age age, @RequestParam(name = "mbti" , required = false) MBTI mbti) {
-        List<Comment> comments = commentService.getComments(voteId,gender,age,mbti);
+        Map<Long, Comment> map = commentService.getComments(voteId,gender,age,mbti);
         List<CommentResponse> commentResponses = new ArrayList<>();
 
-        for (Comment comment : comments) {
-            CommentResponse dto = CommentResponse.builder()
-                    .id(comment.getId())
-                    .userid(comment.getCommentUser().getId())
-                    .content(comment.getContent())
-                    .gender(comment.getGender())
-                    .imageUrl(comment.getCommentUser().getImageUrl())
-                    .age(comment.getAge())
-                    .mbti(comment.getMbti())
-                    .nickName(comment.getCommentUser().getNickname())
-                    .createdDate(comment.getCreatedDate())
-                    .likeCount(comment.getLikeCount())
-                    .build();
-            commentResponses.add(dto);
-
-        }
+//        for (Comment comment : comments) {
+//            CommentResponse dto = CommentResponse.builder()
+//                    .id(comment.getId())
+//                    .userId(comment.getCommentUser().getId())
+//                    .content(comment.getContent())
+//                    .gender(comment.getGender())
+//                    .imageUrl(comment.getCommentUser().getImageUrl())
+//                    .age(comment.getAge())
+//                    .mbti(comment.getMbti())
+//                    .nickName(comment.getCommentUser().getNickname())
+//                    .createdDate(comment.getCreatedDate())
+//                    .likeCount(comment.getLikeCount())
+//                    .build();
+//            commentResponses.add(dto);
+//
+//        }
         Map<String,Object> result = new HashMap<>();
         result.put("data", commentResponses);
         result.put("count", commentResponses.size());

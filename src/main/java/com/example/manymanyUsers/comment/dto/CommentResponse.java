@@ -11,6 +11,8 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,7 +23,10 @@ public class CommentResponse {
 
     private Long id;
 
-    private Long userid;
+    private Long userId;
+
+
+    private Long parentId;
 
     private String content;
 
@@ -39,4 +44,24 @@ public class CommentResponse {
 
     private Long likeCount;
 
+
+    private List<CommentResponse> children;
+
+
+    public CommentResponse(Comment c) {
+        this.id = c.getId();
+        this.userId = c.getCommentUser().getId();
+        this.content = c.getContent();
+        this.gender = c.getGender();
+        this.imageUrl = c.getCommentUser().getImageUrl();
+        this.age = c.getAge();
+        this.mbti = c.getMbti();
+        this.nickName = c.getCommentUser().getNickname();
+        this.createdDate = c.getCreatedDate();
+        this.likeCount = c.getLikeCount();
+    }
+
+//    public CommentResponse(Comment c) {
+//        c.
+//    }
 }

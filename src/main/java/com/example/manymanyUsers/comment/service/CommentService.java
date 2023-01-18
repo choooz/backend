@@ -5,6 +5,7 @@ import com.example.manymanyUsers.comment.domain.Comment;
 import com.example.manymanyUsers.comment.domain.CommentLike;
 import com.example.manymanyUsers.comment.dto.CommentCreateRequest;
 import com.example.manymanyUsers.comment.dto.CommentDeleteRequest;
+import com.example.manymanyUsers.comment.dto.CommentResponse;
 import com.example.manymanyUsers.comment.dto.CommentUpdateRequest;
 import com.example.manymanyUsers.comment.repository.CommentLikeRepository;
 import com.example.manymanyUsers.comment.repository.CommentRepository;
@@ -17,8 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +35,13 @@ public class CommentService {
         Optional<User> byId = userRepository.findById(commentCreateRequest.getUserId());
         User user = byId.get();
 
+        Comment parent = null;
+        //대댓글 이면
+        if(commentCreateRequest.getParentId() != null){
+            Optional<Comment> byParentId = commentRepository.findById(commentCreateRequest.getParentId());
+            parent = byParentId.get();
+        }
+
         Comment comment = Comment.builder()
                 .voteId(commentCreateRequest.getVoteId())
                 .content(commentCreateRequest.getContent())
@@ -43,15 +50,31 @@ public class CommentService {
                 .gender(user.getGender())
                 .build();
         comment.ClassifyAge(user.getAge());   //comment의 Age 정보는 user 정보와 상이하기 때문에 ClassifyAge를 사용하여 따로 저장해주었음.
+        if(null != parent){
+            comment.updateParent(parent);
+        }
         commentRepository.save(comment);
     }
 
 
-    public List<Comment> getComments(Long voteId, Gender gender, Age age, MBTI mbti) {
+    public Map<Long, Comment> getComments(Long voteId, Gender gender, Age age, MBTI mbti) {
 
         List<Comment> comments = commentRepository.filteredComments(voteId,gender,age,mbti);
 
-        return comments;
+        Map<Long, Comment> map = new HashMap<>();
+        comments.stream().forEach(c -> {
+                    map.put(c.getId(), c);
+                    if (c.getParent() != null){
+                        map.get(c.getParent().getId()).getChildren().add(c);
+                    }
+                }
+        );
+
+        System.out.println("---------------------------------------");
+        System.out.println(map);
+        System.out.println("---------------------------------------");
+
+        return map;
     }
 
 
