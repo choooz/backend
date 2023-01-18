@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@RequestMapping("/api/vote")
+@RequestMapping("/api/votes")
 @RestController
 @RequiredArgsConstructor
 @Slf4j
