@@ -49,7 +49,7 @@ public class VoteController {
 
     @Operation(description = "투표 리스트 조회")
     @GetMapping("/")
-    public ResponseEntity<GetVoteListResponse> getVoteList(@RequestParam SortBy sortBy, @RequestParam int page, @RequestParam int size, @RequestParam Category category) {
+    public ResponseEntity<GetVoteListResponse> getVoteList(@RequestParam SortBy sortBy, @RequestParam int page, @RequestParam int size, @RequestParam(required = false) Category category) {
         Slice<VoteListData> voteListData = voteService.getVoteList(sortBy, page, size, category);
         GetVoteListResponse voteResponse = GetVoteListResponse.builder()
                 .voteSlice(voteListData)
