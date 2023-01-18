@@ -14,6 +14,8 @@ public class CommentCreateRequest {
 
     private Long userId;
 
+    private Long parentId;
+
     private String content;
 
 
