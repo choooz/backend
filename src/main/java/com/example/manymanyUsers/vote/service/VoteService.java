@@ -53,7 +53,7 @@ public class VoteService {
 
         voteRepository.save(vote);
 
-        return user.getId();
+        return vote.getId();
 
     }
 

@@ -200,9 +200,10 @@ public class VoteServiceTest {
         });
         int i =0;
         for (VoteListData voteListData : voteResultList) {
-            System.out.println("voteListData.getVoteId() = " + voteListData.getVoteId());
-            System.out.println("voteTestList.get(i).getId() = " + voteTestList.get(i).getId());
             System.out.println("i = " + i);
+            System.out.println("voteListData.getVoteId() = " + voteListData.getVoteId());
+            System.out.println("voteTestList = " + voteTestList);
+            System.out.println("voteTestList.get(i).getId() = " + voteTestList.get(i).getId());
             assertEquals(voteListData.getVoteId(),voteTestList.get(i).getId());
             i++;
         }
