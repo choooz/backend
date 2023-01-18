@@ -57,16 +57,21 @@ public class VoteController {
         return new ResponseEntity(voteResponse, HttpStatus.OK);
     }
 
+    @Operation(description = "투표 단건 조회")
+    @GetMapping("/{voteId}")
+    public ResponseEntity getVote() {
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
     @PatchMapping("/updateVote")
     public ResponseEntity<CommonResponse> updateVote(@Valid @RequestBody UpdateVoteRequest updateVoteRequest, @RequestAttribute Claims claims) {
-
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
         try {
             voteService.updateVote(updateVoteRequest, longId);
         } catch (NotFoundException e) {
-            log.info("error",e);
+            log.info("error", e);
             CommonResponse createVoteResponse = CommonResponse.builder()
                     .message("해당 아이디를 가진 투표가 없습니다. 아이디를 다시 확인하세요.")
                     .build();
