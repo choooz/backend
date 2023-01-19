@@ -8,6 +8,7 @@ import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.*;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,7 +25,6 @@ public class CommentResponse {
     private Long id;
 
     private Long userId;
-
 
     private Long parentId;
 
@@ -44,24 +44,8 @@ public class CommentResponse {
 
     private Long likeCount;
 
+    private List<CommentResponse> children = new ArrayList<>();
 
-    private List<CommentResponse> children;
 
 
-    public CommentResponse(Comment c) {
-        this.id = c.getId();
-        this.userId = c.getCommentUser().getId();
-        this.content = c.getContent();
-        this.gender = c.getGender();
-        this.imageUrl = c.getCommentUser().getImageUrl();
-        this.age = c.getAge();
-        this.mbti = c.getMbti();
-        this.nickName = c.getCommentUser().getNickname();
-        this.createdDate = c.getCreatedDate();
-        this.likeCount = c.getLikeCount();
-    }
-
-//    public CommentResponse(Comment c) {
-//        c.
-//    }
 }

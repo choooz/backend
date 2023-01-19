@@ -57,24 +57,17 @@ public class CommentService {
     }
 
 
-    public Map<Long, Comment> getComments(Long voteId, Gender gender, Age age, MBTI mbti) {
+    public List<Comment> getComments(Long voteId, Gender gender, Age age, MBTI mbti) {
 
         List<Comment> comments = commentRepository.filteredComments(voteId,gender,age,mbti);
+        System.out.println(comments);
 
-        Map<Long, Comment> map = new HashMap<>();
-        comments.stream().forEach(c -> {
-                    map.put(c.getId(), c);
-                    if (c.getParent() != null){
-                        map.get(c.getParent().getId()).getChildren().add(c);
-                    }
-                }
-        );
 
-        System.out.println("---------------------------------------");
-        System.out.println(map);
-        System.out.println("---------------------------------------");
+        List<Comment> comments2 = commentRepository.findAllOrderByParentIdAscNullsFirstCommentIdAsc();
+        System.out.println(comments2);
 
-        return map;
+
+        return comments2;
     }
 
 

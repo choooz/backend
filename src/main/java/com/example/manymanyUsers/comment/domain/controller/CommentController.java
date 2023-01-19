@@ -50,31 +50,37 @@ public class CommentController {
 
 
     @GetMapping("votes/{voteId}/comments")
-    public ResponseEntity<Map<String,Object>> getComment(@PathVariable Long voteId , @RequestParam(name = "gender", required = false) Gender gender, @RequestParam(name = "age", required = false)Age age, @RequestParam(name = "mbti" , required = false) MBTI mbti) {
-        Map<Long, Comment> map = commentService.getComments(voteId,gender,age,mbti);
+    public ResponseEntity<List<CommentResponse>> getComment(@PathVariable Long voteId , @RequestParam(name = "gender", required = false) Gender gender, @RequestParam(name = "age", required = false)Age age, @RequestParam(name = "mbti" , required = false) MBTI mbti) {
+        List<Comment> comments = commentService.getComments(voteId,gender,age,mbti);
         List<CommentResponse> commentResponses = new ArrayList<>();
+        Map<Long,CommentResponse> map = new HashMap<>();
 
-//        for (Comment comment : comments) {
-//            CommentResponse dto = CommentResponse.builder()
-//                    .id(comment.getId())
-//                    .userId(comment.getCommentUser().getId())
-//                    .content(comment.getContent())
-//                    .gender(comment.getGender())
-//                    .imageUrl(comment.getCommentUser().getImageUrl())
-//                    .age(comment.getAge())
-//                    .mbti(comment.getMbti())
-//                    .nickName(comment.getCommentUser().getNickname())
-//                    .createdDate(comment.getCreatedDate())
-//                    .likeCount(comment.getLikeCount())
-//                    .build();
-//            commentResponses.add(dto);
-//
-//        }
-        Map<String,Object> result = new HashMap<>();
-        result.put("data", commentResponses);
-        result.put("count", commentResponses.size());
+        for (Comment comment : comments) {
+            CommentResponse dto = CommentResponse.builder()
+                    .id(comment.getId())
+                    .userId(comment.getCommentUser().getId())
+                    .content(comment.getContent())
+                    .gender(comment.getGender())
+                    .imageUrl(comment.getCommentUser().getImageUrl())
+                    .age(comment.getAge())
+                    .mbti(comment.getMbti())
+                    .nickName(comment.getCommentUser().getNickname())
+                    .createdDate(comment.getCreatedDate())
+                    .likeCount(comment.getLikeCount())
+                    .children(new ArrayList<>())    //이거 안해줘서 삽질 오지게함;;
+                    .build();
+            if (comment.getParent() != null) {
+                dto.setParentId(comment.getParent().getId());
+            }
+            map.put(dto.getId(), dto);
 
-        return ResponseEntity.ok().body(result);
+            if(comment.getParent() != null) {
+                map.get(comment.getParent().getId()).getChildren().add(dto);
+            }
+
+            else commentResponses.add(dto);
+        }
+        return ResponseEntity.ok().body(commentResponses);
     }
 
     @PutMapping("/comments/{commentId}")

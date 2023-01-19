@@ -21,6 +21,9 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
     @Query("select c from Comment c where c.voteId= :voteId and (:gender is null or c.gender = :gender) and (:age is null or c.age = :age) and (:mbti is null or c.mbti = :mbti)")
     List<Comment> filteredComments(@Param("voteId") Long voteId, @Param("gender") Gender gender, @Param("age") Age age, @Param("mbti") MBTI mbti);
 
+    @Query("SELECT c FROM Comment c LEFT JOIN c.parent p ORDER BY p.id ASC NULLS FIRST, c.id ASC ")
+    List<Comment> findAllOrderByParentIdAscNullsFirstCommentIdAsc();
+
 
 
 
