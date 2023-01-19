@@ -64,8 +64,16 @@ public class VoteService {
 
     public Slice<VoteListData> getVoteList(SortBy soryBy, Integer page, Integer size, Category category){
 
+        Slice<Vote> voteSlice;
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, soryBy.getValue()));
-        Slice<Vote> voteSlice = voteRepository.findSliceBy(pageRequest);
+
+        if (category == null) {
+            voteSlice = voteRepository.findSliceBy(pageRequest);
+        }else{
+
+            voteSlice = voteRepository.findByCategory(category,pageRequest);
+        }
+
         Slice<VoteListData> voteListData = voteSlice.map(vote -> {
             vote.getPostedUser(); //프록시 처리된 user 엔티티 가져오기 위함
             return new VoteListData(vote);
