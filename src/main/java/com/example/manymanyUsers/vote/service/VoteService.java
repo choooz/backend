@@ -37,19 +37,17 @@ public class VoteService {
 
         User user = find.get();
 
-        Vote vote = new Vote();
-
-        vote.setPostedUser(user);
-        vote.setTotalTitle(createVoteRequest.getTitle());
-        vote.setImageA(createVoteRequest.getImageA());
-        vote.setImageB(createVoteRequest.getImageB());
-        vote.setTitleA(createVoteRequest.getTitleA());
-        vote.setTitleB(createVoteRequest.getTitleB());
-        vote.setDetail(createVoteRequest.getDetail());
-        vote.setFilteredGender(createVoteRequest.getFilteredGender());
-        vote.setFilteredAge(createVoteRequest.getFilteredAge());
-        vote.setCategory(createVoteRequest.getCategory());
-        vote.setFilteredMbti(createVoteRequest.getFilteredMbti());
+        Vote vote = Vote.builder()
+                .postedUser(user)
+                .totalTitle(createVoteRequest.getTitle())
+                .imageA(createVoteRequest.getImageA())
+                .imageB(createVoteRequest.getImageB())
+                .detail(createVoteRequest.getDetail())
+                .filteredGender(createVoteRequest.getFilteredGender())
+                .filteredAge(createVoteRequest.getFilteredAge())
+                .category(createVoteRequest.getCategory())
+                .filteredMbti(createVoteRequest.getFilteredMbti())
+                .build();
 
         voteRepository.save(vote);
 
@@ -95,16 +93,7 @@ public class VoteService {
 
         Vote vote = findVote.get();
 
-        vote.setTotalTitle(updateVoteRequest.getTitle());
-        vote.setImageA(updateVoteRequest.getImageA());
-        vote.setImageB(updateVoteRequest.getImageB());
-        vote.setTitleA(updateVoteRequest.getTitleA());
-        vote.setTitleB(updateVoteRequest.getTitleB());
-        vote.setDetail(updateVoteRequest.getDetail());
-        vote.setFilteredGender(updateVoteRequest.getFilteredGender());
-        vote.setFilteredAge(updateVoteRequest.getFilteredAge());
-        vote.setCategory(updateVoteRequest.getCategory());
-        vote.setFilteredMbti(updateVoteRequest.getFilteredMbti());
+        vote.update(updateVoteRequest);
 
     }
 
