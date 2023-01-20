@@ -60,6 +60,7 @@ public class KakaoController {
                 .age(user.getAge())
                 .gender(user.getGender())
                 .mbti(user.getMbti())
+                .interestedCategory(user.getCategoryLists())
                 .message("유저 정보 요청에 성공했습니다.")
                 .build();
 
