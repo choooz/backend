@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-@RequestMapping("/api/vote")
+@RequestMapping("/api/votes")
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -48,8 +48,8 @@ public class VoteController {
     }
 
     @Operation(description = "투표 리스트 조회")
-    @GetMapping("/get")
-    public ResponseEntity<GetVoteListResponse> getVoteList(@RequestParam SortBy sortBy, @RequestParam int page, @RequestParam int size, @RequestParam Category category) {
+    @GetMapping("/")
+    public ResponseEntity<GetVoteListResponse> getVoteList(@RequestParam SortBy sortBy, @RequestParam int page, @RequestParam int size, @RequestParam(required = false) Category category) {
         Slice<VoteListData> voteListData = voteService.getVoteList(sortBy, page, size, category);
         GetVoteListResponse voteResponse = GetVoteListResponse.builder()
                 .voteSlice(voteListData)
@@ -57,16 +57,21 @@ public class VoteController {
         return new ResponseEntity(voteResponse, HttpStatus.OK);
     }
 
+    @Operation(description = "투표 단건 조회")
+    @GetMapping("/{voteId}")
+    public ResponseEntity getVote() {
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
     @PatchMapping("/updateVote")
     public ResponseEntity<CommonResponse> updateVote(@Valid @RequestBody UpdateVoteRequest updateVoteRequest, @RequestAttribute Claims claims) {
-
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
         try {
             voteService.updateVote(updateVoteRequest, longId);
         } catch (NotFoundException e) {
-            log.info("error",e);
+            log.info("error", e);
             CommonResponse createVoteResponse = CommonResponse.builder()
                     .message("해당 아이디를 가진 투표가 없습니다. 아이디를 다시 확인하세요.")
                     .build();

@@ -2,20 +2,17 @@ package com.example.manymanyUsers.vote.domain;
 
 import com.example.manymanyUsers.common.domain.BaseTimeEntity;
 import com.example.manymanyUsers.user.domain.User;
+import com.example.manymanyUsers.vote.dto.UpdateVoteRequest;
 import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class Vote extends BaseTimeEntity {
 
@@ -75,4 +72,32 @@ public class Vote extends BaseTimeEntity {
     @Column
     @Enumerated(EnumType.STRING)
     private MBTI filteredMbti;
+
+    @Builder
+    public Vote(User postedUser, String totalTitle, String imageA, String imageB, String titleA, String titleB, String detail, Category category, Gender filteredGender, Age filteredAge, MBTI filteredMbti) {
+        this.postedUser = postedUser;
+        this.totalTitle = totalTitle;
+        this.imageA = imageA;
+        this.imageB = imageB;
+        this.titleA = titleA;
+        this.titleB = titleB;
+        this.detail = detail;
+        this.category = category;
+        this.filteredGender = filteredGender;
+        this.filteredAge = filteredAge;
+        this.filteredMbti = filteredMbti;
+    }
+
+    public void update(UpdateVoteRequest updateVoteRequest) {
+        this.totalTitle = updateVoteRequest.getTitle();
+        this.imageA = updateVoteRequest.getImageA();
+        this.imageB = updateVoteRequest.getImageB();
+        this.titleA = updateVoteRequest.getTitleA();
+        this.titleB = updateVoteRequest.getTitleB();
+        this.detail = updateVoteRequest.getDetail();
+        this.category = updateVoteRequest.getCategory();
+        this.filteredGender = updateVoteRequest.getFilteredGender();
+        this.filteredAge = updateVoteRequest.getFilteredAge();
+        this.filteredMbti = updateVoteRequest.getFilteredMbti();
+    }
 }
