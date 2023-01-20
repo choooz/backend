@@ -152,7 +152,7 @@ public class VoteServiceTest {
                 Age filteredAge = Age.NULL;
                 Category category = Category.NULL;
                 switch (i%5){
-                    case 1: category = Category.CARRIER;
+                    case 1: category = Category.CAREER;
                         break;
                     case 2: category = Category.FOODS;
                         break;
@@ -186,7 +186,7 @@ public class VoteServiceTest {
             }
         }
         //when
-        Slice<VoteListData> voteSlice = voteService.getVoteList(SortBy.ByTime, 0, 10, Category.FASHION);
+        Slice<VoteListData> voteSlice = voteService.getVoteList(SortBy.ByTime, 0, 10, null);
         List<VoteListData> voteResultList = voteSlice.getContent();
         //then
         voteTestList.sort((v1,v2)-> {
