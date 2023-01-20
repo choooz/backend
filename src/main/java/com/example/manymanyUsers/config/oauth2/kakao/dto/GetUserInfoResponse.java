@@ -1,6 +1,7 @@
 package com.example.manymanyUsers.config.oauth2.kakao.dto;
 
 import com.example.manymanyUsers.user.enums.Providers;
+import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.*;
@@ -39,10 +40,12 @@ public class GetUserInfoResponse implements Serializable {
 
     private MBTI mbti;
 
+    private Category interestedCategory;
+
     private String message;
 
     @Builder
-    public GetUserInfoResponse(Long userId, Providers provider, String providerId, String username, String email, String imageUrl, Integer age, Gender gender, MBTI mbti, String message) {
+    public GetUserInfoResponse(Long userId, Providers provider, String providerId, String username, String email, String imageUrl, Integer age, Gender gender, MBTI mbti, Category interestedCategory, String message) {
         this.userId = userId;
         this.provider = provider;
         this.providerId = providerId;
@@ -52,6 +55,7 @@ public class GetUserInfoResponse implements Serializable {
         this.age = age;
         this.gender = gender;
         this.mbti = mbti;
+        this.interestedCategory = interestedCategory;
         this.message = message;
     }
 }
