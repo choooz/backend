@@ -84,13 +84,12 @@ public class UserServiceTest {
         Long userId = userService.registerUser(request);
 
         AddInterestCategoryRequest addInterestCategoryRequest = new AddInterestCategoryRequest();
-        addInterestCategoryRequest.setUserId(userId);
 
         List<Category> categoryLists = addInterestCategoryRequest.getCategoryLists();
         categoryLists.add(Category.LOVE);
 
         //when
-        userService.addInterestCategory(addInterestCategoryRequest);
+        userService.addInterestCategory(addInterestCategoryRequest,userId);
 
         Optional<User> byId = userRepository.findById(userId);
         User result = byId.get();
@@ -109,14 +108,13 @@ public class UserServiceTest {
         Long userId = userService.registerUser(request);
 
         AddInterestCategoryRequest addInterestCategoryRequest = new AddInterestCategoryRequest();
-        addInterestCategoryRequest.setUserId(userId);
 
         List<Category> categoryLists = addInterestCategoryRequest.getCategoryLists();
         categoryLists.add(Category.LOVE);
         categoryLists.add(Category.FASHION);
 
         //when
-        userService.addInterestCategory(addInterestCategoryRequest);
+        userService.addInterestCategory(addInterestCategoryRequest, userId);
 
         Optional<User> byId = userRepository.findById(userId);
         User result = byId.get();
@@ -136,14 +134,13 @@ public class UserServiceTest {
         Long userId = userService.registerUser(request);
 
         AddInterestCategoryRequest addInterestCategoryRequest = new AddInterestCategoryRequest();
-        addInterestCategoryRequest.setUserId(0L);
 
         List<Category> categoryLists = addInterestCategoryRequest.getCategoryLists();
         categoryLists.add(Category.LOVE);
         categoryLists.add(Category.FASHION);
 
         //when
-        userService.addInterestCategory(addInterestCategoryRequest);
+        userService.addInterestCategory(addInterestCategoryRequest, 0L);
 
         //then
 

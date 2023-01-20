@@ -50,9 +50,11 @@ public class UserController {
 
 
     @PatchMapping("/addInterestCategory")
-    public ResponseEntity<CommonResponse> AddInterestCategory(@RequestBody AddInterestCategoryRequest addInterestCategoryRequest) {
+    public ResponseEntity<CommonResponse> AddInterestCategory(@RequestBody AddInterestCategoryRequest addInterestCategoryRequest, @RequestAttribute Claims claims) {
+        Integer userId = (int) claims.get("userId");
+        Long longId = Long.valueOf(userId);
         try {
-            userService.addInterestCategory(addInterestCategoryRequest);
+            userService.addInterestCategory(addInterestCategoryRequest, longId);
         } catch (NotFoundException e) {
             CommonResponse response = new CommonResponse("해당 아이디 값을 가진 유저가 없습니다. 아이디를 다시 한번 확인하세요.");
             return new ResponseEntity(response, HttpStatus.NOT_FOUND);
