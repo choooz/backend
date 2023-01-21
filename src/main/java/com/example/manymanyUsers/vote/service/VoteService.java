@@ -29,8 +29,8 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;
 
-    public Long createVote(@Valid CreateVoteRequest createVoteRequest, Long userid) throws NotFoundException{
-        Optional<User> find = userRepository.findById(userid);
+    public Long createVote(@Valid CreateVoteRequest createVoteRequest, Long userId) throws NotFoundException{
+        Optional<User> find = userRepository.findById(userId);
         if(find.isEmpty()){
             throw new NotFoundException("해당 아이디를 가진 유저가 없습니다. 아이디 값을 다시 한번 확인하세요.");
         }
@@ -56,7 +56,21 @@ public class VoteService {
     }
 
 
-    public void doVote() {
+    public void doVote(Long userId, Long voteId) throws NotFoundException{
+        Optional<Vote> byId = voteRepository.findById(voteId);
+        if (byId.isEmpty()) {
+            throw new NotFoundException("해당 아이디를 가진 투표가 없습니다. 아이디 값을 다시 한번 확인하세요.");
+        }
+
+        Optional<User> find = userRepository.findById(userId);
+        if(find.isEmpty()){
+            throw new NotFoundException("해당 아이디를 가진 유저가 없습니다. 아이디 값을 다시 한번 확인하세요.");
+        }
+
+        Vote vote = byId.get();
+        User user = find.get();
+
+
 
     }
 
