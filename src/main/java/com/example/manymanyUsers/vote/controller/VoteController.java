@@ -107,4 +107,21 @@ public class VoteController {
 
         return new ResponseEntity(updateVoteResponse, HttpStatus.OK);
     }
+
+    @PostMapping("/do")
+    public ResponseEntity doVote(DoVoteRequest doVoteRequest, @RequestAttribute Claims claims) {
+
+        Integer userId = (int) claims.get("userId");
+        Long longId = Long.valueOf(userId);
+
+        try {
+            voteService.doVote(doVoteRequest.converter(longId));
+        } catch (NotFoundException e) {
+
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }
