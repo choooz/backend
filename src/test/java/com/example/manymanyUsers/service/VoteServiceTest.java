@@ -45,17 +45,15 @@ public class VoteServiceTest {
         Long userId = userService.registerUser(request);
 
         //when
-        CreateVoteRequest createVoteRequest = new CreateVoteRequest(
-                "투표 제목",
-                "imageA",
-                "imageB",
-                "detailText",
-                Gender.NULL,
-                Age.NULL,
-                Category.NULL,
-                MBTI.ENFJ,
-                "titleA",
-                "titleB");
+
+        CreateVoteRequest createVoteRequest = CreateVoteRequest.builder()
+                .title("투표 제목")
+                .imageA("imageA")
+                .imageB("imageB")
+                .titleA("titleA")
+                .titleB("titleB")
+                .build();
+
 
         voteService.createVote(createVoteRequest,userId);
 
@@ -69,13 +67,10 @@ public class VoteServiceTest {
         //then
         assertEquals(vote.getPostedUser(), user);
         assertEquals(vote.getTotalTitle(), createVoteRequest.getTitle());
-        assertEquals(vote.getCategory(), createVoteRequest.getCategory());
-        assertEquals(vote.getDetail(), createVoteRequest.getDetail());
         assertEquals(vote.getImageA(), createVoteRequest.getImageA());
         assertEquals(vote.getImageB(), createVoteRequest.getImageB());
-        assertEquals(vote.getFilteredGender(), createVoteRequest.getFilteredGender());
-        assertEquals(vote.getFilteredAge(), createVoteRequest.getFilteredAge());
-        assertEquals(vote.getCategory(), createVoteRequest.getCategory());
+        assertEquals(vote.getTitleA(), createVoteRequest.getTitleA());
+        assertEquals(vote.getTitleB(), createVoteRequest.getTitleB());
     }
 
     @Test(expected = NotFoundException.class)
@@ -86,17 +81,13 @@ public class VoteServiceTest {
         Long userId = userService.registerUser(request);
 
         //when
-        CreateVoteRequest createVoteRequest = new CreateVoteRequest(
-                "투표 제목",
-                "imageA",
-                "imageB",
-                "detailText",
-                Gender.NULL,
-                Age.NULL,
-                Category.NULL,
-                MBTI.ENFJ,
-                "titleA",
-                "titleB");
+        CreateVoteRequest createVoteRequest = CreateVoteRequest.builder()
+                .title("투표 제목")
+                .imageA("imageA")
+                .imageB("imageB")
+                .titleA("titleA")
+                .titleB("titleB")
+                .build();
 
         //then
         voteService.createVote(createVoteRequest,0L);
@@ -176,7 +167,13 @@ public class VoteServiceTest {
                 }
                 String titleA = "titleA" + i;
                 String titleB = "titleB" + i;
-                CreateVoteRequest createVoteRequest = new CreateVoteRequest(voteTitle, imageA, imageB, detail, filteredGender, filteredAge, category, filteredMbti, titleA, titleB);
+                CreateVoteRequest createVoteRequest = CreateVoteRequest.builder()
+                        .title("투표 제목")
+                        .imageA("imageA")
+                        .imageB("imageB")
+                        .titleA("titleA")
+                        .titleB("titleB")
+                        .build();
                 Long voteId = voteService.createVote(createVoteRequest, userid);
                 Optional<Vote> byId = voteRepository.findById(voteId);
                 Vote vote = byId.get();
@@ -216,17 +213,13 @@ public class VoteServiceTest {
         SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
         Long userId = userService.registerUser(request);
 
-        CreateVoteRequest createVoteRequest = new CreateVoteRequest(
-                "투표 제목",
-                "imageA",
-                "imageB",
-                "detailText",
-                Gender.NULL,
-                Age.NULL,
-                Category.NULL,
-                MBTI.ENFJ,
-                "titleA",
-                "titleB");
+        CreateVoteRequest createVoteRequest = CreateVoteRequest.builder()
+                .title("투표 제목")
+                .imageA("imageA")
+                .imageB("imageB")
+                .titleA("titleA")
+                .titleB("titleB")
+                .build();
 
         voteService.createVote(createVoteRequest,userId);
 
@@ -283,17 +276,13 @@ public class VoteServiceTest {
         SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
         Long userId = userService.registerUser(request);
 
-        CreateVoteRequest createVoteRequest = new CreateVoteRequest(
-                "투표 제목",
-                "imageA",
-                "imageB",
-                "detailText",
-                Gender.NULL,
-                Age.NULL,
-                Category.NULL,
-                MBTI.ENFJ,
-                "titleA",
-                "titleB");
+        CreateVoteRequest createVoteRequest = CreateVoteRequest.builder()
+                .title("투표 제목")
+                .imageA("imageA")
+                .imageB("imageB")
+                .titleA("titleA")
+                .titleB("titleB")
+                .build();
 
         voteService.createVote(createVoteRequest,userId);
 
@@ -339,17 +328,13 @@ public class VoteServiceTest {
         SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
         Long userId = userService.registerUser(request);
 
-        CreateVoteRequest createVoteRequest = new CreateVoteRequest(
-                "투표 제목",
-                "imageA",
-                "imageB",
-                "detailText",
-                Gender.NULL,
-                Age.NULL,
-                Category.NULL,
-                MBTI.ENFJ,
-                "titleA",
-                "titleB");
+        CreateVoteRequest createVoteRequest = CreateVoteRequest.builder()
+                .title("투표 제목")
+                .imageA("imageA")
+                .imageB("imageB")
+                .titleA("titleA")
+                .titleB("titleB")
+                .build();
 
         voteService.createVote(createVoteRequest,userId);
 
@@ -395,17 +380,13 @@ public class VoteServiceTest {
         SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
         Long userId = userService.registerUser(request);
 
-        CreateVoteRequest createVoteRequest = new CreateVoteRequest(
-                "투표 제목",
-                "imageA",
-                "imageB",
-                "detailText",
-                Gender.NULL,
-                Age.NULL,
-                Category.NULL,
-                MBTI.ENFJ,
-                "titleA",
-                "titleB");
+        CreateVoteRequest createVoteRequest = CreateVoteRequest.builder()
+                .title("투표 제목")
+                .imageA("imageA")
+                .imageB("imageB")
+                .titleA("titleA")
+                .titleB("titleB")
+                .build();
 
         voteService.createVote(createVoteRequest,userId);
 
@@ -436,17 +417,13 @@ public class VoteServiceTest {
         SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
         Long userId = userService.registerUser(request);
 
-        CreateVoteRequest createVoteRequest = new CreateVoteRequest(
-                "투표 제목",
-                "imageA",
-                "imageB",
-                "detailText",
-                Gender.NULL,
-                Age.NULL,
-                Category.NULL,
-                MBTI.ENFJ,
-                "titleA",
-                "titleB");
+        CreateVoteRequest createVoteRequest = CreateVoteRequest.builder()
+                .title("투표 제목")
+                .imageA("imageA")
+                .imageB("imageB")
+                .titleA("titleA")
+                .titleB("titleB")
+                .build();
 
         voteService.createVote(createVoteRequest,userId);
 
@@ -477,17 +454,13 @@ public class VoteServiceTest {
         SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
         Long userId = userService.registerUser(request);
 
-        CreateVoteRequest createVoteRequest = new CreateVoteRequest(
-                "투표 제목",
-                "imageA",
-                "imageB",
-                "detailText",
-                Gender.NULL,
-                Age.NULL,
-                Category.NULL,
-                MBTI.ENFJ,
-                "titleA",
-                "titleB");
+        CreateVoteRequest createVoteRequest = CreateVoteRequest.builder()
+                .title("투표 제목")
+                .imageA("imageA")
+                .imageB("imageB")
+                .titleA("titleA")
+                .titleB("titleB")
+                .build();
 
         voteService.createVote(createVoteRequest,userId);
 

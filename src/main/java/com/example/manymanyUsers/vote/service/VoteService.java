@@ -42,11 +42,8 @@ public class VoteService {
                 .totalTitle(createVoteRequest.getTitle())
                 .imageA(createVoteRequest.getImageA())
                 .imageB(createVoteRequest.getImageB())
-                .detail(createVoteRequest.getDetail())
-                .filteredGender(createVoteRequest.getFilteredGender())
-                .filteredAge(createVoteRequest.getFilteredAge())
-                .category(createVoteRequest.getCategory())
-                .filteredMbti(createVoteRequest.getFilteredMbti())
+                .titleA(createVoteRequest.getTitleA())
+                .titleB(createVoteRequest.getTitleB())
                 .build();
 
         voteRepository.save(vote);
