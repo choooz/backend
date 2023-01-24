@@ -7,6 +7,7 @@ import com.example.manymanyUsers.vote.dto.CreateVoteRequest;
 import com.example.manymanyUsers.vote.dto.GetVoteListRequest;
 import com.example.manymanyUsers.vote.dto.UpdateVoteRequest;
 import com.example.manymanyUsers.vote.dto.VoteListData;
+import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.SortBy;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import javassist.NotFoundException;
@@ -28,7 +29,7 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;
 
-    public Vote createVote(@Valid CreateVoteRequest createVoteRequest, Long userid) throws NotFoundException{
+    public Long createVote(@Valid CreateVoteRequest createVoteRequest, Long userid) throws NotFoundException{
         Optional<User> find = userRepository.findById(userid);
         if(find.isEmpty()){
             throw new NotFoundException("해당 아이디를 가진 유저가 없습니다. 아이디 값을 다시 한번 확인하세요.");
@@ -36,21 +37,21 @@ public class VoteService {
 
         User user = find.get();
 
-        Vote vote = new Vote();
+        Vote vote = Vote.builder()
+                .postedUser(user)
+                .totalTitle(createVoteRequest.getTitle())
+                .imageA(createVoteRequest.getImageA())
+                .imageB(createVoteRequest.getImageB())
+                .detail(createVoteRequest.getDetail())
+                .filteredGender(createVoteRequest.getFilteredGender())
+                .filteredAge(createVoteRequest.getFilteredAge())
+                .category(createVoteRequest.getCategory())
+                .filteredMbti(createVoteRequest.getFilteredMbti())
+                .build();
 
-        vote.setPostedUser(user);
-        vote.setTotalTitle(createVoteRequest.getTitle());
-        vote.setImageA(createVoteRequest.getImageA());
-        vote.setImageB(createVoteRequest.getImageB());
-        vote.setTitleA(createVoteRequest.getTitleA());
-        vote.setTitleB(createVoteRequest.getTitleB());
-        vote.setDetail(createVoteRequest.getDetail());
-        vote.setFilteredGender(createVoteRequest.getFilteredGender());
-        vote.setFilteredAge(createVoteRequest.getFilteredAge());
-        vote.setCategory(createVoteRequest.getCategory());
-        vote.setFilteredMbti(createVoteRequest.getFilteredMbti());
+        voteRepository.save(vote);
 
-        return voteRepository.save(vote);
+        return vote.getId();
 
     }
 
@@ -59,10 +60,18 @@ public class VoteService {
 
     }
 
-    public Slice<VoteListData> getVoteList(SortBy soryBy, Integer page, Integer size){
+    public Slice<VoteListData> getVoteList(SortBy soryBy, Integer page, Integer size, Category category){
 
+        Slice<Vote> voteSlice;
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, soryBy.getValue()));
-        Slice<Vote> voteSlice = voteRepository.findSliceBy(pageRequest);
+
+        if (category == null) {
+            voteSlice = voteRepository.findSliceBy(pageRequest);
+        }else{
+
+            voteSlice = voteRepository.findByCategory(category,pageRequest);
+        }
+
         Slice<VoteListData> voteListData = voteSlice.map(vote -> {
             vote.getPostedUser(); //프록시 처리된 user 엔티티 가져오기 위함
             return new VoteListData(vote);
@@ -84,16 +93,7 @@ public class VoteService {
 
         Vote vote = findVote.get();
 
-        vote.setTotalTitle(updateVoteRequest.getTitle());
-        vote.setImageA(updateVoteRequest.getImageA());
-        vote.setImageB(updateVoteRequest.getImageB());
-        vote.setTitleA(updateVoteRequest.getTitleA());
-        vote.setTitleB(updateVoteRequest.getTitleB());
-        vote.setDetail(updateVoteRequest.getDetail());
-        vote.setFilteredGender(updateVoteRequest.getFilteredGender());
-        vote.setFilteredAge(updateVoteRequest.getFilteredAge());
-        vote.setCategory(updateVoteRequest.getCategory());
-        vote.setFilteredMbti(updateVoteRequest.getFilteredMbti());
+        vote.update(updateVoteRequest);
 
     }
 
