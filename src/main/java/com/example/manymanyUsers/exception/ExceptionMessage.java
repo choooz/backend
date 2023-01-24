@@ -2,8 +2,6 @@ package com.example.manymanyUsers.exception;
 
 import lombok.*;
 
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class ExceptionMessage {
