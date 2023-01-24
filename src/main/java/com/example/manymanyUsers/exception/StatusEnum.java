@@ -5,8 +5,8 @@ public enum StatusEnum {
     USER_NOT_FOUND(404,"USER_NOT_FOUND"),
     VOTE_NOT_FOUND(200,"VOTE_NOT_FOUND");
 
-    final int statusCode;
-    final String code;
+    private final int statusCode;
+    private final String code;
 
     StatusEnum(int statusCode, String code) {
         this.statusCode = statusCode;
