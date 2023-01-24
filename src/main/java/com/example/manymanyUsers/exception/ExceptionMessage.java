@@ -6,11 +6,11 @@ import lombok.*;
 @Builder
 public class ExceptionMessage {
     private StatusEnum status;
-    private String msg;
+    private String message;
 
     public static ExceptionMessage of(StatusEnum status, String message){
         return ExceptionMessage.builder().status(status)
-                .msg(message)
+                .message(message)
                 .build();
     }
 
