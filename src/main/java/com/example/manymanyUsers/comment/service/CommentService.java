@@ -59,15 +59,12 @@ public class CommentService {
 
     public List<Comment> getComments(Long voteId, Gender gender, Age age, MBTI mbti) {
 
-        List<Comment> comments = commentRepository.filteredComments(voteId,gender,age,mbti);
-        System.out.println(comments);
+//        List<Comment> comments = commentRepository.findCommentsByfilterAndGetChildren(voteId,gender,age,mbti);
+        List<Comment> comments = commentRepository.findCommentsAllByfilter(voteId,gender,age,mbti);
 
 
-        List<Comment> comments2 = commentRepository.findAllOrderByParentIdAscNullsFirstCommentIdAsc();
-        System.out.println(comments2);
 
-
-        return comments2;
+        return comments;
     }
 
 
