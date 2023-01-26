@@ -82,7 +82,7 @@ public class Comment extends BaseTimeEntity {
         this.parent = parent;
     }
 
-    public void ClassifyAge(Integer age){
+    public void classifyAge(Integer age){
         Age ageGroup;
         switch (age/10){
             case 1:

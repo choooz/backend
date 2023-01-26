@@ -1,4 +1,4 @@
-package com.example.manymanyUsers.comment.domain.controller;
+package com.example.manymanyUsers.comment.controller;
 
 
 import com.example.manymanyUsers.comment.domain.Comment;
