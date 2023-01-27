@@ -25,7 +25,7 @@ public class VoteController {
     private final VoteService voteService;
 
     @Operation(description = "투표 생성")
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<CreateVoteResponse> createVote(@Valid @RequestBody CreateVoteRequest createVoteRequest, @RequestAttribute Claims claims) {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
@@ -48,7 +48,7 @@ public class VoteController {
     }
 
     @Operation(description = "투표 리스트 조회")
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<GetVoteListResponse> getVoteList(@RequestParam SortBy sortBy, @RequestParam int page, @RequestParam int size, @RequestParam(required = false) Category category) {
         Slice<VoteListData> voteListData = voteService.getVoteList(sortBy, page, size, category);
         GetVoteListResponse voteResponse = GetVoteListResponse.builder()
@@ -64,7 +64,7 @@ public class VoteController {
     }
 
     @Operation(description = "투표 업데이트")
-    @PatchMapping("/")
+    @PatchMapping("")
     public ResponseEntity<CommonResponse> updateVote(@Valid @RequestBody UpdateVoteRequest updateVoteRequest, @RequestAttribute Claims claims) {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
