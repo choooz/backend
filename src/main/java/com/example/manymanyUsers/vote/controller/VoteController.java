@@ -64,8 +64,8 @@ public class VoteController {
     }
 
     @Operation(description = "투표 업데이트")
-    @PatchMapping("")
-    public ResponseEntity<CommonResponse> updateVote(@Valid @RequestBody UpdateVoteRequest updateVoteRequest, @RequestAttribute Claims claims) {
+    @PatchMapping("/{voteId}")
+    public ResponseEntity<CommonResponse> updateVote(@PathVariable("voteId") Long voteId, @Valid @RequestBody UpdateVoteRequest updateVoteRequest, @RequestAttribute Claims claims) {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
