@@ -70,7 +70,7 @@ public class VoteController {
         Long longId = Long.valueOf(userId);
 
         try {
-            voteService.updateVote(updateVoteRequest, longId);
+            voteService.updateVote(updateVoteRequest, longId, voteId);
         } catch (NotFoundException e) {
             log.info("error", e);
             CommonResponse createVoteResponse = CommonResponse.builder()

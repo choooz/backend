@@ -235,20 +235,17 @@ public class VoteServiceTest {
         System.out.println("수정 전 타이틀B " + vote.getTitleB());
 
         //when
-        UpdateVoteRequest updateVoteRequest = new UpdateVoteRequest(
-                vote.getId(),
-                "title, titleA 만 바꾸겠습니다",
-                "imageA",
-                "imageB",
-                "detailText",
-                Gender.NULL,
-                Age.NULL,
-                Category.NULL,
-                MBTI.ENFJ,
-                "title, titleA 만 바꾸겠습니다",
-                "titleB");
+        UpdateVoteRequest updateVoteRequest = UpdateVoteRequest.builder()
+                .title("수정 후 타이틀")
+                .detail("수정 후 디테일")
+                .category(Category.NULL)
+                .titleA("수정 후 타이틀A")
+                .titleB("수정 후 타이틀B")
+                .build();
 
-        voteService.updateVote(updateVoteRequest, userId);
+
+
+        voteService.updateVote(updateVoteRequest, userId, vote.getId());
 
         //then
 
@@ -256,10 +253,6 @@ public class VoteServiceTest {
         assertEquals(vote.getTotalTitle(), updateVoteRequest.getTitle());
         assertEquals(vote.getCategory(), updateVoteRequest.getCategory());
         assertEquals(vote.getDetail(), updateVoteRequest.getDetail());
-        assertEquals(vote.getImageA(), updateVoteRequest.getImageA());
-        assertEquals(vote.getImageB(), updateVoteRequest.getImageB());
-        assertEquals(vote.getFilteredGender(), updateVoteRequest.getFilteredGender());
-        assertEquals(vote.getFilteredAge(), updateVoteRequest.getFilteredAge());
         assertEquals(vote.getCategory(), updateVoteRequest.getCategory());
 
         System.out.println("수정 후 타이틀: " + vote.getTotalTitle());
@@ -293,30 +286,21 @@ public class VoteServiceTest {
         Vote vote = byProviderId.get();
 
         //when
-        UpdateVoteRequest updateVoteRequest = new UpdateVoteRequest(
-                vote.getId(),
-                "title, titleA 만 바꾸겠습니다",
-                "imageA",
-                "imageB",
-                "detailText",
-                Gender.NULL,
-                Age.NULL,
-                Category.NULL,
-                MBTI.ENFJ,
-                "title, titleA 만 바꾸겠습니다",
-                "titleB");
+        UpdateVoteRequest updateVoteRequest = UpdateVoteRequest.builder()
+                .title("수정 후 타이틀")
+                .detail("수정 후 디테일")
+                .category(Category.NULL)
+                .titleA("수정 후 타이틀A")
+                .titleB("수정 후 타이틀B")
+                .build();
 
-        voteService.updateVote(updateVoteRequest, 100L);
+        voteService.updateVote(updateVoteRequest, 100L, vote.getId());
 
         //then
         assertEquals(vote.getPostedUser(), user);
         assertEquals(vote.getTotalTitle(), updateVoteRequest.getTitle());
         assertEquals(vote.getCategory(), updateVoteRequest.getCategory());
         assertEquals(vote.getDetail(), updateVoteRequest.getDetail());
-        assertEquals(vote.getImageA(), updateVoteRequest.getImageA());
-        assertEquals(vote.getImageB(), updateVoteRequest.getImageB());
-        assertEquals(vote.getFilteredGender(), updateVoteRequest.getFilteredGender());
-        assertEquals(vote.getFilteredAge(), updateVoteRequest.getFilteredAge());
         assertEquals(vote.getCategory(), updateVoteRequest.getCategory());
 
     }
@@ -345,30 +329,21 @@ public class VoteServiceTest {
         Vote vote = byProviderId.get();
 
         //when
-        UpdateVoteRequest updateVoteRequest = new UpdateVoteRequest(
-                100L,
-                "title, titleA 만 바꾸겠습니다",
-                "imageA",
-                "imageB",
-                "detailText",
-                Gender.NULL,
-                Age.NULL,
-                Category.NULL,
-                MBTI.ENFJ,
-                "title, titleA 만 바꾸겠습니다",
-                "titleB");
+        UpdateVoteRequest updateVoteRequest = UpdateVoteRequest.builder()
+                .title("수정 후 타이틀")
+                .detail("수정 후 디테일")
+                .category(Category.NULL)
+                .titleA("수정 후 타이틀A")
+                .titleB("수정 후 타이틀B")
+                .build();
 
-        voteService.updateVote(updateVoteRequest, userId);
+        voteService.updateVote(updateVoteRequest, userId, 0L);
 
         //then
         assertEquals(vote.getPostedUser(), user);
         assertEquals(vote.getTotalTitle(), updateVoteRequest.getTitle());
         assertEquals(vote.getCategory(), updateVoteRequest.getCategory());
         assertEquals(vote.getDetail(), updateVoteRequest.getDetail());
-        assertEquals(vote.getImageA(), updateVoteRequest.getImageA());
-        assertEquals(vote.getImageB(), updateVoteRequest.getImageB());
-        assertEquals(vote.getFilteredGender(), updateVoteRequest.getFilteredGender());
-        assertEquals(vote.getFilteredAge(), updateVoteRequest.getFilteredAge());
         assertEquals(vote.getCategory(), updateVoteRequest.getCategory());
 
     }
