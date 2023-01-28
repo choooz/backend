@@ -86,7 +86,6 @@ public class VoteService {
         if (category == null) {
             voteSlice = voteRepository.findSliceBy(pageRequest);
         }else{
-
             voteSlice = voteRepository.findByCategory(category,pageRequest);
         }
 
