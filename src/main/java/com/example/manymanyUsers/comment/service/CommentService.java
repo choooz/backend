@@ -2,12 +2,12 @@ package com.example.manymanyUsers.comment.service;
 
 
 import com.example.manymanyUsers.comment.domain.Comment;
-import com.example.manymanyUsers.comment.domain.CommentLike;
+import com.example.manymanyUsers.comment.domain.CommentEmotion;
 import com.example.manymanyUsers.comment.dto.CommentCreateRequest;
 import com.example.manymanyUsers.comment.dto.CommentDeleteRequest;
-import com.example.manymanyUsers.comment.dto.CommentResponse;
 import com.example.manymanyUsers.comment.dto.CommentUpdateRequest;
-import com.example.manymanyUsers.comment.repository.CommentLikeRepository;
+import com.example.manymanyUsers.comment.enums.Emotion;
+import com.example.manymanyUsers.comment.repository.CommentEmotionRepository;
 import com.example.manymanyUsers.comment.repository.CommentRepository;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
@@ -28,7 +28,7 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
-    private final CommentLikeRepository commentLikeRepository;
+    private final CommentEmotionRepository commentEmotionRepository;
 
 
     public void createComment(CommentCreateRequest commentCreateRequest) {
@@ -86,28 +86,100 @@ public class CommentService {
         Optional<User> byIdUser = userRepository.findById(userId);
         User user = byIdUser.get();
 
-        Optional<CommentLike> byCommentAndUser = commentLikeRepository.findByCommentAndUser(comment, user);
+        Optional<CommentEmotion> byCommentAndUser = commentEmotionRepository.findByCommentAndUser(comment, user);
 
 
         byCommentAndUser.ifPresentOrElse(
-                commentLike -> {
-                    commentLikeRepository.delete(commentLike);
-                    comment.discountLike(commentLike);
-                    comment.updateLikeCount();
+                commentEmotion -> {
+                    //좋아요를 눌렀는데 또 눌렀을 경우 좋아요 취소
+                    if (commentEmotion.getEmotion().equals(Emotion.LIKE)) {
+                        commentEmotionRepository.delete(commentEmotion);
+                        comment.removeEmotion(commentEmotion);
+                        comment.updateLikeHateCount();
+                    }
+                    //싫어요를 누른 상태로 좋아요를 누른 경우 싫어요 취소 후 좋아요로 등록
+                    else {
+                        commentEmotionRepository.delete(commentEmotion);
+                        comment.removeEmotion(commentEmotion);
+
+                        CommentEmotion changeEmotion = new CommentEmotion();
+
+                        changeEmotion.setEmotionLike();
+                        changeEmotion.mappingComment(comment);
+                        changeEmotion.mappingUser(user);
+                        comment.updateLikeHateCount();
+
+                        commentEmotionRepository.save(changeEmotion);
+                    }
 
                 },
                 // 좋아요가 없을 경우 좋아요 추가
                 () -> {
-                    CommentLike commentLike = CommentLike.builder().build();
+                    CommentEmotion commentEmotion = new CommentEmotion();
 
-                    commentLike.mappingPost(comment);
-                    commentLike.mappingUser(user);
-                    comment.updateLikeCount();
+                    commentEmotion.setEmotionLike();
+                    commentEmotion.mappingComment(comment);
+                    commentEmotion.mappingUser(user);
+                    comment.updateLikeHateCount();
 
-                    commentLikeRepository.save(commentLike);
+                    commentEmotionRepository.save(commentEmotion);
                 }
         );
 
         return comment.getLikeCount();
     }
+
+    public Long hateComment(Long commentId, Long userId) {
+        Optional<Comment> byIdComment = commentRepository.findById(commentId);
+        Comment comment = byIdComment.get();
+
+        Optional<User> byIdUser = userRepository.findById(userId);
+        User user = byIdUser.get();
+
+        Optional<CommentEmotion> byCommentAndUser = commentEmotionRepository.findByCommentAndUser(comment, user);
+
+
+        byCommentAndUser.ifPresentOrElse(
+                commentEmotion -> {
+                    //싫어요를 눌렀는데 또 눌렀을 경우 싫어요 취소
+                    if (commentEmotion.getEmotion().equals(Emotion.HATE)) {
+                        commentEmotionRepository.delete(commentEmotion);
+                        comment.removeEmotion(commentEmotion);
+                        comment.updateLikeHateCount();
+                    }
+                    //좋아요를 누른 상태로 싫어요를 누른 경우 좋아요 취소 후 싫어요로 등록
+                    else {
+                        commentEmotionRepository.delete(commentEmotion);
+                        comment.removeEmotion(commentEmotion);
+
+                        CommentEmotion changeEmotion = new CommentEmotion();
+
+                        changeEmotion.setEmotionHate();
+                        changeEmotion.mappingComment(comment);
+                        changeEmotion.mappingUser(user);
+                        comment.updateLikeHateCount();
+
+                        commentEmotionRepository.save(changeEmotion);
+                    }
+
+                },
+                // 싫어요가 없을 경우 싫어요 추가
+                () -> {
+                    CommentEmotion commentEmotion = new CommentEmotion();
+
+                    commentEmotion.setEmotionHate();
+                    commentEmotion.mappingComment(comment);
+                    commentEmotion.mappingUser(user);
+
+                    comment.updateLikeHateCount();
+
+                    commentEmotionRepository.save(commentEmotion);
+                }
+        );
+
+        return comment.getHateCount();
+    }
+
+
+
 }

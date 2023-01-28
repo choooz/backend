@@ -1,18 +1,19 @@
 package com.example.manymanyUsers.comment.domain;
 
+import com.example.manymanyUsers.comment.enums.Emotion;
 import com.example.manymanyUsers.user.domain.User;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Fetch;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
-public class CommentLike {
+public class CommentEmotion {
     @Id
     @GeneratedValue
     @Column
@@ -26,19 +27,30 @@ public class CommentLike {
     @JoinColumn(name ="COMMENT_ID")
     private Comment comment;
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Emotion emotion;
+
     @Builder
-    public CommentLike(User user, Comment comment){
+    public CommentEmotion(User user, Comment comment, Emotion emotion){
         this.user =user;
         this.comment = comment;
+        this.emotion = emotion;
     }
 
-    public void mappingPost(Comment comment) {
+    public void mappingComment(Comment comment) {
         this.comment = comment;
-        comment.mappingCommentLike(this);
+        comment.mappingCommentEmotion(this);
     }
 
     public void mappingUser(User user) {
         this.user = user;
         user.mappingCommentLike(this);
+    }
+    public void setEmotionLike(){
+        this.emotion = Emotion.LIKE;
+    }
+    public void setEmotionHate(){
+        this.emotion = Emotion.HATE;
     }
 }
