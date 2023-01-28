@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor
 public class UpdateVoteRequest {
 
     @Schema(description = "투표 제목", example = "A, B 중 어떤게 나을까요?")
@@ -29,4 +28,13 @@ public class UpdateVoteRequest {
 
     @Schema(description = "B 항목의 제목")
     private String titleB;
+
+    @Builder
+    public UpdateVoteRequest(String title, String detail, Category category, String titleA, String titleB) {
+        this.title = title;
+        this.detail = detail;
+        this.category = category;
+        this.titleA = titleA;
+        this.titleB = titleB;
+    }
 }

@@ -41,12 +41,14 @@ public class CreateVoteRequest {
     private MBTI FilteredMbti;
 
     @Builder
-
-    public CreateVoteRequest(String title, String titleA, String titleB, String imageA, String imageB) {
+    public CreateVoteRequest(String title, String titleA, String titleB, String imageA, String imageB, Gender filteredGender, Age filteredAge, MBTI filteredMbti) {
         this.title = title;
         this.titleA = titleA;
         this.titleB = titleB;
         this.imageA = imageA;
         this.imageB = imageB;
+        FilteredGender = filteredGender;
+        FilteredAge = filteredAge;
+        FilteredMbti = filteredMbti;
     }
 }
