@@ -34,6 +34,13 @@ public class Comment extends BaseTimeEntity {
     @Column
     private String content;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PARENT_ID")
+    private Comment parent;
+
+    @OneToMany(mappedBy = "parent", orphanRemoval = true)
+    private List<Comment> children = new ArrayList<>();
+
     @Enumerated(EnumType.STRING)
     @Column
     private Age age;
@@ -71,7 +78,11 @@ public class Comment extends BaseTimeEntity {
         this.content = commentUpdateRequest.getContent();
     }
 
-    public void ClassifyAge(Integer age){
+    public void updateParent(Comment parent){
+        this.parent = parent;
+    }
+
+    public void classifyAge(Integer age){
         Age ageGroup;
         switch (age/10){
             case 1:

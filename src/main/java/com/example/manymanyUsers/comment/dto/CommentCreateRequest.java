@@ -14,14 +14,8 @@ public class CommentCreateRequest {
 
     private Long userId;
 
+    private Long parentId;
+
     private String content;
 
-
-//    public Comment toEntity(){
-//        return Comment.builder()
-//                .content(this.content)
-//                .voteId(this.voteId)
-//                .
-//                .build();
-//    }
 }

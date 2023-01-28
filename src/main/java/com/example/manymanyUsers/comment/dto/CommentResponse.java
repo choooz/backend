@@ -8,9 +8,12 @@ import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.*;
+import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,7 +24,9 @@ public class CommentResponse {
 
     private Long id;
 
-    private Long userid;
+    private Long userId;
+
+    private Long parentId;
 
     private String content;
 
@@ -38,5 +43,9 @@ public class CommentResponse {
     private LocalDateTime createdDate;  //만든 시간 말고 수정 시간을 보내줘야 하나?
 
     private Long likeCount;
+
+    private List<CommentResponse> children = new ArrayList<>();
+
+
 
 }
