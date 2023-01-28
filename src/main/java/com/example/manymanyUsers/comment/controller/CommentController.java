@@ -2,10 +2,7 @@ package com.example.manymanyUsers.comment.controller;
 
 
 import com.example.manymanyUsers.comment.domain.Comment;
-import com.example.manymanyUsers.comment.dto.CommentCreateRequest;
-import com.example.manymanyUsers.comment.dto.CommentDeleteRequest;
-import com.example.manymanyUsers.comment.dto.CommentUpdateRequest;
-import com.example.manymanyUsers.comment.dto.CommentResponse;
+import com.example.manymanyUsers.comment.dto.*;
 import com.example.manymanyUsers.comment.repository.CommentRepository;
 import com.example.manymanyUsers.comment.service.CommentService;
 import com.example.manymanyUsers.common.dto.CommonResponse;
@@ -50,8 +47,8 @@ public class CommentController {
 
 
     @GetMapping("votes/{voteId}/comments")
-    public ResponseEntity<List<CommentResponse>> getComment(@PathVariable Long voteId , @RequestParam(name = "gender", required = false) Gender gender, @RequestParam(name = "age", required = false)Age age, @RequestParam(name = "mbti" , required = false) MBTI mbti) {
-        List<Comment> comments = commentService.getComments(voteId,gender,age,mbti);
+    public ResponseEntity<List<CommentResponse>> getComment(@PathVariable Long voteId ,@ModelAttribute CommentGetRequest commentGetRequest) {
+        List<Comment> comments = commentService.getComments(voteId,commentGetRequest.getGender(),commentGetRequest.getAge(),commentGetRequest.getMbti());
         List<CommentResponse> commentResponses = new ArrayList<>();
         Map<Long,CommentResponse> map = new HashMap<>();
 
@@ -67,7 +64,7 @@ public class CommentController {
                     .nickName(comment.getCommentUser().getNickname())
                     .createdDate(comment.getCreatedDate())
                     .likeCount(comment.getLikeCount())
-                    .children(new ArrayList<>())    //이거 안해줘서 삽질 오지게함;;
+                    .children(new ArrayList<>()) //NullPointerException 발생
                     .build();
             if (comment.getParent() != null) {
                 dto.setParentId(comment.getParent().getId());
@@ -108,7 +105,7 @@ public class CommentController {
     }
 
 
-    @GetMapping("/comments/{commentId}/likers/{userId}")
+    @PostMapping("/comments/{commentId}/likers/{userId}")
     public ResponseEntity<Map<String,Object>> likeComment(@PathVariable Long commentId,@PathVariable Long userId) {
         Long likeCount = commentService.likeComment(commentId,userId);
 
