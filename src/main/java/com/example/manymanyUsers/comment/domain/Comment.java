@@ -2,6 +2,7 @@ package com.example.manymanyUsers.comment.domain;
 
 
 import com.example.manymanyUsers.comment.dto.CommentUpdateRequest;
+import com.example.manymanyUsers.comment.enums.Emotion;
 import com.example.manymanyUsers.common.domain.BaseTimeEntity;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.vote.enums.Age;
@@ -52,31 +53,41 @@ public class Comment extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column
     private Gender gender;
-
     @Column
     private Long likeCount;
+    @Column
+    private Long hateCount;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "comment")
-    private List<CommentLike> commentLikeList = new ArrayList<>();
+    private List<CommentEmotion> commentEmotionList = new ArrayList<>();
 
-
-    public void mappingCommentLike(CommentLike commentLike){
-        this.commentLikeList.add(commentLike);
+    public void mappingCommentEmotion(CommentEmotion commentEmotion){
+        this.commentEmotionList.add(commentEmotion);
     }
 
-    public void updateLikeCount() {
-        this.likeCount = (long) this.commentLikeList.size();
+    public void updateLikeHateCount() {
+        int likecnt = 0;
+        int hatecnt = 0;
+        for (CommentEmotion commentEmotion : commentEmotionList ){
+            if(commentEmotion.getEmotion().equals(Emotion.LIKE)){
+                likecnt +=1;
+            }
+            else {
+                hatecnt +=1;
+            }
+        }
+        this.likeCount = (long) likecnt;
+        this.hateCount = (long) hatecnt;
     }
 
-    public void discountLike(CommentLike commentLike) {
-        this.commentLikeList.remove(commentLike);
+    public void removeEmotion(CommentEmotion commentEmotion) {
+        this.commentEmotionList.remove(commentEmotion);
     }
-
-
 
     public void update(CommentUpdateRequest commentUpdateRequest) {
         this.content = commentUpdateRequest.getContent();
     }
+
 
     public void updateParent(Comment parent){
         this.parent = parent;
