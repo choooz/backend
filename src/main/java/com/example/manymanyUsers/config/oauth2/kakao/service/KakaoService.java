@@ -48,7 +48,6 @@ public class KakaoService {
     @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
     private String client_secret;
 
-    // 카카오 서버에 api 요청을 때려야함 -> 웹 통신을 위한 라이브러리를 사용해야함 (프론트는 axios 우리는 RestTemplate)
     public String getKakaoToken(String code, String redirectUrl) throws ParseException {
         // 인가코드로 토큰받기
         String host = "https://kauth.kakao.com/oauth/token";
@@ -82,7 +81,7 @@ public class KakaoService {
 
     public Map<String, String> getKaKaoUserInfo(String access_token) {
         String host = "https://kapi.kakao.com/v2/user/me";
-        Map<String, String> result = new HashMap<>(); //key, value json 형식으로 데이터 내보내기 위해 hashMap 사용
+        Map<String, String> result = new HashMap<>();
 
         try {
             URL url = new URL(host);
@@ -149,8 +148,8 @@ public class KakaoService {
 
 
     public GetLoginTokenResponse KakaoLogin(String code, String redirectUrl) throws IOException, ParseException {
-        String KakaoaccessToken = this.getKakaoToken(code, redirectUrl);// 인가 코드로 카카오 서버에 카카오 엑세스 토큰 요청
-        Map<String, String> userInfo = this.getKaKaoUserInfo(KakaoaccessToken);  //카카오 서버에 카카오 엑세스 토큰으로 유저정보 요청
+        String kakaoAccessToken = this.getKakaoToken(code, redirectUrl);
+        Map<String, String> userInfo = this.getKaKaoUserInfo(kakaoAccessToken);
         Optional<User> id = findByProviderId(userInfo.get("id"));
         boolean isNewUser = false;
         if (id.isEmpty()) { // 카카오 계정은 이매일이 카카오에서 주는 아이디값
@@ -166,7 +165,7 @@ public class KakaoService {
 
         }
         User findUser = id.get();
-        return new GetLoginTokenResponse(this.jwtTokenProvider.makeJwtToken(findUser.getId(), 30), isNewUser); // 카카오 계정은 이매일이 카카오에서 주는 아이디값이라 아이디 값으로 대체
+        return new GetLoginTokenResponse(this.jwtTokenProvider.makeJwtToken(findUser.getId(), 30), isNewUser);
     }
 
 

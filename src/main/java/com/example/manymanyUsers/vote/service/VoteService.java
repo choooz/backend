@@ -1,5 +1,7 @@
 package com.example.manymanyUsers.vote.service;
 
+import com.example.manymanyUsers.exception.user.UserNotFoundException;
+import com.example.manymanyUsers.exception.vote.VoteNotFoundException;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
 import com.example.manymanyUsers.vote.domain.Vote;
@@ -29,16 +31,11 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;
 
-    public Long createVote(@Valid CreateVoteRequest createVoteRequest, Long userid) throws NotFoundException{
-        Optional<User> find = userRepository.findById(userid);
-        if(find.isEmpty()){
-            throw new NotFoundException("해당 아이디를 가진 유저가 없습니다. 아이디 값을 다시 한번 확인하세요.");
-        }
-
-        User user = find.get();
+    public Long createVote(@Valid CreateVoteRequest createVoteRequest, Long userId) throws UserNotFoundException{
+        User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
         Vote vote = Vote.builder()
-                .postedUser(user)
+                .postedUser(findUser)
                 .totalTitle(createVoteRequest.getTitle())
                 .imageA(createVoteRequest.getImageA())
                 .imageB(createVoteRequest.getImageB())
@@ -79,30 +76,24 @@ public class VoteService {
         return voteListData;
     }
 
-    public void updateVote(@Valid UpdateVoteRequest updateVoteRequest, Long userId) throws NotFoundException{
+    public void updateVote(@Valid UpdateVoteRequest updateVoteRequest, Long userId) throws UserNotFoundException, VoteNotFoundException {
 
-        Optional<User> find = userRepository.findById(userId);
-        if(find.isEmpty()) {
-            throw new NotFoundException("해당 아이디를 가진 유저가 없습니다. 아이디 값을 다시 한번 확인하세요.");
-        }
 
-        Optional<Vote> findVote = voteRepository.findById(updateVoteRequest.getVoteId());
-        if(findVote.isEmpty()) {
-            throw new NotFoundException("해당 아이디를 가진 투표가 없습니다. 아이디 값을 다시 한번 확인하세요.");
-        }
+        User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
-        Vote vote = findVote.get();
+        Vote vote = voteRepository.findById(updateVoteRequest.getVoteId()).orElseThrow(VoteNotFoundException::new);
+
 
         vote.update(updateVoteRequest);
 
     }
 
-    public void deleteVote(Long voteId, Long userId) throws NotFoundException {
+    public void deleteVote(Long voteId, Long userId) throws UserNotFoundException {
 
-        Optional<User> find = userRepository.findById(userId);
-        if(find.isEmpty()) {
-            throw new NotFoundException("해당 아이디를 가진 유저가 없습니다. 아이디 값을 다시 한번 확인하세요.");
-        }
+        User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+//        if(find.isEmpty()) {
+//            throw new NotFoundException("해당 아이디를 가진 유저가 없습니다. 아이디 값을 다시 한번 확인하세요.");
+//        }
 
         voteRepository.deleteById(voteId);
 

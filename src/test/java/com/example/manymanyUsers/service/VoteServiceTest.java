@@ -1,5 +1,7 @@
 package com.example.manymanyUsers.service;
 
+import com.example.manymanyUsers.exception.user.UserNotFoundException;
+import com.example.manymanyUsers.exception.vote.VoteNotFoundException;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
 import com.example.manymanyUsers.user.dto.SignUpRequest;
@@ -78,7 +80,7 @@ public class VoteServiceTest {
         assertEquals(vote.getCategory(), createVoteRequest.getCategory());
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test(expected = UserNotFoundException.class)
     public void 투표생성_실패_아이디를_가진_유저가_없음() throws Exception {
 
         //given
@@ -276,7 +278,7 @@ public class VoteServiceTest {
         System.out.println("수정 후 타이틀B " + vote.getTitleB());
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test(expected = UserNotFoundException.class)
     public void 투표수정_실패_아이디를_가진_유저가_없음() throws Exception {
 
         //given
@@ -332,7 +334,7 @@ public class VoteServiceTest {
 
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test(expected = VoteNotFoundException.class)
     public void 투표수정_실패_아이디를_가진_투표가_없음() throws Exception {
 
         //given
