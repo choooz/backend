@@ -111,14 +111,14 @@ public class VoteController {
     }
 
     @Operation(description = "투표 참여")
-    @PostMapping("/do")
-    public ResponseEntity doVote(DoVoteRequest doVoteRequest, @RequestAttribute Claims claims) {
+    @PostMapping("/{voteId}/vote")
+    public ResponseEntity doVote(DoVoteRequest doVoteRequest, @PathVariable("voteId") Long voteId, @RequestAttribute Claims claims) {
 
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
         try {
-            voteService.doVote(doVoteRequest.converter(longId));
+            voteService.doVote(doVoteRequest.converter(longId, voteId));
         } catch (NotFoundException e) {
 
             CommonResponse commonResponse = CommonResponse.builder()

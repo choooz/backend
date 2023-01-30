@@ -8,16 +8,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DoVoteRequest {
 
-    private Long voteId;
-
     private Choice choice;
 
-
-    public DoVote converter(Long userId) {
+    public DoVote converter(Long userId, Long voteId) {
         return DoVote.builder()
                 .userId(userId)
                 .choice(choice)
-                .voteId(voteId)
                 .build();
     }
 

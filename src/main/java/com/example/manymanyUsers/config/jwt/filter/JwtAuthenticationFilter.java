@@ -34,7 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String baseUrl = "http://localhost:8080/api";
-        StringBuffer requestURL = request.getRequestURL();
+        String requestURL = request.getRequestURL().toString();
         if(requestURL.toString().equals(baseUrl + "/oauth/login")
                 || requestURL.toString().equals(baseUrl + "/user/addInfo")
                 || requestURL.toString().contains(baseUrl + "/votes/")
