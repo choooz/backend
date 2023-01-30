@@ -57,10 +57,10 @@ public class VoteService {
 
     }
 
-    public Slice<VoteListData> getVoteList(SortBy soryBy, Integer page, Integer size, Category category){
+    public Slice<VoteListData> getVoteList(SortBy sortBy, Integer page, Integer size, Category category){
 
         Slice<Vote> voteSlice;
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, soryBy.getValue()));
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
 
         if (category == null) {
             voteSlice = voteRepository.findSliceBy(pageRequest);
@@ -78,11 +78,9 @@ public class VoteService {
 
     public void updateVote(@Valid UpdateVoteRequest updateVoteRequest, Long userId) throws UserNotFoundException, VoteNotFoundException {
 
-
         User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
         Vote vote = voteRepository.findById(updateVoteRequest.getVoteId()).orElseThrow(VoteNotFoundException::new);
-
 
         vote.update(updateVoteRequest);
 
@@ -91,9 +89,7 @@ public class VoteService {
     public void deleteVote(Long voteId, Long userId) throws UserNotFoundException {
 
         User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-//        if(find.isEmpty()) {
-//            throw new NotFoundException("해당 아이디를 가진 유저가 없습니다. 아이디 값을 다시 한번 확인하세요.");
-//        }
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
         voteRepository.deleteById(voteId);
 
