@@ -35,10 +35,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
 
         String baseUrl = "http://localhost:8080/api";
         String requestURL = request.getRequestURL().toString();
-        if(requestURL.toString().equals(baseUrl + "/oauth/login")
-                || requestURL.toString().equals(baseUrl + "/user/addInfo")
-                || requestURL.toString().contains(baseUrl + "/votes/")
-                || requestURL.toString().equals(baseUrl + "/user/addInterestCategory")
+        if(requestURL.equals(baseUrl + "/oauth/login")
+                || requestURL.equals(baseUrl + "/user/addInfo")
+                || requestURL.contains(baseUrl + "/votes/")
+                || requestURL.equals(baseUrl + "/user/addInterestCategory")
         ) {
             String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
                 try {
