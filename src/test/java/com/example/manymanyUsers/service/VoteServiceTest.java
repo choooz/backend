@@ -431,7 +431,7 @@ public class VoteServiceTest {
 
     }
 
-    @Test(expected = EmptyResultDataAccessException.class)
+    @Test(expected = VoteNotFoundException.class)
     public void 투표삭제_실패_아이디를_가진_투표가_없음() throws Exception {
 
         //given
