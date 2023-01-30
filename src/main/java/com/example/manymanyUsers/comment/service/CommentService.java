@@ -16,6 +16,7 @@ import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,6 +67,25 @@ public class CommentService {
 
 
         return comments;
+    }
+
+    public List<Comment> getHotComments(Long voteId){
+        Comment topComment = commentRepository.findHotComments(voteId, PageRequest.of(0,1)).get(0);
+        List<Comment> newestComment = commentRepository.findNewestComments(voteId, PageRequest.of(0,3));
+
+        List<Comment> hotComments = new ArrayList<>();
+        hotComments.add(topComment);
+
+        for(Comment comment : newestComment){
+            if(!comment.equals(topComment)){
+                hotComments.add(comment);
+            }
+            if(hotComments.size()==3){
+                break;
+            }
+        }
+
+        return hotComments;
     }
 
 

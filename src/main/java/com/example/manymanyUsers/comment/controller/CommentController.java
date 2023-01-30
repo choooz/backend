@@ -81,6 +81,41 @@ public class CommentController {
         return ResponseEntity.ok().body(commentResponses);
     }
 
+    @GetMapping("votes/{voteId}/comments/hot")
+    public ResponseEntity<List<CommentResponse>> getHotComment(@PathVariable Long voteId) {
+        List<Comment> comments = commentService.getHotComments(voteId);
+        List<CommentResponse> commentResponses = new ArrayList<>();
+        Map<Long,CommentResponse> map = new HashMap<>();
+
+        for (Comment comment : comments) {
+            CommentResponse dto = CommentResponse.builder()
+                    .id(comment.getId())
+                    .userId(comment.getCommentUser().getId())
+                    .content(comment.getContent())
+                    .gender(comment.getGender())
+                    .imageUrl(comment.getCommentUser().getImageUrl())
+                    .age(comment.getAge())
+                    .mbti(comment.getMbti())
+                    .nickName(comment.getCommentUser().getNickname())
+                    .createdDate(comment.getCreatedDate())
+                    .likeCount(comment.getLikeCount())
+                    .hateCount(comment.getHateCount())
+                    .children(new ArrayList<>()) //NullPointerException 발생
+                    .build();
+            if (comment.getParent() != null) {
+                dto.setParentId(comment.getParent().getId());
+            }
+            map.put(dto.getId(), dto);
+
+            if(comment.getParent() != null) {
+                map.get(comment.getParent().getId()).getChildren().add(dto);
+            }
+
+            else commentResponses.add(dto);
+        }
+        return ResponseEntity.ok().body(commentResponses);
+    }
+
     @PutMapping("/comments/{commentId}")
     public ResponseEntity<CommonResponse> updateComment(@PathVariable Long commentId, @Valid @RequestBody CommentUpdateRequest commentUpdateRequest){
         commentService.updateComment(commentId, commentUpdateRequest);
