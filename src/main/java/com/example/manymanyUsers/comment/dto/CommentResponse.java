@@ -44,6 +44,7 @@ public class CommentResponse {
 
     private Long likeCount;
 
+
     private Long hateCount;
 
     private List<CommentResponse> children = new ArrayList<>();
