@@ -13,6 +13,7 @@ public class DoVoteRequest {
     public DoVote converter(Long userId, Long voteId) {
         return DoVote.builder()
                 .userId(userId)
+                .voteId(voteId)
                 .choice(choice)
                 .build();
     }

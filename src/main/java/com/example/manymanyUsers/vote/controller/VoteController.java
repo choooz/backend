@@ -112,7 +112,7 @@ public class VoteController {
 
     @Operation(description = "투표 참여")
     @PostMapping("/{voteId}/vote")
-    public ResponseEntity doVote(DoVoteRequest doVoteRequest, @PathVariable("voteId") Long voteId, @RequestAttribute Claims claims) {
+    public ResponseEntity doVote(@RequestBody DoVoteRequest doVoteRequest, @PathVariable("voteId") Long voteId, @RequestAttribute Claims claims) {
 
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
@@ -131,6 +131,6 @@ public class VoteController {
                 .message("투표 참여에 성공했습니다.")
                 .build();
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(commonResponse ,HttpStatus.OK);
     }
 }
