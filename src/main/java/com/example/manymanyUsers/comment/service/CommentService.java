@@ -16,8 +16,6 @@ import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,30 +64,8 @@ public class CommentService {
         List<Comment> comments = commentRepository.findCommentsAllByfilter(voteId,gender,age,mbti);
 
 
+
         return comments;
-    }
-
-    public List<Comment> getHotComments(Long voteId) {
-
-
-        Comment hotComment = commentRepository.findTopComment(voteId, PageRequest.of(0,1)).get(0);
-        List<Comment> comments = commentRepository.findRecentComments(voteId, PageRequest.of(0,3));
-
-
-        List<Comment> hotComments = new ArrayList<>();
-        hotComments.add(hotComment);
-
-        for(Comment comment : comments) {
-            if(hotComments.size()==3){
-                break;
-            }
-            //인기 댓글이랑 중복되지 않다면 hot 댓글에 추가
-            if(!comment.equals(hotComment)){
-                hotComments.add(comment);
-            }
-        }
-
-        return hotComments;
     }
 
 
