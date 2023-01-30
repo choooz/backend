@@ -89,7 +89,7 @@ public class UserServiceTest {
         categoryLists.add(Category.LOVE);
 
         //when
-        userService.addInterestCategory(addInterestCategoryRequest,userId);
+        userService.addInterestCategory(categoryLists,userId);
 
         Optional<User> byId = userRepository.findById(userId);
         User result = byId.get();
@@ -114,7 +114,7 @@ public class UserServiceTest {
         categoryLists.add(Category.FASHION);
 
         //when
-        userService.addInterestCategory(addInterestCategoryRequest, userId);
+        userService.addInterestCategory(categoryLists, userId);
 
         Optional<User> byId = userRepository.findById(userId);
         User result = byId.get();
@@ -140,7 +140,7 @@ public class UserServiceTest {
         categoryLists.add(Category.FASHION);
 
         //when
-        userService.addInterestCategory(addInterestCategoryRequest, 0L);
+        userService.addInterestCategory(categoryLists, 0L);
 
         //then
 
