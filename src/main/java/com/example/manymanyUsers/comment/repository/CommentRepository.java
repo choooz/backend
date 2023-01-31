@@ -35,10 +35,14 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             "order by p.id ASC NULLS FIRST, c.id ASC")
     List<Comment> findCommentsAllByfilter(@Param("voteId") Long voteId, @Param("gender") Gender gender, @Param("age") Age age, @Param("mbti") MBTI mbti);
 
-    @Query("SELECT c FROM Comment c WHERE c.voteId = :voteId and c.parent is null and (:gender is null or c.gender = :gender) and (:age is null or c.age = :age) and (:mbti is null or c.mbti = :mbti) ORDER BY (c.likeCount + c.hateCount) DESC , c.createdDate DESC")
+    @Query("SELECT c FROM Comment c" +
+            " WHERE c.voteId = :voteId and c.parent is null and (:gender is null or c.gender = :gender) and (:age is null or c.age = :age) and (:mbti is null or c.mbti = :mbti)" +
+            " ORDER BY (c.likeCount + c.hateCount) DESC , c.createdDate DESC")
     List<Comment> findHotComments(@Param("voteId") Long voteId,@Param("gender") Gender gender, @Param("age") Age age, @Param("mbti") MBTI mbti,Pageable pageable);
 
-    @Query("SELECT c FROM Comment c WHERE c.voteId = :voteId and c.parent is null and (:gender is null or c.gender = :gender) and (:age is null or c.age = :age) and (:mbti is null or c.mbti = :mbti) ORDER BY c.createdDate DESC")
+    @Query("SELECT c FROM Comment c" +
+            " WHERE c.voteId = :voteId and c.parent is null and (:gender is null or c.gender = :gender) and (:age is null or c.age = :age) and (:mbti is null or c.mbti = :mbti) " +
+            "ORDER BY c.createdDate DESC")
     List<Comment> findNewestComments(@Param("voteId") Long voteId, @Param("gender") Gender gender, @Param("age") Age age, @Param("mbti") MBTI mbti, Pageable pageable);
 
 
