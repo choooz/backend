@@ -69,9 +69,9 @@ public class CommentService {
         return comments;
     }
 
-    public List<Comment> getHotComments(Long voteId){
-        Comment topComment = commentRepository.findHotComments(voteId, PageRequest.of(0,1)).get(0);
-        List<Comment> newestComment = commentRepository.findNewestComments(voteId, PageRequest.of(0,3));
+    public List<Comment> getHotComments(Long voteId,Gender gender, Age age, MBTI mbti){
+        Comment topComment = commentRepository.findHotComments(voteId,gender,age,mbti,PageRequest.of(0,1)).get(0);
+        List<Comment> newestComment = commentRepository.findNewestComments(voteId,gender,age,mbti,PageRequest.of(0,3));
 
         List<Comment> hotComments = new ArrayList<>();
         hotComments.add(topComment);
