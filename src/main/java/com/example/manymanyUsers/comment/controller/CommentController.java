@@ -64,6 +64,7 @@ public class CommentController {
                     .nickName(comment.getCommentUser().getNickname())
                     .createdDate(comment.getCreatedDate())
                     .likeCount(comment.getLikeCount())
+                    .hateCount(comment.getHateCount())
                     .children(new ArrayList<>()) //NullPointerException 발생
                     .build();
             if (comment.getParent() != null) {
@@ -112,6 +113,17 @@ public class CommentController {
         Map<String,Object> result = new HashMap<>();
         result.put("message","성공 코드." );
         result.put("count", likeCount);
+
+        return ResponseEntity.ok().body(result);
+    }
+
+    @PostMapping("/comments/{commentId}/haters/{userId}")
+    public ResponseEntity<Map<String,Object>> hateComment(@PathVariable Long commentId,@PathVariable Long userId) {
+        Long hateCount = commentService.hateComment(commentId,userId);
+
+        Map<String,Object> result = new HashMap<>();
+        result.put("message","성공 코드." );
+        result.put("count", hateCount);
 
         return ResponseEntity.ok().body(result);
     }
