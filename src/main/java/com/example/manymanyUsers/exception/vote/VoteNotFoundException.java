@@ -1,13 +1,10 @@
 package com.example.manymanyUsers.exception.vote;
 
 import com.example.manymanyUsers.exception.StatusEnum;
-import javassist.NotFoundException;
 import lombok.Getter;
 
-import java.util.NoSuchElementException;
-
 @Getter
-public class VoteNotFoundException extends NotFoundException {
+public class VoteNotFoundException extends IllegalArgumentException {
 
     private final StatusEnum status;
 

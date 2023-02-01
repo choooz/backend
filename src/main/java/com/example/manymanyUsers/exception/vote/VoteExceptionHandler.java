@@ -15,7 +15,7 @@ public class VoteExceptionHandler {
 
     @ExceptionHandler(VoteNotFoundException.class)
     public ResponseEntity<ExceptionMessage> handle(VoteNotFoundException e) {
-        final ExceptionMessage message = ExceptionMessage.of(e.getMessage());
+        final ExceptionMessage message = ExceptionMessage.of(e.getStatus(), e.getMessage());
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 }
