@@ -19,4 +19,6 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
 
     Slice<Vote> findByCategory(Category category, Pageable pageable);
 
+    Optional<Vote> findById(Long voteId);
+
 }
