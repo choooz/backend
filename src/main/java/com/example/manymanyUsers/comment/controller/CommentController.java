@@ -116,9 +116,9 @@ public class CommentController {
         return ResponseEntity.ok().body(commentResponses);
     }
 
-    @PutMapping("/comments/{commentId}")
-    public ResponseEntity<CommonResponse> updateComment(@PathVariable Long commentId, @Valid @RequestBody CommentUpdateRequest commentUpdateRequest){
-        commentService.updateComment(commentId, commentUpdateRequest);
+    @PutMapping("vote/{voteId}/comments/{commentId}")
+    public ResponseEntity<CommonResponse> updateComment(@PathVariable Long commentId,@PathVariable Long voteId, @Valid @RequestBody CommentUpdateRequest commentUpdateRequest){
+        commentService.updateComment(commentId,voteId,commentUpdateRequest);
 
         CommonResponse commentResponse = CommonResponse.builder()
                 .message("댓글 수정에 성공했습니다.")
@@ -129,9 +129,9 @@ public class CommentController {
 
 
 
-    @DeleteMapping("/comments/{commentId}")
-    public ResponseEntity<CommonResponse> deleteComment(@PathVariable Long commentId, @Valid @RequestBody CommentDeleteRequest commentDeleteRequest){
-        commentService.deleteComment(commentId, commentDeleteRequest);
+    @DeleteMapping("vote/{voteId}/comments/{commentId}")
+    public ResponseEntity<CommonResponse> deleteComment(@PathVariable Long commentId,@PathVariable Long voteId){
+        commentService.deleteComment(commentId,voteId);
 
         CommonResponse commentResponse = CommonResponse.builder()
                 .message("댓글 삭제에 성공했습니다.")

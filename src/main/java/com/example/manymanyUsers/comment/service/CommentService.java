@@ -4,8 +4,6 @@ package com.example.manymanyUsers.comment.service;
 import com.example.manymanyUsers.comment.domain.Comment;
 import com.example.manymanyUsers.comment.domain.CommentEmotion;
 import com.example.manymanyUsers.comment.dto.CommentCreateRequest;
-import com.example.manymanyUsers.comment.dto.CommentDeleteRequest;
-import com.example.manymanyUsers.comment.dto.CommentResponse;
 import com.example.manymanyUsers.comment.dto.CommentUpdateRequest;
 import com.example.manymanyUsers.comment.enums.Emotion;
 import com.example.manymanyUsers.comment.repository.CommentEmotionRepository;
@@ -20,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.util.*;
 
 @Service
@@ -89,13 +88,13 @@ public class CommentService {
     }
 
 
-    public void updateComment(Long commentId, CommentUpdateRequest commentUpdateRequest) {
+    public void updateComment(Long commentId, Long voteId, CommentUpdateRequest commentUpdateRequest) {
         Optional<Comment> byId = commentRepository.findById(commentId);
         Comment comment = byId.get();
         comment.update(commentUpdateRequest);
     }
 
-    public void deleteComment(Long commentId, CommentDeleteRequest commentDeleteRequest) {
+    public void deleteComment(Long commentId,Long voteId) {  // voteId 로 확인 절차
         commentRepository.deleteById(commentId);
     }
 
