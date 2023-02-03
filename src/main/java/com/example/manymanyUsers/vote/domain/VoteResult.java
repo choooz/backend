@@ -2,13 +2,16 @@ package com.example.manymanyUsers.vote.domain;
 
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.vote.enums.Choice;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class VoteResult {
 
     @Id
@@ -27,6 +30,7 @@ public class VoteResult {
     private User votedUser;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Choice choice;
 
     @Builder
