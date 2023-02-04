@@ -8,6 +8,7 @@ import com.example.manymanyUsers.comment.dto.CommentUpdateRequest;
 import com.example.manymanyUsers.comment.enums.Emotion;
 import com.example.manymanyUsers.comment.repository.CommentEmotionRepository;
 import com.example.manymanyUsers.comment.repository.CommentRepository;
+import com.example.manymanyUsers.exception.comment.CommentNotFoundException;
 import com.example.manymanyUsers.exception.user.UserNotFoundException;
 import com.example.manymanyUsers.exception.vote.VoteNotFoundException;
 import com.example.manymanyUsers.user.domain.User;
@@ -36,8 +37,10 @@ public class CommentService {
     private final VoteRepository voteRepository;
 
 
-    public void createComment(CommentCreateRequest commentCreateRequest, Long userId) throws UserNotFoundException {
+    public void createComment(Long voteId, CommentCreateRequest commentCreateRequest, Long userId) throws UserNotFoundException,VoteNotFoundException {
+
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
         Comment parent = null;
         //대댓글 이면
@@ -47,7 +50,7 @@ public class CommentService {
         }
 
         Comment comment = Comment.builder()
-                .voteId(commentCreateRequest.getVoteId())
+                .voteId(voteId)
                 .content(commentCreateRequest.getContent())
                 .commentUser(user)
                 .mbti(user.getMbti())
@@ -61,9 +64,9 @@ public class CommentService {
     }
 
 
-    public List<Comment> getComments(Long voteId, Gender gender, Age age, MBTI mbti) {
+    public List<Comment> getComments(Long voteId, Gender gender, Age age, MBTI mbti) throws VoteNotFoundException{
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
-//        List<Comment> comments = commentRepository.findCommentsByfilterAndGetChildren(voteId,gender,age,mbti);
         List<Comment> comments = commentRepository.findCommentsAllByfilter(voteId,gender,age,mbti);
 
 
@@ -72,6 +75,8 @@ public class CommentService {
     }
 
     public List<Comment> getHotComments(Long voteId,Gender gender, Age age, MBTI mbti){
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+
         Comment topComment = commentRepository.findHotComments(voteId,gender,age,mbti,PageRequest.of(0,1)).get(0);
         List<Comment> newestComment = commentRepository.findNewestComments(voteId,gender,age,mbti,PageRequest.of(0,3));
 
@@ -91,34 +96,30 @@ public class CommentService {
     }
 
 
-    public void updateComment(Long voteId,Long commentId, Long userId, CommentUpdateRequest commentUpdateRequest) throws UserNotFoundException,VoteNotFoundException {
+    public void updateComment(Long voteId,Long commentId, Long userId, CommentUpdateRequest commentUpdateRequest) throws UserNotFoundException,VoteNotFoundException,CommentNotFoundException{
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
 
-        //voteId, userId로 예외처리 추가해야함
-        Optional<Comment> byId = commentRepository.findById(commentId);
-        Comment comment = byId.get();
         comment.update(commentUpdateRequest);
     }
 
-    public void deleteComment(Long commentId,Long voteId, Long userId) throws  UserNotFoundException{
+    public void deleteComment(Long commentId,Long voteId, Long userId) throws UserNotFoundException,VoteNotFoundException,CommentNotFoundException{
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
 
 
         commentRepository.deleteById(commentId);
     }
 
 
-    public Long likeComment(Long voteId, Long commentId, Long userId) {
-        Optional<Comment> byIdComment = commentRepository.findById(commentId);
-        Comment comment = byIdComment.get();
-
-        Optional<User> byIdUser = userRepository.findById(userId);
-        User user = byIdUser.get();
+    public Long likeComment(Long voteId, Long commentId, Long userId) throws UserNotFoundException,VoteNotFoundException,CommentNotFoundException  {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
 
         Optional<CommentEmotion> byCommentAndUser = commentEmotionRepository.findByCommentAndUser(comment, user);
-
 
         byCommentAndUser.ifPresentOrElse(
                 commentEmotion -> {
@@ -160,12 +161,10 @@ public class CommentService {
         return comment.getLikeCount();
     }
 
-    public Long hateComment(Long voteId, Long commentId, Long userId) {
-        Optional<Comment> byIdComment = commentRepository.findById(commentId);
-        Comment comment = byIdComment.get();
-
-        Optional<User> byIdUser = userRepository.findById(userId);
-        User user = byIdUser.get();
+    public Long hateComment(Long voteId, Long commentId, Long userId) throws UserNotFoundException,VoteNotFoundException,CommentNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
 
         Optional<CommentEmotion> byCommentAndUser = commentEmotionRepository.findByCommentAndUser(comment, user);
 

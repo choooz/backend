@@ -5,6 +5,7 @@ import com.example.manymanyUsers.comment.domain.Comment;
 import com.example.manymanyUsers.comment.dto.*;
 import com.example.manymanyUsers.comment.service.CommentService;
 import com.example.manymanyUsers.common.dto.CommonResponse;
+import com.example.manymanyUsers.exception.comment.CommentNotFoundException;
 import com.example.manymanyUsers.exception.user.UserNotFoundException;
 import com.example.manymanyUsers.exception.vote.VoteNotFoundException;
 import io.jsonwebtoken.Claims;
@@ -30,11 +31,11 @@ public class CommentController {
 
 
     @PostMapping("votes/{voteId}/comments")
-    public ResponseEntity<CommonResponse> createComment(@RequestBody @Valid CommentCreateRequest commentCreateRequest, @RequestAttribute Claims claims) throws UserNotFoundException {
+    public ResponseEntity<CommonResponse> createComment(@PathVariable Long voteId, @RequestBody @Valid CommentCreateRequest commentCreateRequest, @RequestAttribute Claims claims) throws UserNotFoundException {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
-        commentService.createComment(commentCreateRequest,longId);
+        commentService.createComment(voteId,commentCreateRequest,longId);
 
         CommonResponse commonResponse = CommonResponse.builder()
                 .message("댓글 생성에 성공했습니다.")
@@ -116,7 +117,7 @@ public class CommentController {
     }
 
     @PutMapping("votes/{voteId}/comments/{commentId}")
-    public ResponseEntity<CommonResponse> updateComment(@PathVariable Long voteId, @PathVariable Long commentId, @Valid @RequestBody CommentUpdateRequest commentUpdateRequest, @RequestAttribute Claims claims) throws UserNotFoundException, VoteNotFoundException {
+    public ResponseEntity<CommonResponse> updateComment(@PathVariable Long voteId, @PathVariable Long commentId, @Valid @RequestBody CommentUpdateRequest commentUpdateRequest, @RequestAttribute Claims claims) throws UserNotFoundException, VoteNotFoundException, CommentNotFoundException {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
@@ -132,7 +133,7 @@ public class CommentController {
 
 
     @DeleteMapping("votes/{voteId}/comments/{commentId}")
-    public ResponseEntity<CommonResponse> deleteComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Claims claims) throws UserNotFoundException{
+    public ResponseEntity<CommonResponse> deleteComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Claims claims) throws UserNotFoundException,VoteNotFoundException,CommentNotFoundException{
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
@@ -147,7 +148,7 @@ public class CommentController {
 
 
     @PostMapping("votes/{voteId}/comments/{commentId}/likers")
-    public ResponseEntity<Map<String,Object>> likeComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Claims claims) {
+    public ResponseEntity<Map<String,Object>> likeComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Claims claims) throws UserNotFoundException {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
@@ -162,7 +163,7 @@ public class CommentController {
 
 
     @PostMapping("votes/{voteId}/comments/{commentId}/haters")
-    public ResponseEntity<Map<String,Object>> hateComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Claims claims) {
+    public ResponseEntity<Map<String,Object>> hateComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Claims claims) throws UserNotFoundException {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
