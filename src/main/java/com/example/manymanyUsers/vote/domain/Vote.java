@@ -10,6 +10,8 @@ import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -28,12 +30,9 @@ public class Vote extends BaseTimeEntity {
     @JoinColumn(name = "USER_ID")
     private User postedUser;
 
-    /**
-     * voteResult 와의 연관관계 주인
-     */
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "VOTE_RESULT_ID")
-    private VoteResult voteResult;
+
+    @OneToMany(mappedBy = "votedUser", fetch = FetchType.LAZY)
+    private List<VoteResult> voteResultList = new ArrayList<>();
 
     @Column
     private String totalTitle;
@@ -88,11 +87,15 @@ public class Vote extends BaseTimeEntity {
         this.filteredMbti = filteredMbti;
     }
 
-    public void update(UpdateVoteRequest updateVoteRequest) {
+    public void  update(UpdateVoteRequest updateVoteRequest) {
         this.totalTitle = updateVoteRequest.getTitle();
         this.titleA = updateVoteRequest.getTitleA();
         this.titleB = updateVoteRequest.getTitleB();
         this.detail = updateVoteRequest.getDetail();
         this.category = updateVoteRequest.getCategory();
+    }
+
+    public void addVoteResult(VoteResult voteResult) {
+        this.voteResultList.add(voteResult);
     }
 }

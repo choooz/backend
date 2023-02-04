@@ -2,13 +2,16 @@ package com.example.manymanyUsers.vote.domain;
 
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.vote.enums.Choice;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class VoteResult {
 
     @Id
@@ -16,7 +19,11 @@ public class VoteResult {
     @Column(name = "VOTE_RESULT_ID")
     private Long id;
 
-    @OneToOne(mappedBy = "voteResult", fetch = FetchType.LAZY)
+    /**
+     * Vote 와의 연관관계 주인
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "VOTE_ID")
     private Vote vote;
 
     /**
@@ -27,12 +34,13 @@ public class VoteResult {
     private User votedUser;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Choice choice;
 
-    @Builder
-    public VoteResult(Vote vote, User votedUser, Choice choice) {
+    public void doVote(Vote vote, User user, Choice choice) {
         this.vote = vote;
-        this.votedUser = votedUser;
+        vote.addVoteResult(this);
+        this.votedUser = user;
         this.choice = choice;
     }
 }

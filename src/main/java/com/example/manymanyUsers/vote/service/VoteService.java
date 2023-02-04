@@ -65,11 +65,11 @@ public class VoteService {
         Vote vote = byId.get();
         User user = find.get();
 
-        VoteResult voteResult = VoteResult.builder()
-                .vote(vote)
-                .votedUser(user)
-                .choice(doVote.getChoice())
-                .build();
+        VoteResult voteResult = new VoteResult();
+
+        voteResult.doVote(vote, user, doVote.getChoice());
+
+        voteResultRepository.save(voteResult);
 
         voteResultRepository.save(voteResult);
 
