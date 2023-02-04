@@ -3,19 +3,13 @@ package com.example.manymanyUsers.comment.controller;
 
 import com.example.manymanyUsers.comment.domain.Comment;
 import com.example.manymanyUsers.comment.dto.*;
-import com.example.manymanyUsers.comment.repository.CommentRepository;
 import com.example.manymanyUsers.comment.service.CommentService;
 import com.example.manymanyUsers.common.dto.CommonResponse;
-import com.example.manymanyUsers.vote.enums.Age;
-import com.example.manymanyUsers.vote.enums.Gender;
-import com.example.manymanyUsers.vote.enums.MBTI;
 import io.jsonwebtoken.Claims;
-import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -50,13 +44,13 @@ public class CommentController {
 
 
     @GetMapping("votes/{voteId}/comments")
-    public ResponseEntity<List<CommentResponse>> getComment(@PathVariable Long voteId ,@ModelAttribute CommentGetRequest commentGetRequest) {
+    public ResponseEntity<List<CommentGetResponse>> getComment(@PathVariable Long voteId , @ModelAttribute CommentGetRequest commentGetRequest) {
         List<Comment> comments = commentService.getComments(voteId,commentGetRequest.getGender(),commentGetRequest.getAge(),commentGetRequest.getMbti());
-        List<CommentResponse> commentResponses = new ArrayList<>();
-        Map<Long,CommentResponse> map = new HashMap<>();
+        List<CommentGetResponse> commentGetRespons = new ArrayList<>();
+        Map<Long, CommentGetResponse> map = new HashMap<>();
 
         for (Comment comment : comments) {
-            CommentResponse dto = CommentResponse.builder()
+            CommentGetResponse dto = CommentGetResponse.builder()
                     .id(comment.getId())
                     .userId(comment.getCommentUser().getId())
                     .content(comment.getContent())
@@ -79,19 +73,19 @@ public class CommentController {
                 map.get(comment.getParent().getId()).getChildren().add(dto);
             }
 
-            else commentResponses.add(dto);
+            else commentGetRespons.add(dto);
         }
-        return ResponseEntity.ok().body(commentResponses);
+        return ResponseEntity.ok().body(commentGetRespons);
     }
 
     @GetMapping("votes/{voteId}/comments/hot")
-    public ResponseEntity<List<CommentResponse>> getHotComment(@PathVariable Long voteId, @ModelAttribute CommentGetRequest commentGetRequest) {
+    public ResponseEntity<List<CommentGetResponse>> getHotComment(@PathVariable Long voteId, @ModelAttribute CommentGetRequest commentGetRequest) {
         List<Comment> comments = commentService.getHotComments(voteId,commentGetRequest.getGender(),commentGetRequest.getAge(),commentGetRequest.getMbti());
-        List<CommentResponse> commentResponses = new ArrayList<>();
-        Map<Long,CommentResponse> map = new HashMap<>();
+        List<CommentGetResponse> commentGetRespons = new ArrayList<>();
+        Map<Long, CommentGetResponse> map = new HashMap<>();
 
         for (Comment comment : comments) {
-            CommentResponse dto = CommentResponse.builder()
+            CommentGetResponse dto = CommentGetResponse.builder()
                     .id(comment.getId())
                     .userId(comment.getCommentUser().getId())
                     .content(comment.getContent())
@@ -114,9 +108,9 @@ public class CommentController {
                 map.get(comment.getParent().getId()).getChildren().add(dto);
             }
 
-            else commentResponses.add(dto);
+            else commentGetRespons.add(dto);
         }
-        return ResponseEntity.ok().body(commentResponses);
+        return ResponseEntity.ok().body(commentGetRespons);
     }
 
     @PutMapping("votes/{voteId}/comments/{commentId}")
