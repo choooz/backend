@@ -71,8 +71,6 @@ public class VoteService {
 
         voteResultRepository.save(voteResult);
 
-        voteResultRepository.save(voteResult);
-
 
     }
 
