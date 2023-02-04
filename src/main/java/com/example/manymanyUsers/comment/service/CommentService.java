@@ -4,8 +4,6 @@ package com.example.manymanyUsers.comment.service;
 import com.example.manymanyUsers.comment.domain.Comment;
 import com.example.manymanyUsers.comment.domain.CommentEmotion;
 import com.example.manymanyUsers.comment.dto.CommentCreateRequest;
-import com.example.manymanyUsers.comment.dto.CommentDeleteRequest;
-import com.example.manymanyUsers.comment.dto.CommentResponse;
 import com.example.manymanyUsers.comment.dto.CommentUpdateRequest;
 import com.example.manymanyUsers.comment.enums.Emotion;
 import com.example.manymanyUsers.comment.repository.CommentEmotionRepository;
@@ -16,9 +14,11 @@ import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.util.*;
 
 @Service
@@ -68,14 +68,33 @@ public class CommentService {
         return comments;
     }
 
+    public List<Comment> getHotComments(Long voteId,Gender gender, Age age, MBTI mbti){
+        Comment topComment = commentRepository.findHotComments(voteId,gender,age,mbti,PageRequest.of(0,1)).get(0);
+        List<Comment> newestComment = commentRepository.findNewestComments(voteId,gender,age,mbti,PageRequest.of(0,3));
 
-    public void updateComment(Long commentId, CommentUpdateRequest commentUpdateRequest) {
+        List<Comment> hotComments = new ArrayList<>();
+        hotComments.add(topComment);
+
+        for(Comment comment : newestComment){
+            if(!comment.equals(topComment)){
+                hotComments.add(comment);
+            }
+            if(hotComments.size()==3){
+                break;
+            }
+        }
+
+        return hotComments;
+    }
+
+
+    public void updateComment(Long commentId, Long voteId, CommentUpdateRequest commentUpdateRequest) {
         Optional<Comment> byId = commentRepository.findById(commentId);
         Comment comment = byId.get();
         comment.update(commentUpdateRequest);
     }
 
-    public void deleteComment(Long commentId, CommentDeleteRequest commentDeleteRequest) {
+    public void deleteComment(Long commentId,Long voteId) {  // voteId 로 확인 절차
         commentRepository.deleteById(commentId);
     }
 

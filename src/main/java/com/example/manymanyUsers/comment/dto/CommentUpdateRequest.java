@@ -9,8 +9,6 @@ import lombok.*;
 @AllArgsConstructor
 public class CommentUpdateRequest {
 
-    private Long userId;
-
     private String content;
 
 }
