@@ -24,7 +24,7 @@ public class S3Controller {
     private final S3Uploader s3Uploader;
 
     @Operation(summary = "이미지 업로드", description = "form-data 형태로 key : images, value : 이미지 파일 형태로 보내주시면 됩니다.")
-    @PostMapping(value = "/upload",
+    @PostMapping(value = "",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity uploadImage(
             @RequestParam("images") MultipartFile multipartFile) {

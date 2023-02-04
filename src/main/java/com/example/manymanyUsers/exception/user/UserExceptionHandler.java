@@ -16,7 +16,7 @@ public class UserExceptionHandler {
 
     @ExceptionHandler(AlreadyExistUserException.class)
     public ResponseEntity<ExceptionMessage> handle(AlreadyExistUserException e){
-        final ExceptionMessage message = ExceptionMessage.of(e.getMessage());
+        final ExceptionMessage message = ExceptionMessage.of(e.getStatus(), e.getMessage());
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 

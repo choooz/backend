@@ -1,11 +1,15 @@
 package com.example.manymanyUsers.config.oauth2.kakao.dto;
 
+import com.example.manymanyUsers.user.domain.CategoryEntity;
 import com.example.manymanyUsers.user.enums.Providers;
+import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 사용자 정보 조회 DTO
@@ -39,10 +43,12 @@ public class GetUserInfoResponse implements Serializable {
 
     private MBTI mbti;
 
+    private List<CategoryEntity> interestedCategory = new ArrayList<>();
+
     private String message;
 
     @Builder
-    public GetUserInfoResponse(Long userId, Providers provider, String providerId, String username, String email, String imageUrl, Integer age, Gender gender, MBTI mbti, String message) {
+    public GetUserInfoResponse(Long userId, Providers provider, String providerId, String username, String email, String imageUrl, Integer age, Gender gender, MBTI mbti, List<CategoryEntity> interestedCategory, String message) {
         this.userId = userId;
         this.provider = provider;
         this.providerId = providerId;
@@ -52,6 +58,7 @@ public class GetUserInfoResponse implements Serializable {
         this.age = age;
         this.gender = gender;
         this.mbti = mbti;
+        this.interestedCategory = interestedCategory;
         this.message = message;
     }
 }

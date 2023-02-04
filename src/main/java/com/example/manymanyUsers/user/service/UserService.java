@@ -101,15 +101,14 @@ public class UserService {
     /**
      * 유저 정보 기입 이후에 호출되며 유저가 관심이 있는 카테고리를 추가 해주는 메서드
      */
-    public void addInterestCategory(AddInterestCategoryRequest addInterestCategoryRequest) throws NotFoundException{
-        Optional<User> byId = userRepository.findById(addInterestCategoryRequest.getUserId());
+    public void addInterestCategory(List<Category> lists, Long userId) throws NotFoundException{
+        Optional<User> byId = userRepository.findById(userId);
         if (byId.isEmpty()) {
             throw new NotFoundException("해당 아이디 값을 가진 유저가 없습니다. 아이디를 다시 한번 확인하세요.");
         }
 
         User user = byId.get();
         List<CategoryEntity> categoryLists = user.getCategoryLists();
-        List<Category> lists = addInterestCategoryRequest.getCategoryLists();
         for (Category list : lists) {
             CategoryEntity category = new CategoryEntity();
             category.setCategory(list);

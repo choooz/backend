@@ -152,6 +152,7 @@ public class CommentController {
         return ResponseEntity.ok().body(result);
     }
 
+
     @PostMapping("vote/{voteId}/comments/{commentId}/haters/{userId}")
     public ResponseEntity<Map<String,Object>> hateComment(@PathVariable Long commentId,@PathVariable Long userId) {
         Long hateCount = commentService.hateComment(commentId,userId);
