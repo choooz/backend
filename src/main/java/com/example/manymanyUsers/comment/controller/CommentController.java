@@ -141,7 +141,7 @@ public class CommentController {
     }
 
 
-    @PostMapping("/comments/{commentId}/likers/{userId}")
+    @PostMapping("vote/{voteId}/comments/{commentId}/likers/{userId}")
     public ResponseEntity<Map<String,Object>> likeComment(@PathVariable Long commentId,@PathVariable Long userId) {
         Long likeCount = commentService.likeComment(commentId,userId);
 
@@ -152,7 +152,7 @@ public class CommentController {
         return ResponseEntity.ok().body(result);
     }
 
-    @PostMapping("/comments/{commentId}/haters/{userId}")
+    @PostMapping("vote/{voteId}/comments/{commentId}/haters/{userId}")
     public ResponseEntity<Map<String,Object>> hateComment(@PathVariable Long commentId,@PathVariable Long userId) {
         Long hateCount = commentService.hateComment(commentId,userId);
 
