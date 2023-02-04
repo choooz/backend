@@ -8,11 +8,15 @@ import com.example.manymanyUsers.comment.dto.CommentUpdateRequest;
 import com.example.manymanyUsers.comment.enums.Emotion;
 import com.example.manymanyUsers.comment.repository.CommentEmotionRepository;
 import com.example.manymanyUsers.comment.repository.CommentRepository;
+import com.example.manymanyUsers.exception.user.UserNotFoundException;
+import com.example.manymanyUsers.exception.vote.VoteNotFoundException;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
+import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
+import com.example.manymanyUsers.vote.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -29,11 +33,11 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final CommentEmotionRepository commentEmotionRepository;
+    private final VoteRepository voteRepository;
 
 
-    public void createComment(CommentCreateRequest commentCreateRequest, Long userId) {
-        Optional<User> byId = userRepository.findById(userId);
-        User user = byId.get();
+    public void createComment(CommentCreateRequest commentCreateRequest, Long userId) throws UserNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
         Comment parent = null;
         //대댓글 이면
@@ -87,19 +91,26 @@ public class CommentService {
     }
 
 
-    public void updateComment(Long commentId, Long voteId, Long userId, CommentUpdateRequest commentUpdateRequest) {
+    public void updateComment(Long voteId,Long commentId, Long userId, CommentUpdateRequest commentUpdateRequest) throws UserNotFoundException,VoteNotFoundException {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+
         //voteId, userId로 예외처리 추가해야함
         Optional<Comment> byId = commentRepository.findById(commentId);
         Comment comment = byId.get();
         comment.update(commentUpdateRequest);
     }
 
-    public void deleteComment(Long commentId,Long voteId, Long userId) {  // voteId 로 확인 절차
+    public void deleteComment(Long commentId,Long voteId, Long userId) throws  UserNotFoundException{
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+
+
         commentRepository.deleteById(commentId);
     }
 
 
-    public Long likeComment(Long commentId, Long userId) {
+    public Long likeComment(Long voteId, Long commentId, Long userId) {
         Optional<Comment> byIdComment = commentRepository.findById(commentId);
         Comment comment = byIdComment.get();
 
@@ -149,7 +160,7 @@ public class CommentService {
         return comment.getLikeCount();
     }
 
-    public Long hateComment(Long commentId, Long userId) {
+    public Long hateComment(Long voteId, Long commentId, Long userId) {
         Optional<Comment> byIdComment = commentRepository.findById(commentId);
         Comment comment = byIdComment.get();
 
