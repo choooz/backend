@@ -18,7 +18,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.Valid;
 import java.util.*;
 
 @Service
@@ -32,8 +31,8 @@ public class CommentService {
     private final CommentEmotionRepository commentEmotionRepository;
 
 
-    public void createComment(CommentCreateRequest commentCreateRequest) {
-        Optional<User> byId = userRepository.findById(commentCreateRequest.getUserId());
+    public void createComment(CommentCreateRequest commentCreateRequest, Long userId) {
+        Optional<User> byId = userRepository.findById(userId);
         User user = byId.get();
 
         Comment parent = null;
@@ -88,13 +87,14 @@ public class CommentService {
     }
 
 
-    public void updateComment(Long commentId, Long voteId, CommentUpdateRequest commentUpdateRequest) {
+    public void updateComment(Long commentId, Long voteId, Long userId, CommentUpdateRequest commentUpdateRequest) {
+        //voteId, userId로 예외처리 추가해야함
         Optional<Comment> byId = commentRepository.findById(commentId);
         Comment comment = byId.get();
         comment.update(commentUpdateRequest);
     }
 
-    public void deleteComment(Long commentId,Long voteId) {  // voteId 로 확인 절차
+    public void deleteComment(Long commentId,Long voteId, Long userId) {  // voteId 로 확인 절차
         commentRepository.deleteById(commentId);
     }
 

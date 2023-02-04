@@ -9,6 +9,7 @@ import com.example.manymanyUsers.common.dto.CommonResponse;
 import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
+import io.jsonwebtoken.Claims;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,9 +34,11 @@ public class CommentController {
 
 
     @PostMapping("votes/{voteId}/comments")
-    public ResponseEntity<CommonResponse> createComment(@RequestBody @Valid CommentCreateRequest commentCreateRequest){
+    public ResponseEntity<CommonResponse> createComment(@RequestBody @Valid CommentCreateRequest commentCreateRequest, @RequestAttribute Claims claims){
+        Integer userId = (int) claims.get("userId");
+        Long longId = Long.valueOf(userId);
 
-        commentService.createComment(commentCreateRequest);
+        commentService.createComment(commentCreateRequest,longId);
 
         CommonResponse commonResponse = CommonResponse.builder()
                 .message("댓글 생성에 성공했습니다.")
@@ -116,9 +119,12 @@ public class CommentController {
         return ResponseEntity.ok().body(commentResponses);
     }
 
-    @PutMapping("vote/{voteId}/comments/{commentId}")
-    public ResponseEntity<CommonResponse> updateComment(@PathVariable Long commentId,@PathVariable Long voteId, @Valid @RequestBody CommentUpdateRequest commentUpdateRequest){
-        commentService.updateComment(commentId,voteId,commentUpdateRequest);
+    @PutMapping("votes/{voteId}/comments/{commentId}")
+    public ResponseEntity<CommonResponse> updateComment(@PathVariable Long commentId,@PathVariable Long voteId,@Valid @RequestBody CommentUpdateRequest commentUpdateRequest, @RequestAttribute Claims claims){
+        Integer userId = (int) claims.get("userId");
+        Long longId = Long.valueOf(userId);
+
+        commentService.updateComment(commentId,voteId,longId,commentUpdateRequest);
 
         CommonResponse commentResponse = CommonResponse.builder()
                 .message("댓글 수정에 성공했습니다.")
@@ -129,9 +135,12 @@ public class CommentController {
 
 
 
-    @DeleteMapping("vote/{voteId}/comments/{commentId}")
-    public ResponseEntity<CommonResponse> deleteComment(@PathVariable Long commentId,@PathVariable Long voteId){
-        commentService.deleteComment(commentId,voteId);
+    @DeleteMapping("votes/{voteId}/comments/{commentId}")
+    public ResponseEntity<CommonResponse> deleteComment(@PathVariable Long commentId,@PathVariable Long voteId, @RequestAttribute Claims claims){
+        Integer userId = (int) claims.get("userId");
+        Long longId = Long.valueOf(userId);
+
+        commentService.deleteComment(commentId,voteId,longId);
 
         CommonResponse commentResponse = CommonResponse.builder()
                 .message("댓글 삭제에 성공했습니다.")
@@ -141,9 +150,12 @@ public class CommentController {
     }
 
 
-    @PostMapping("vote/{voteId}/comments/{commentId}/likers/{userId}")
-    public ResponseEntity<Map<String,Object>> likeComment(@PathVariable Long commentId,@PathVariable Long userId) {
-        Long likeCount = commentService.likeComment(commentId,userId);
+    @PostMapping("votes/{voteId}/comments/{commentId}/likers")
+    public ResponseEntity<Map<String,Object>> likeComment(@PathVariable Long commentId, @RequestAttribute Claims claims) {
+        Integer userId = (int) claims.get("userId");
+        Long longId = Long.valueOf(userId);
+
+        Long likeCount = commentService.likeComment(commentId,longId);
 
         Map<String,Object> result = new HashMap<>();
         result.put("message","성공 코드." );
@@ -153,9 +165,12 @@ public class CommentController {
     }
 
 
-    @PostMapping("vote/{voteId}/comments/{commentId}/haters/{userId}")
-    public ResponseEntity<Map<String,Object>> hateComment(@PathVariable Long commentId,@PathVariable Long userId) {
-        Long hateCount = commentService.hateComment(commentId,userId);
+    @PostMapping("votes/{voteId}/comments/{commentId}/haters")
+    public ResponseEntity<Map<String,Object>> hateComment(@PathVariable Long commentId, @RequestAttribute Claims claims) {
+        Integer userId = (int) claims.get("userId");
+        Long longId = Long.valueOf(userId);
+
+        Long hateCount = commentService.hateComment(commentId,longId);
 
         Map<String,Object> result = new HashMap<>();
         result.put("message","성공 코드." );
