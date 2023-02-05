@@ -18,7 +18,7 @@ public class StatisticsService {
     public String getTotalStatistics(Long voteId) {
 
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
-        String totalVote = String.valueOf(voteResultRepository.findTotalVoteById(vote));
+        String totalVote = String.valueOf(voteResultRepository.countByVote(vote));
         return totalVote;
 
     }
