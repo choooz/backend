@@ -30,7 +30,7 @@ public class CommentController {
     private final CommentService commentService;
 
 
-    @PostMapping("votes/{voteId}/comments")
+    @PostMapping("/votes/{voteId}/comments")
     public ResponseEntity<CommonResponse> createComment(@PathVariable Long voteId, @RequestBody @Valid CommentCreateRequest commentCreateRequest, @RequestAttribute Claims claims) throws UserNotFoundException {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
@@ -46,7 +46,7 @@ public class CommentController {
 
 
 
-    @GetMapping("votes/{voteId}/comments")
+    @GetMapping("/votes/{voteId}/comments")
     public ResponseEntity<List<CommentGetResponse>> getComment(@PathVariable Long voteId , @ModelAttribute CommentGetRequest commentGetRequest) {
         List<Comment> comments = commentService.getComments(voteId,commentGetRequest.getGender(),commentGetRequest.getAge(),commentGetRequest.getMbti());
         List<CommentGetResponse> commentGetRespons = new ArrayList<>();
@@ -81,7 +81,7 @@ public class CommentController {
         return ResponseEntity.ok().body(commentGetRespons);
     }
 
-    @GetMapping("votes/{voteId}/comments/hot")
+    @GetMapping("/votes/{voteId}/comments/hot")
     public ResponseEntity<List<CommentGetResponse>> getHotComment(@PathVariable Long voteId, @ModelAttribute CommentGetRequest commentGetRequest) {
         List<Comment> comments = commentService.getHotComments(voteId,commentGetRequest.getGender(),commentGetRequest.getAge(),commentGetRequest.getMbti());
         List<CommentGetResponse> commentGetRespons = new ArrayList<>();
@@ -116,7 +116,7 @@ public class CommentController {
         return ResponseEntity.ok().body(commentGetRespons);
     }
 
-    @PutMapping("votes/{voteId}/comments/{commentId}")
+    @PutMapping("/votes/{voteId}/comments/{commentId}")
     public ResponseEntity<CommonResponse> updateComment(@PathVariable Long voteId, @PathVariable Long commentId, @Valid @RequestBody CommentUpdateRequest commentUpdateRequest, @RequestAttribute Claims claims) throws UserNotFoundException, VoteNotFoundException, CommentNotFoundException {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
@@ -132,7 +132,7 @@ public class CommentController {
 
 
 
-    @DeleteMapping("votes/{voteId}/comments/{commentId}")
+    @DeleteMapping("/votes/{voteId}/comments/{commentId}")
     public ResponseEntity<CommonResponse> deleteComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Claims claims) throws UserNotFoundException,VoteNotFoundException,CommentNotFoundException{
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
@@ -147,7 +147,7 @@ public class CommentController {
     }
 
 
-    @PostMapping("votes/{voteId}/comments/{commentId}/likers")
+    @PostMapping("/votes/{voteId}/comments/{commentId}/likers")
     public ResponseEntity<Map<String,Object>> likeComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Claims claims) throws UserNotFoundException {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
@@ -162,7 +162,7 @@ public class CommentController {
     }
 
 
-    @PostMapping("votes/{voteId}/comments/{commentId}/haters")
+    @PostMapping("/votes/{voteId}/comments/{commentId}/haters")
     public ResponseEntity<Map<String,Object>> hateComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Claims claims) throws UserNotFoundException {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
