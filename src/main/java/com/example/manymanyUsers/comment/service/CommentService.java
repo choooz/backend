@@ -74,7 +74,7 @@ public class CommentService {
         return comments;
     }
 
-    public List<Comment> getHotComments(Long voteId,Gender gender, Age age, MBTI mbti){
+    public List<Comment> getHotComments(Long voteId, Gender gender, Age age, MBTI mbti){
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
         Comment topComment = commentRepository.findHotComments(voteId,gender,age,mbti,PageRequest.of(0,1)).get(0);
@@ -96,7 +96,7 @@ public class CommentService {
     }
 
 
-    public void updateComment(Long voteId,Long commentId, Long userId, CommentUpdateRequest commentUpdateRequest) throws UserNotFoundException,VoteNotFoundException,CommentNotFoundException{
+    public void updateComment(Long voteId, Long commentId, Long userId, CommentUpdateRequest commentUpdateRequest) throws UserNotFoundException,VoteNotFoundException,CommentNotFoundException{
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
@@ -104,7 +104,7 @@ public class CommentService {
         comment.update(commentUpdateRequest);
     }
 
-    public void deleteComment(Long commentId,Long voteId, Long userId) throws UserNotFoundException,VoteNotFoundException,CommentNotFoundException{
+    public void deleteComment(Long commentId, Long voteId, Long userId) throws UserNotFoundException,VoteNotFoundException,CommentNotFoundException{
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
