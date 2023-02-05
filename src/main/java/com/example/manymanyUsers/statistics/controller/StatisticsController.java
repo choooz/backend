@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/api/statistics")
+@RequestMapping("/api")
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -22,7 +22,7 @@ public class StatisticsController {
     private final StatisticsService statisticsService;
 
     @Operation(description = "투표 참여 인원 통계")
-    @GetMapping("/{voteId}")
+    @GetMapping("/{voteId}/statistics")
     public ResponseEntity<TotalStatisticsResponse> getTotalStatistics(@PathVariable("voteId") Long voteId) {
 
         String totalVoteNumber = statisticsService.getTotalStatistics(voteId);
