@@ -87,7 +87,7 @@ public class Vote extends BaseTimeEntity {
         this.filteredMbti = filteredMbti;
     }
 
-    public void update(UpdateVoteRequest updateVoteRequest) {
+    public void  update(UpdateVoteRequest updateVoteRequest) {
         this.totalTitle = updateVoteRequest.getTitle();
         this.titleA = updateVoteRequest.getTitleA();
         this.titleB = updateVoteRequest.getTitleB();
