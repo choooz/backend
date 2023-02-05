@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 public interface VoteResultRepository extends JpaRepository<VoteResult, Long> {
 
     //해당 투표의 투표결과 개수 가져오는 쿼리
-    @Query("SELECT COUNT(*) FROM VoteResult v WHERE v.vote = :vote")
-    Long findTotalVoteById(@Param("vote") Vote vote);
+//    @Query("SELECT COUNT(*) FROM VoteResult v WHERE v.vote = :vote")
+    Long countByVote(@Param("vote") Vote vote);
 
 }
