@@ -104,7 +104,7 @@ public class CommentService {
         comment.update(commentUpdateRequest);
     }
 
-    public void deleteComment(Long commentId, Long voteId, Long userId) throws UserNotFoundException,VoteNotFoundException,CommentNotFoundException{
+    public void deleteComment(Long voteId, Long commentId , Long userId) throws UserNotFoundException,VoteNotFoundException,CommentNotFoundException{
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
