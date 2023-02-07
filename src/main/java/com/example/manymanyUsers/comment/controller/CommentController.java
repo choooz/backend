@@ -116,12 +116,12 @@ public class CommentController {
         return ResponseEntity.ok().body(commentGetRespons);
     }
 
-    @PutMapping("/votes/{voteId}/comments/{commentId}")
+    @PatchMapping("/votes/{voteId}/comments/{commentId}")
     public ResponseEntity<CommonResponse> updateComment(@PathVariable Long voteId, @PathVariable Long commentId, @Valid @RequestBody CommentUpdateRequest commentUpdateRequest, @RequestAttribute Claims claims) throws UserNotFoundException, VoteNotFoundException, CommentNotFoundException {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
-        commentService.updateComment(commentId,voteId,longId,commentUpdateRequest);
+        commentService.updateComment(voteId,commentId,longId,commentUpdateRequest);
 
         CommonResponse commentResponse = CommonResponse.builder()
                 .message("댓글 수정에 성공했습니다.")
@@ -137,7 +137,7 @@ public class CommentController {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
-        commentService.deleteComment(commentId,voteId,longId);
+        commentService.deleteComment(voteId,commentId,longId);
 
         CommonResponse commentResponse = CommonResponse.builder()
                 .message("댓글 삭제에 성공했습니다.")
