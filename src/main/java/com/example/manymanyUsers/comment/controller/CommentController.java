@@ -81,9 +81,44 @@ public class CommentController {
         return ResponseEntity.ok().body(commentResponses);
     }
 
-    @PutMapping("/comments/{commentId}")
-    public ResponseEntity<CommonResponse> updateComment(@PathVariable Long commentId, @Valid @RequestBody CommentUpdateRequest commentUpdateRequest){
-        commentService.updateComment(commentId, commentUpdateRequest);
+    @GetMapping("votes/{voteId}/comments/hot")
+    public ResponseEntity<List<CommentResponse>> getHotComment(@PathVariable Long voteId, @ModelAttribute CommentGetRequest commentGetRequest) {
+        List<Comment> comments = commentService.getHotComments(voteId,commentGetRequest.getGender(),commentGetRequest.getAge(),commentGetRequest.getMbti());
+        List<CommentResponse> commentResponses = new ArrayList<>();
+        Map<Long,CommentResponse> map = new HashMap<>();
+
+        for (Comment comment : comments) {
+            CommentResponse dto = CommentResponse.builder()
+                    .id(comment.getId())
+                    .userId(comment.getCommentUser().getId())
+                    .content(comment.getContent())
+                    .gender(comment.getGender())
+                    .imageUrl(comment.getCommentUser().getImageUrl())
+                    .age(comment.getAge())
+                    .mbti(comment.getMbti())
+                    .nickName(comment.getCommentUser().getNickname())
+                    .createdDate(comment.getCreatedDate())
+                    .likeCount(comment.getLikeCount())
+                    .hateCount(comment.getHateCount())
+                    .children(new ArrayList<>()) //NullPointerException 발생
+                    .build();
+            if (comment.getParent() != null) {
+                dto.setParentId(comment.getParent().getId());
+            }
+            map.put(dto.getId(), dto);
+
+            if(comment.getParent() != null) {
+                map.get(comment.getParent().getId()).getChildren().add(dto);
+            }
+
+            else commentResponses.add(dto);
+        }
+        return ResponseEntity.ok().body(commentResponses);
+    }
+
+    @PutMapping("vote/{voteId}/comments/{commentId}")
+    public ResponseEntity<CommonResponse> updateComment(@PathVariable Long commentId,@PathVariable Long voteId, @Valid @RequestBody CommentUpdateRequest commentUpdateRequest){
+        commentService.updateComment(commentId,voteId,commentUpdateRequest);
 
         CommonResponse commentResponse = CommonResponse.builder()
                 .message("댓글 수정에 성공했습니다.")
@@ -94,9 +129,9 @@ public class CommentController {
 
 
 
-    @DeleteMapping("/comments/{commentId}")
-    public ResponseEntity<CommonResponse> deleteComment(@PathVariable Long commentId, @Valid @RequestBody CommentDeleteRequest commentDeleteRequest){
-        commentService.deleteComment(commentId, commentDeleteRequest);
+    @DeleteMapping("vote/{voteId}/comments/{commentId}")
+    public ResponseEntity<CommonResponse> deleteComment(@PathVariable Long commentId,@PathVariable Long voteId){
+        commentService.deleteComment(commentId,voteId);
 
         CommonResponse commentResponse = CommonResponse.builder()
                 .message("댓글 삭제에 성공했습니다.")
@@ -106,7 +141,7 @@ public class CommentController {
     }
 
 
-    @PostMapping("/comments/{commentId}/likers/{userId}")
+    @PostMapping("vote/{voteId}/comments/{commentId}/likers/{userId}")
     public ResponseEntity<Map<String,Object>> likeComment(@PathVariable Long commentId,@PathVariable Long userId) {
         Long likeCount = commentService.likeComment(commentId,userId);
 
@@ -117,7 +152,8 @@ public class CommentController {
         return ResponseEntity.ok().body(result);
     }
 
-    @PostMapping("/comments/{commentId}/haters/{userId}")
+
+    @PostMapping("vote/{voteId}/comments/{commentId}/haters/{userId}")
     public ResponseEntity<Map<String,Object>> hateComment(@PathVariable Long commentId,@PathVariable Long userId) {
         Long hateCount = commentService.hateComment(commentId,userId);
 
