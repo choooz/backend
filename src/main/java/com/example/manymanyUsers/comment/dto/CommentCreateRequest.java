@@ -10,8 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 public class CommentCreateRequest {
 
-    private Long voteId;
-
     private Long parentId;
 
     private String content;
