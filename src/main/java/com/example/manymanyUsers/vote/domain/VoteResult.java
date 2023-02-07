@@ -19,7 +19,11 @@ public class VoteResult {
     @Column(name = "VOTE_RESULT_ID")
     private Long id;
 
-    @OneToOne(mappedBy = "voteResult", fetch = FetchType.LAZY)
+    /**
+     * Vote 와의 연관관계 주인
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "VOTE_ID")
     private Vote vote;
 
     /**
@@ -33,10 +37,10 @@ public class VoteResult {
     @Enumerated(EnumType.STRING)
     private Choice choice;
 
-    @Builder
-    public VoteResult(Vote vote, User votedUser, Choice choice) {
+    public void doVote(Vote vote, User user, Choice choice) {
         this.vote = vote;
-        this.votedUser = votedUser;
+        vote.addVoteResult(this);
+        this.votedUser = user;
         this.choice = choice;
     }
 }
