@@ -32,6 +32,7 @@ public class VoteService {
     private final VoteResultRepository voteResultRepository;
 
 
+
     public Long createVote(@Valid CreateVoteRequest createVoteRequest, Long userId) throws UserNotFoundException{
         User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
@@ -90,6 +91,12 @@ public class VoteService {
             return new VoteListData(vote);
         });
         return voteListData;
+    }
+
+    public Vote getVote(Long voteId) throws  VoteNotFoundException {
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+
+        return vote;
     }
 
     public void updateVote(@Valid UpdateVoteRequest updateVoteRequest, Long userId, Long voteId) throws UserNotFoundException, VoteNotFoundException {

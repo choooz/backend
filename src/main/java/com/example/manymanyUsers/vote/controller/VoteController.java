@@ -2,6 +2,8 @@ package com.example.manymanyUsers.vote.controller;
 
 import com.example.manymanyUsers.exception.user.UserNotFoundException;
 import com.example.manymanyUsers.exception.vote.VoteNotFoundException;
+import com.example.manymanyUsers.user.domain.User;
+import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.dto.*;
 import com.example.manymanyUsers.common.dto.CommonResponse;
 import com.example.manymanyUsers.vote.enums.Category;
@@ -15,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -53,8 +56,31 @@ public class VoteController {
 
     @Operation(description = "투표 단건 조회")
     @GetMapping("/{voteId}")
-    public ResponseEntity getVote() {
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity<GetVoteResponse> getVote(@PathVariable Long voteId) {
+        Vote vote = voteService.getVote(voteId);
+
+        User writer = vote.getPostedUser();
+
+        GetVoteResponse getVoteResponse = GetVoteResponse.builder()
+                .userImage(writer.getImageUrl())
+                .userGender(writer.getGender())
+                .userAge(vote.classifyAge(writer.getAge()))
+                .nickName(writer.getNickname())
+                .voteCreatedDate(vote.getCreatedDate())
+                .category(vote.getCategory())
+                .title(vote.getTotalTitle())
+                .imageA(vote.getImageA())
+                .imageB(vote.getImageB())
+                .filteredGender(vote.getFilteredGender())
+                .filteredAge(vote.getFilteredAge())
+                .filteredMbti(vote.getFilteredMbti())
+                .titleA(vote.getTitleA())
+                .titleB(vote.getTitleB())
+                .description(vote.getDetail())
+                .build();
+
+
+        return new ResponseEntity(getVoteResponse,HttpStatus.OK);
     }
 
 
