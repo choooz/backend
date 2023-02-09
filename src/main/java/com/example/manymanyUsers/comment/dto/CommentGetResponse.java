@@ -1,17 +1,12 @@
 package com.example.manymanyUsers.comment.dto;
 
 
-import com.example.manymanyUsers.comment.domain.Comment;
-import com.example.manymanyUsers.user.domain.User;
-import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.*;
-import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CommentResponse {
+public class CommentGetResponse {
 
     private Long id;
 
@@ -47,7 +42,7 @@ public class CommentResponse {
 
     private Long hateCount;
 
-    private List<CommentResponse> children = new ArrayList<>();
+    private List<CommentGetResponse> children = new ArrayList<>();
 
 
 
