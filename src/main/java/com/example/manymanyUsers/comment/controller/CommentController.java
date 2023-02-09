@@ -9,6 +9,7 @@ import com.example.manymanyUsers.exception.comment.CommentNotFoundException;
 import com.example.manymanyUsers.exception.user.UserNotFoundException;
 import com.example.manymanyUsers.exception.vote.VoteNotFoundException;
 import io.jsonwebtoken.Claims;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-
+    @Operation(description = "댓글 생성")
     @PostMapping("/votes/{voteId}/comments")
     public ResponseEntity<CommonResponse> createComment(@PathVariable Long voteId, @RequestBody @Valid CommentCreateRequest commentCreateRequest, @RequestAttribute Claims claims) throws UserNotFoundException {
         Integer userId = (int) claims.get("userId");
@@ -45,7 +46,7 @@ public class CommentController {
     }
 
 
-
+    @Operation(description = "댓글 조회")
     @GetMapping("/votes/{voteId}/comments")
     public ResponseEntity<List<CommentGetResponse>> getComment(@PathVariable Long voteId, @ModelAttribute CommentGetRequest commentGetRequest) {
         List<Comment> comments = commentService.getComments(voteId, commentGetRequest.getGender(), commentGetRequest.getAge(), commentGetRequest.getMbti());
@@ -80,7 +81,7 @@ public class CommentController {
         }
         return ResponseEntity.ok().body(commentGetRespons);
     }
-
+    @Operation(description = "맛보기 댓글 조회")
     @GetMapping("/votes/{voteId}/comments/hot")
     public ResponseEntity<List<CommentGetResponse>> getHotComment(@PathVariable Long voteId, @ModelAttribute CommentGetRequest commentGetRequest) {
         List<Comment> comments = commentService.getHotComments(voteId, commentGetRequest.getGender(), commentGetRequest.getAge(), commentGetRequest.getMbti());
@@ -115,7 +116,7 @@ public class CommentController {
         }
         return ResponseEntity.ok().body(commentGetRespons);
     }
-
+    @Operation(description = "댓글 수정")
     @PatchMapping("/votes/{voteId}/comments/{commentId}")
     public ResponseEntity<CommonResponse> updateComment(@PathVariable Long voteId, @PathVariable Long commentId, @Valid @RequestBody CommentUpdateRequest commentUpdateRequest, @RequestAttribute Claims claims) throws UserNotFoundException, VoteNotFoundException, CommentNotFoundException {
         Integer userId = (int) claims.get("userId");
@@ -131,7 +132,7 @@ public class CommentController {
     }
 
 
-
+    @Operation(description = "댓글 삭제")
     @DeleteMapping("/votes/{voteId}/comments/{commentId}")
     public ResponseEntity<CommonResponse> deleteComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Claims claims) throws UserNotFoundException,VoteNotFoundException,CommentNotFoundException{
         Integer userId = (int) claims.get("userId");
@@ -146,7 +147,7 @@ public class CommentController {
         return new ResponseEntity(commentResponse, HttpStatus.OK);
     }
 
-
+    @Operation(description = "댓글 좋아요")
     @PostMapping("/votes/{voteId}/comments/{commentId}/likers")
     public ResponseEntity<Map<String,Object>> likeComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Claims claims) throws UserNotFoundException {
         Integer userId = (int) claims.get("userId");
@@ -161,7 +162,7 @@ public class CommentController {
         return ResponseEntity.ok().body(result);
     }
 
-
+    @Operation(description = "댓글 싫어요")
     @PostMapping("/votes/{voteId}/comments/{commentId}/haters")
     public ResponseEntity<Map<String,Object>> hateComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Claims claims) throws UserNotFoundException {
         Integer userId = (int) claims.get("userId");
