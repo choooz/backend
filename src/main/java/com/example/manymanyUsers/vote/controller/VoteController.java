@@ -59,7 +59,7 @@ public class VoteController {
     public ResponseEntity<GetVoteResponse> getVote(@PathVariable Long voteId) {
         Vote vote = voteService.getVote(voteId);
 
-        User writer = vote.getPostedUser();
+        User writer = vote.getPostedUser(); // 투표 작성자
 
         GetVoteResponse getVoteResponse = GetVoteResponse.builder()
                 .userImage(writer.getImageUrl())
