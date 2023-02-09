@@ -36,4 +36,4 @@ public class StatisticsController {
         return new ResponseEntity(wholeStatisticsResponse, HttpStatus.OK);
 
     }
-}
+}// 테스트 주석
