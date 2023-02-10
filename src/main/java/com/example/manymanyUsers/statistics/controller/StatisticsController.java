@@ -25,15 +25,9 @@ public class StatisticsController {
     @GetMapping("/{voteId}/statistics")
     public ResponseEntity<TotalStatisticsResponse> getTotalStatistics(@PathVariable("voteId") Long voteId) {
 
-        String totalVoteNumber = statisticsService.getTotalStatistics(voteId);
+        TotalStatisticsResponse totalStatisticsResponse = statisticsService.getTotalStatistics(voteId);
 
-        TotalStatisticsResponse wholeStatisticsResponse = TotalStatisticsResponse.builder()
-                    .voteId(voteId)
-                    .totalVote(totalVoteNumber)
-                    .message("해당 voteId 투표 참여 인원 통계 조회에 성공했습니다")
-                    .build();
-
-        return new ResponseEntity(wholeStatisticsResponse, HttpStatus.OK);
-
+        return new ResponseEntity(totalStatisticsResponse, HttpStatus.OK);
     }
-}// 테스트 주석
+
+}
