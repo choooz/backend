@@ -88,20 +88,11 @@ public class VoteController {
 
     @Operation(description = "투표 참여")
     @PostMapping("/{voteId}/vote")
-    public ResponseEntity doVote(@RequestBody DoVoteRequest doVoteRequest, @PathVariable("voteId") Long voteId, @RequestAttribute Claims claims) {
+    public ResponseEntity doVote(@RequestBody DoVoteRequest doVoteRequest, @PathVariable("voteId") Long voteId, @RequestAttribute Claims claims) throws UserNotFoundException, VoteNotFoundException {
 
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
-
-        try {
-            voteService.doVote(doVoteRequest.converter(longId, voteId));
-        } catch (NotFoundException e) {
-
-            CommonResponse commonResponse = CommonResponse.builder()
-                    .message("투표 참여에 실패했습니다. 토큰과 투표 아이디를 다시한번 확인하세요.")
-                    .build();
-            return new ResponseEntity(commonResponse,HttpStatus.NOT_FOUND);
-        }
+        voteService.doVote(doVoteRequest.converter(longId, voteId));
 
         CommonResponse commonResponse = CommonResponse.builder()
                 .message("투표 참여에 성공했습니다.")
