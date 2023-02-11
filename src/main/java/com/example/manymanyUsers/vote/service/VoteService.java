@@ -52,26 +52,16 @@ public class VoteService {
     }
 
 
-    public void doVote(DoVote doVote) throws NotFoundException{
-        Optional<Vote> byId = voteRepository.findById(doVote.getVoteId());
-        if (byId.isEmpty()) {
-            throw new NotFoundException("해당 아이디를 가진 투표가 없습니다. 아이디 값을 다시 한번 확인하세요.");
-        }
+    public void doVote(DoVote doVote) {
 
-        Optional<User> find = userRepository.findById(doVote.getUserId());
-        if(find.isEmpty()){
-            throw new NotFoundException("해당 아이디를 가진 유저가 없습니다. 아이디 값을 다시 한번 확인하세요.");
-        }
-
-        Vote vote = byId.get();
-        User user = find.get();
+        Vote vote = voteRepository.findById(doVote.getVoteId()).orElseThrow(VoteNotFoundException::new);
+        User user = userRepository.findById(doVote.getUserId()).orElseThrow(UserNotFoundException::new);
 
         VoteResult voteResult = new VoteResult();
 
         voteResult.doVote(vote, user, doVote.getChoice());
 
         voteResultRepository.save(voteResult);
-
 
     }
 
@@ -103,12 +93,9 @@ public class VoteService {
     public void updateVote(@Valid UpdateVoteRequest updateVoteRequest, Long userId, Long voteId) throws UserNotFoundException, VoteNotFoundException {
 
         User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
-
         vote.update(updateVoteRequest);
-
     }
 
     public void deleteVote(Long voteId, Long userId) throws UserNotFoundException {

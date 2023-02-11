@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 public class TotalStatisticsResponse {
 
     private Long voteId;
-    private String totalVote;
+    private int totalVote;
     private String message;
 
     @Builder
-    public TotalStatisticsResponse(Long voteId, String totalVote, String message) {
+    public TotalStatisticsResponse(Long voteId, int totalVote, String message) {
         this.voteId = voteId;
         this.totalVote = totalVote;
         this.message = message;
