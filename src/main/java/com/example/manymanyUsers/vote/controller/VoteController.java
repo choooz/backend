@@ -9,7 +9,6 @@ import com.example.manymanyUsers.vote.enums.SortBy;
 import com.example.manymanyUsers.vote.service.VoteService;
 import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
-import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
@@ -88,7 +87,7 @@ public class VoteController {
 
     @Operation(description = "투표 참여")
     @PostMapping("/{voteId}/vote")
-    public ResponseEntity doVote(@RequestBody DoVoteRequest doVoteRequest, @PathVariable("voteId") Long voteId, @RequestAttribute Claims claims) throws UserNotFoundException, VoteNotFoundException {
+    public ResponseEntity doVote(@RequestBody DoVoteRequest doVoteRequest, @PathVariable("voteId") Long voteId, @RequestAttribute Claims claims) {
 
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);

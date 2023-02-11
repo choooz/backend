@@ -51,7 +51,7 @@ public class VoteService {
     }
 
 
-    public void doVote(DoVote doVote) throws UserNotFoundException {
+    public void doVote(DoVote doVote) {
 
         Vote vote = voteRepository.findById(doVote.getVoteId()).orElseThrow(VoteNotFoundException::new);
         User user = userRepository.findById(doVote.getUserId()).orElseThrow(UserNotFoundException::new);
