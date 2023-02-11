@@ -10,20 +10,13 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Slice;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
 public class GetVoteResponse {
 
-    private String userImage;
-
-    private Gender userGender;
-
-    private Age userAge;
-
-    private MBTI userMbti;
-
-    private String nickName;
+    private GetVoteUserResponse user;
 
     private LocalDateTime voteCreatedDate;
 
@@ -48,13 +41,9 @@ public class GetVoteResponse {
     private String description;
 
     @Builder
-    public GetVoteResponse(String userImage, Gender userGender, Age userAge, MBTI userMbti, String nickName, LocalDateTime voteCreatedDate, Category category, String title, String imageA
+    public GetVoteResponse(GetVoteUserResponse user,String nickName, LocalDateTime voteCreatedDate, Category category, String title, String imageA
     ,String imageB, Gender filteredGender, Age filteredAge, MBTI filteredMbti, String titleA, String titleB, String description){
-        this.userImage = userImage;
-        this.userGender = userGender;
-        this.userAge = userAge;
-        this.userMbti = userMbti;
-        this.nickName = nickName;
+        this.user = user;
         this.voteCreatedDate = voteCreatedDate;
         this.category = category;
         this.title = title;
