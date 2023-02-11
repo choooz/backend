@@ -4,11 +4,13 @@ import com.example.manymanyUsers.exception.user.UserNotFoundException;
 import com.example.manymanyUsers.exception.vote.VoteNotFoundException;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
+import com.example.manymanyUsers.user.dto.AddInfoRequest;
 import com.example.manymanyUsers.user.dto.SignUpRequest;
 import com.example.manymanyUsers.user.enums.Providers;
 import com.example.manymanyUsers.user.service.UserService;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.dto.CreateVoteRequest;
+import com.example.manymanyUsers.vote.dto.GetVoteResponse;
 import com.example.manymanyUsers.vote.dto.UpdateVoteRequest;
 import com.example.manymanyUsers.vote.dto.VoteListData;
 import com.example.manymanyUsers.vote.enums.*;
@@ -460,5 +462,46 @@ public class VoteServiceTest {
         Vote removedVote2 = removedVote.get();  //투표를 찾을 수 없음 (NoSuchElementException)
 
     }
+
+    @Test
+    public void 투표단건조회_성공() throws Exception{
+        //given
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
+        Long userId = userService.registerUser(request);
+
+        AddInfoRequest addInfoRequest = new AddInfoRequest();
+
+        addInfoRequest.setAge(26);
+        addInfoRequest.setGender(Gender.MALE);
+        addInfoRequest.setMbti(MBTI.INFJ);
+
+        userService.addUserInfo(addInfoRequest,userId);
+
+        CreateVoteRequest createVoteRequest = CreateVoteRequest.builder()
+                .title("투표 제목")
+                .imageA("imageA")
+                .imageB("imageB")
+                .titleA("titleA")
+                .titleB("titleB")
+                .build();
+
+        voteService.createVote(createVoteRequest,userId);
+
+        Optional<User> userById = userRepository.findById(userId);
+        User user = userById.get();
+
+        Optional<Vote> voteById = voteRepository.findByPostedUser(user);
+        Vote vote = voteById.get();
+
+        //when
+        Vote getVote = voteService.getVote(vote.getId());
+
+        //then
+        assertEquals(vote,getVote);
+        assertEquals(user,vote.getPostedUser());
+        assertEquals(vote.classifyAge(user.getAge()),Age.twenties);
+    }
+
+
 
 }
