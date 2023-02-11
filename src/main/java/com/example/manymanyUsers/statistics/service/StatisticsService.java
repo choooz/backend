@@ -21,16 +21,16 @@ public class StatisticsService {
 
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
-        Long totalVote = voteResultRepository.countByVote(vote);
+        Long totalVoteCount = voteResultRepository.countByVote(vote);
 
-        return totalVote;
+        return totalVoteCount;
     }
 
     public VoteSelectResultData getSelectStatistics(Long voteId) {
 
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
-        Long totalVote = voteResultRepository.countByVote(vote);
+        Long totalVoteCount = voteResultRepository.countByVote(vote);
 
 //        int totalCountA = voteResultRepository.countChoiceAByVote(vote);
 //        int totalCountB = voteResultRepository.countChoiceBByVote(vote);
@@ -38,8 +38,8 @@ public class StatisticsService {
         int totalCountA = voteResultRepository.countByVoteAndChoice(vote, Choice.A);
         int totalCountB = voteResultRepository.countByVoteAndChoice(vote, Choice.B);
 
-        int percentA = (int) (((float)totalCountA / (float)totalVote) * 100);
-        int percentB = (int) (((float)totalCountB / (float)totalVote) * 100);
+        int percentA = (int) (((float)totalCountA / (float)totalVoteCount) * 100);
+        int percentB = (int) (((float)totalCountB / (float)totalVoteCount) * 100);
 
         VoteSelectResultData voteSelectResultData = new VoteSelectResultData(totalCountA, totalCountB, percentA, percentB);
 
