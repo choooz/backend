@@ -33,7 +33,9 @@ public class VoteListData {
 
     private final LocalDateTime modifiedDate;
 
-    public VoteListData(final Vote vote) {
+    private final Long countVoted;
+
+    public VoteListData(final Vote vote, final Long countVoted) {
         this.voteId = vote.getId();
         this.totalTitle = vote.getTotalTitle();
         this.category = vote.getCategory();
@@ -43,7 +45,7 @@ public class VoteListData {
         this.imageA = vote.getImageA();
         this.imageB = vote.getImageB();
         this.modifiedDate = vote.getModifiedDate();
-
+        this.countVoted = countVoted;
         UserData userData = new UserData(vote.getPostedUser());
         this.writer = userData;
     }
