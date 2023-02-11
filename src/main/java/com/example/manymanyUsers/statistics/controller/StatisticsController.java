@@ -26,7 +26,7 @@ public class StatisticsController {
     @GetMapping("/vote/{voteId}/total-statistics")
     public ResponseEntity<TotalStatisticsResponse> getTotalStatistics(@PathVariable("voteId") Long voteId) {
 
-        int totalVoteNumber = statisticsService.getTotalStatistics(voteId);
+        Long totalVoteNumber = statisticsService.getTotalStatistics(voteId);
 
         TotalStatisticsResponse wholeStatisticsResponse = TotalStatisticsResponse.builder()
                 .voteId(voteId)

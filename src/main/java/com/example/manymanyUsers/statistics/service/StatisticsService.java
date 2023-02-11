@@ -17,11 +17,11 @@ public class StatisticsService {
 
     private final VoteResultRepository voteResultRepository;
     private final VoteRepository voteRepository;
-    public int getTotalStatistics(Long voteId) {
+    public Long getTotalStatistics(Long voteId) {
 
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
-        int totalVote = voteResultRepository.countByVote(vote);
+        Long totalVote = voteResultRepository.countByVote(vote);
 
         return totalVote;
     }
@@ -30,7 +30,7 @@ public class StatisticsService {
 
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
-        int totalVote = voteResultRepository.countByVote(vote);
+        Long totalVote = voteResultRepository.countByVote(vote);
 
 //        int totalCountA = voteResultRepository.countChoiceAByVote(vote);
 //        int totalCountB = voteResultRepository.countChoiceBByVote(vote);

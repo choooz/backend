@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 public interface VoteResultRepository extends JpaRepository<VoteResult, Long> {
 
 //    @Query("SELECT COUNT(*) FROM VoteResult v WHERE v.vote = :vote")
-    int countByVote(@Param("vote") Vote vote);
+    Long countByVote(@Param("vote") Vote vote);
 
 //    @Query("SELECT COUNT(*) FROM VoteResult v WHERE v.vote = :vote and v.choice = com.example.manymanyUsers.vote.enums.Choice.A")
     int countByVoteAndChoice(@Param("vote") Vote vote, @Param("choice") Choice choice);
