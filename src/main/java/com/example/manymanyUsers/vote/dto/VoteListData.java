@@ -8,6 +8,8 @@ import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class VoteListData {
 
@@ -25,6 +27,12 @@ public class VoteListData {
 
     private final MBTI filteredMbti;
 
+    private final String imageA;
+
+    private final String imageB;
+
+    private final LocalDateTime modifiedDate;
+
     public VoteListData(final Vote vote) {
         this.voteId = vote.getId();
         this.totalTitle = vote.getTotalTitle();
@@ -32,6 +40,9 @@ public class VoteListData {
         this.filteredGender = vote.getFilteredGender();
         this.filteredAge = vote.getFilteredAge();
         this.filteredMbti = vote.getFilteredMbti();
+        this.imageA = vote.getImageA();
+        this.imageB = vote.getImageB();
+        this.modifiedDate = vote.getModifiedDate();
 
         UserData userData = new UserData(vote.getPostedUser());
         this.writer = userData;
