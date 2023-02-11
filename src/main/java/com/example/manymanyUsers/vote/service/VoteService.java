@@ -88,7 +88,8 @@ public class VoteService {
 
         Slice<VoteListData> voteListData = voteSlice.map(vote -> {
             vote.getPostedUser(); //프록시 처리된 user 엔티티 가져오기 위함
-            return new VoteListData(vote);
+            Long countVoted = voteResultRepository.countByVote(vote);
+            return new VoteListData(vote, countVoted);
         });
         return voteListData;
     }
