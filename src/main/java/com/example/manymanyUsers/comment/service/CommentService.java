@@ -72,7 +72,8 @@ public class CommentService {
 
         Pageable pageable = PageRequest.of(page,size);
 
-        List<Comment> comments = new ArrayList<>();
+        List<Comment> comments = new ArrayList<>(); //댓글
+        List<Comment> childComments = new ArrayList<>(); //대댓글
 
         if(sortBy.equals(CommentSortBy.ByPopularity)) {
             comments = commentRepository.findHotComments(voteId, gender, age, mbti, pageable);
@@ -81,7 +82,6 @@ public class CommentService {
             comments = commentRepository.findNewestComments(voteId,gender,age,mbti,pageable);
         }
 
-        List<Comment> childComments = new ArrayList<>();
 
         for(Comment parentComment : comments){
             childComments.addAll(commentRepository.findChildComments(voteId,gender,age,mbti,parentComment));
@@ -95,7 +95,6 @@ public class CommentService {
 
     public List<Comment> getHotComments(Long voteId, Gender gender, Age age, MBTI mbti){
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
-
         Comment topComment = commentRepository.findHotComments(voteId,gender,age,mbti,PageRequest.of(0,1)).get(0);
         List<Comment> newestComment = commentRepository.findNewestComments(voteId,gender,age,mbti,PageRequest.of(0,3));
 

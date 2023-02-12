@@ -35,18 +35,19 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             "ORDER BY p.id ASC NULLS FIRST, c.id DESC")
     List<Comment> findCommentsAllByfilter(@Param("voteId") Long voteId, @Param("gender") Gender gender, @Param("age") Age age, @Param("mbti") MBTI mbti);
 
-    
+    //인기순 댓글 조회
     @Query("SELECT c FROM Comment c" +
             " WHERE c.voteId = :voteId AND c.parent IS NULL AND (:gender IS NULL OR c.gender = :gender) AND (:age IS NULL OR c.age = :age) AND (:mbti IS NULL OR c.mbti = :mbti)" +
             " ORDER BY (c.likeCount + c.hateCount) DESC , c.createdDate DESC")
     List<Comment> findHotComments(@Param("voteId") Long voteId,@Param("gender") Gender gender, @Param("age") Age age, @Param("mbti") MBTI mbti,Pageable pageable);
 
+    //최신순 댓글 조회
     @Query("SELECT c FROM Comment c" +
             " WHERE c.voteId = :voteId AND c.parent IS NULL AND (:gender IS NULL OR c.gender = :gender) AND (:age IS NULL OR c.age = :age) AND (:mbti IS NULL OR c.mbti = :mbti) " +
             "ORDER BY c.createdDate DESC")
     List<Comment> findNewestComments(@Param("voteId") Long voteId, @Param("gender") Gender gender, @Param("age") Age age, @Param("mbti") MBTI mbti, Pageable pageable);
 
-
+    //댓글에 속하는 대댓글 조회
     @Query("SELECT c FROM Comment c " +
             "WHERE c.voteId= :voteId AND c.parent= :parentComment AND (:gender IS NULL OR  (c.gender = :gender)) AND (:age IS NULL OR  (c.age = :age)) AND (:mbti IS NULL OR  (c.mbti = :mbti))" +
             "ORDER BY c.id ASC")
