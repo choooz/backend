@@ -69,7 +69,6 @@ public class CommentController {
                     .hateCount(comment.getHateCount())
                     .children(new ArrayList<>()) //NullPointerException 발생
                     .build();
-            System.out.println(dto);
             if (comment.getParent() != null) {
                 dto.setParentId(comment.getParent().getId());
             }

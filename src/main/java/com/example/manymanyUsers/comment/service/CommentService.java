@@ -89,11 +89,6 @@ public class CommentService {
 
         comments.addAll(childComments);
 
-        for (Comment comment : comments){
-            System.out.println("----------------");
-            System.out.println(comment.getId());
-            System.out.println("----------------");
-        }
 
         return comments;
     }
