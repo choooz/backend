@@ -5,6 +5,7 @@ import com.example.manymanyUsers.comment.domain.Comment;
 import com.example.manymanyUsers.comment.domain.CommentEmotion;
 import com.example.manymanyUsers.comment.dto.CommentCreateRequest;
 import com.example.manymanyUsers.comment.dto.CommentUpdateRequest;
+import com.example.manymanyUsers.comment.enums.CommentSortBy;
 import com.example.manymanyUsers.comment.enums.Emotion;
 import com.example.manymanyUsers.comment.repository.CommentEmotionRepository;
 import com.example.manymanyUsers.comment.repository.CommentRepository;
@@ -17,9 +18,11 @@ import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
+import com.example.manymanyUsers.vote.enums.SortBy;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,12 +67,33 @@ public class CommentService {
     }
 
 
-    public List<Comment> getComments(Long voteId, Gender gender, Age age, MBTI mbti) throws VoteNotFoundException{
+    public List<Comment> getComments(Long voteId, Gender gender, Age age, MBTI mbti, int size, int page, CommentSortBy sortBy) throws VoteNotFoundException{
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
-        List<Comment> comments = commentRepository.findCommentsAllByfilter(voteId,gender,age,mbti);
+        Pageable pageable = PageRequest.of(page,size);
 
+        List<Comment> comments = new ArrayList<>();
 
+        if(sortBy.equals(CommentSortBy.ByPopularity)) {
+            comments = commentRepository.findHotComments(voteId, gender, age, mbti, pageable);
+        }
+        else{
+            comments = commentRepository.findNewestComments(voteId,gender,age,mbti,pageable);
+        }
+
+        List<Comment> childComments = new ArrayList<>();
+
+        for(Comment parentComment : comments){
+            childComments.addAll(commentRepository.findChildComments(voteId,gender,age,mbti,parentComment));
+        }
+
+        comments.addAll(childComments);
+
+        for (Comment comment : comments){
+            System.out.println("----------------");
+            System.out.println(comment.getId());
+            System.out.println("----------------");
+        }
 
         return comments;
     }

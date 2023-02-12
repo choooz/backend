@@ -24,7 +24,7 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             "LEFT JOIN c.parent p " +
             "WHERE (c.voteId= :voteId AND c.parent IS NULL AND (:gender IS NULL OR c.gender = :gender) AND (:age IS NULL OR c.age = :age) AND (:mbti IS NULL OR c.mbti = :mbti)) " +
             "OR (c.voteId= :voteId AND c.parent is not null AND (:gender IS NULL OR p.gender = :gender) AND (:age IS NULL OR p.age = :age) AND (:mbti IS NULL OR p.mbti = :mbti))" +
-            "ORDER BY p.id ASC NULLS FIRST, c.id ASC")
+            "ORDER BY p.id ASC NULLS FIRST, c.id DESC")
     List<Comment> findCommentsByfilterANDGetChildren(@Param("voteId") Long voteId, @Param("gender") Gender gender, @Param("age") Age age, @Param("mbti") MBTI mbti);
 
     //댓글,대댓글 모두 필터에 걸러지는 쿼리
@@ -32,7 +32,7 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             "LEFT JOIN c.parent p " +
             "WHERE (c.voteId= :voteId AND c.parent IS NULL AND (:gender IS NULL OR c.gender = :gender) AND (:age IS NULL OR c.age = :age) AND (:mbti IS NULL OR c.mbti = :mbti)) " +
             "OR (c.voteId= :voteId AND c.parent is not null AND (:gender IS NULL OR ((p.gender = :gender) AND (c.gender = :gender))) AND (:age IS NULL OR ((p.age = :age) AND (c.age = :age))) AND (:mbti IS NULL OR ((p.mbti = :mbti) AND (c.mbti = :mbti))))" +
-            "ORDER BY p.id ASC NULLS FIRST, c.id ASC")
+            "ORDER BY p.id ASC NULLS FIRST, c.id DESC")
     List<Comment> findCommentsAllByfilter(@Param("voteId") Long voteId, @Param("gender") Gender gender, @Param("age") Age age, @Param("mbti") MBTI mbti);
 
     
@@ -47,5 +47,9 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
     List<Comment> findNewestComments(@Param("voteId") Long voteId, @Param("gender") Gender gender, @Param("age") Age age, @Param("mbti") MBTI mbti, Pageable pageable);
 
 
+    @Query("SELECT c FROM Comment c " +
+            "WHERE c.voteId= :voteId AND c.parent= :parentComment AND (:gender IS NULL OR  (c.gender = :gender)) AND (:age IS NULL OR  (c.age = :age)) AND (:mbti IS NULL OR  (c.mbti = :mbti))" +
+            "ORDER BY c.id ASC")
+    List<Comment> findChildComments(@Param("voteId") Long voteId, @Param("gender") Gender gender, @Param("age") Age age, @Param("mbti") MBTI mbti, @Param("parentComment") Comment parentComment);
 
 }
