@@ -84,7 +84,7 @@ public class VoteService {
         return voteListData;
     }
 
-    public Vote getVote(Long voteId) throws  VoteNotFoundException {
+    public Vote getVote(Long voteId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
         return vote;
@@ -98,7 +98,7 @@ public class VoteService {
         vote.update(updateVoteRequest);
     }
 
-    public void deleteVote(Long voteId, Long userId) throws UserNotFoundException {
+    public void deleteVote(Long voteId, Long userId) {
 
         User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
