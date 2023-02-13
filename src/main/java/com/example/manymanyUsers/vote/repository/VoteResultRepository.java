@@ -7,6 +7,8 @@ import com.example.manymanyUsers.vote.enums.Choice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface VoteResultRepository extends JpaRepository<VoteResult, Long> {
 
 //    @Query("SELECT COUNT(*) FROM VoteResult v WHERE v.vote = :vote")
@@ -17,4 +19,5 @@ public interface VoteResultRepository extends JpaRepository<VoteResult, Long> {
 
     boolean existsByVoteAndVotedUser(@Param("vote")Vote vote, @Param("votedUser")User user);
 
+    VoteResult findByVote(Vote vote);
 }

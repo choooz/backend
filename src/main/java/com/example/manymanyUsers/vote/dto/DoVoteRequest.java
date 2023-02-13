@@ -18,4 +18,7 @@ public class DoVoteRequest {
                 .build();
     }
 
+    public DoVoteRequest(Choice choice) {
+        this.choice = choice;
+    }
 }
