@@ -8,7 +8,6 @@ import com.example.manymanyUsers.common.dto.CommonResponse;
 import com.example.manymanyUsers.exception.comment.CommentNotFoundException;
 import com.example.manymanyUsers.exception.user.UserNotFoundException;
 import com.example.manymanyUsers.exception.vote.VoteNotFoundException;
-import com.example.manymanyUsers.vote.enums.SortBy;
 import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -82,11 +81,12 @@ public class CommentController {
         }
         return ResponseEntity.ok().body(commentGetResponse);
     }
+
     @Operation(description = "맛보기 댓글 조회")
     @GetMapping("/votes/{voteId}/comments/hot")
-    public ResponseEntity<List<CommentGetResponse>> getHotComment(@PathVariable Long voteId, @ModelAttribute CommentGetRequest commentGetRequest ) {
+    public ResponseEntity<List<CommentGetResponse>> getHotComment(@PathVariable Long voteId, @ModelAttribute CommentGetRequest commentGetRequest) {
         List<Comment> comments = commentService.getHotComments(voteId, commentGetRequest.getGender(), commentGetRequest.getAge(), commentGetRequest.getMbti());
-        List<CommentGetResponse> commentGetRespons = new ArrayList<>();
+        List<CommentGetResponse> commentGetResponse = new ArrayList<>();
         Map<Long, CommentGetResponse> map = new HashMap<>();
 
         for (Comment comment : comments) {
@@ -113,9 +113,9 @@ public class CommentController {
                 map.get(comment.getParent().getId()).getChildren().add(dto);
             }
 
-            else commentGetRespons.add(dto);
+            else commentGetResponse.add(dto);
         }
-        return ResponseEntity.ok().body(commentGetRespons);
+        return ResponseEntity.ok().body(commentGetResponse);
     }
     @Operation(description = "댓글 수정")
     @PatchMapping("/votes/{voteId}/comments/{commentId}")
