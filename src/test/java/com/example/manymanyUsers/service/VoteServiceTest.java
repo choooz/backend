@@ -638,6 +638,43 @@ public class VoteServiceTest {
         assertEquals(Choice.A, voteResult.getChoice());
     }
 
+    @Test(expected = AlreadyUserDoVoteException.class)
+    public void 투표참여_실패_중복투표_수정() throws Exception {
+        //given
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
+        Long userId = userService.registerUser(request);
+
+        CreateVoteRequest createVoteRequest = CreateVoteRequest.builder()
+                .title("투표 제목")
+                .imageA("imageA")
+                .imageB("imageB")
+                .titleA("titleA")
+                .titleB("titleB")
+                .build();
+
+        voteService.createVote(createVoteRequest,userId);
+
+        Optional<User> userRepositoryByProviderId = userRepository.findById(userId);
+        User user = userRepositoryByProviderId.get();
+
+        Optional<Vote> byProviderId = voteRepository.findByPostedUser(user);
+        Vote vote = byProviderId.get();
+
+        //when
+        DoVoteRequest firstDoVoteRequest = new DoVoteRequest(Choice.A);
+
+        DoVoteRequest secondDoVoteRequest = new DoVoteRequest(Choice.B);
+
+        voteService.doVote(firstDoVoteRequest.converter(userId, vote.getId()));
+        voteService.doVote(secondDoVoteRequest.converter(userId, vote.getId()));
+
+        //then
+        VoteResult voteResult = voteResultRepository.findByVote(vote);
+        assertEquals(vote.getId(), voteResult.getVote().getId());
+        assertEquals(user.getId(), voteResult.getVotedUser().getId());
+        assertEquals(Choice.A, voteResult.getChoice());
+    }
+
     @Test
     public void 투표결과_조회() throws Exception {
         //given
