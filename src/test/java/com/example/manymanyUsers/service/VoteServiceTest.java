@@ -1,13 +1,13 @@
 package com.example.manymanyUsers.service;
 
-import com.example.manymanyUsers.exception.user.AlreadyExistUserException;
 import com.example.manymanyUsers.exception.user.UserNotFoundException;
-import com.example.manymanyUsers.exception.vote.AlreadyUserDoVoteException;
 import com.example.manymanyUsers.exception.vote.VoteNotFoundException;
+import com.example.manymanyUsers.exception.vote.AlreadyUserDoVoteException;
 import com.example.manymanyUsers.statistics.dto.VoteSelectResultData;
 import com.example.manymanyUsers.statistics.service.StatisticsService;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
+import com.example.manymanyUsers.user.dto.AddInfoRequest;
 import com.example.manymanyUsers.user.dto.SignUpRequest;
 import com.example.manymanyUsers.user.enums.Providers;
 import com.example.manymanyUsers.user.service.UserService;
@@ -18,14 +18,10 @@ import com.example.manymanyUsers.vote.enums.*;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import com.example.manymanyUsers.vote.repository.VoteResultRepository;
 import com.example.manymanyUsers.vote.service.VoteService;
-import javassist.NotFoundException;
-import org.junit.Assert;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Slice;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -466,6 +462,45 @@ public class VoteServiceTest {
         System.out.println("removedVote.Id(): " + removedVote.getClass());
         Vote removedVote2 = removedVote.get();  //투표를 찾을 수 없음 (NoSuchElementException)
 
+    }
+
+    @Test
+    public void 투표단건조회_성공() throws Exception{
+        //given
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
+        Long userId = userService.registerUser(request);
+
+        AddInfoRequest addInfoRequest = new AddInfoRequest();
+
+        addInfoRequest.setAge(26);
+        addInfoRequest.setGender(Gender.MALE);
+        addInfoRequest.setMbti(MBTI.INFJ);
+
+        userService.addUserInfo(addInfoRequest,userId);
+
+        CreateVoteRequest createVoteRequest = CreateVoteRequest.builder()
+                .title("투표 제목")
+                .imageA("imageA")
+                .imageB("imageB")
+                .titleA("titleA")
+                .titleB("titleB")
+                .build();
+
+        voteService.createVote(createVoteRequest,userId);
+
+        Optional<User> userById = userRepository.findById(userId);
+        User user = userById.get();
+
+        Optional<Vote> voteById = voteRepository.findByPostedUser(user);
+        Vote vote = voteById.get();
+
+        //when
+        Vote getVote = voteService.getVote(vote.getId());
+
+        //then
+        assertEquals(vote,getVote);
+        assertEquals(user,vote.getPostedUser());
+        assertEquals(vote.classifyAge(user.getAge()),Age.twenties);
     }
 
     @Test
