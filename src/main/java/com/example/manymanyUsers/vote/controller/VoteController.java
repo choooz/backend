@@ -9,6 +9,7 @@ import com.example.manymanyUsers.common.dto.CommonResponse;
 import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.SortBy;
 import com.example.manymanyUsers.vote.service.VoteService;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,10 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @RequestMapping("/api/votes")
 @RestController
@@ -60,11 +65,16 @@ public class VoteController {
 
         User writer = vote.getPostedUser(); // 투표 작성자
 
-        GetVoteResponse getVoteResponse = GetVoteResponse.builder()
+        GetVoteUserResponse getVoteUserResponse = GetVoteUserResponse.builder()
                 .userImage(writer.getImageUrl())
                 .userGender(writer.getGender())
                 .userAge(vote.classifyAge(writer.getAge()))
+                .userMbti(writer.getMbti())
                 .nickName(writer.getNickname())
+                .build();
+
+        GetVoteResponse getVoteResponse = GetVoteResponse.builder()
+                .user(getVoteUserResponse)
                 .voteCreatedDate(vote.getCreatedDate())
                 .category(vote.getCategory())
                 .title(vote.getTotalTitle())
@@ -77,7 +87,6 @@ public class VoteController {
                 .titleB(vote.getTitleB())
                 .description(vote.getDetail())
                 .build();
-
 
         return new ResponseEntity(getVoteResponse,HttpStatus.OK);
     }
