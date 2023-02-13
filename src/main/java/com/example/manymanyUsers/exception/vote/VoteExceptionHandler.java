@@ -18,4 +18,10 @@ public class VoteExceptionHandler {
         final ExceptionMessage message = ExceptionMessage.of(e.getStatus(), e.getMessage());
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(AlreadyUserDoVoteException.class)
+    public ResponseEntity<ExceptionMessage> handle(AlreadyUserDoVoteException e) {
+        final ExceptionMessage message = ExceptionMessage.of(e.getStatus(), e.getMessage());
+        return new ResponseEntity<>(message, HttpStatus.FORBIDDEN);
+    }
 }

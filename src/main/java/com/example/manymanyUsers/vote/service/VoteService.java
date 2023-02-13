@@ -1,6 +1,7 @@
 package com.example.manymanyUsers.vote.service;
 
 import com.example.manymanyUsers.exception.user.UserNotFoundException;
+import com.example.manymanyUsers.exception.vote.AlreadyUserDoVoteException;
 import com.example.manymanyUsers.exception.vote.VoteNotFoundException;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
@@ -11,7 +12,6 @@ import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.SortBy;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import com.example.manymanyUsers.vote.repository.VoteResultRepository;
-import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -20,8 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Optional;
+
 
 @RequiredArgsConstructor
 @Service
@@ -57,6 +56,10 @@ public class VoteService {
         Vote vote = voteRepository.findById(doVote.getVoteId()).orElseThrow(VoteNotFoundException::new);
         User user = userRepository.findById(doVote.getUserId()).orElseThrow(UserNotFoundException::new);
 
+        if(voteResultRepository.existsByVoteAndVotedUser(vote, user)) {
+            throw new AlreadyUserDoVoteException();
+        }
+
         VoteResult voteResult = new VoteResult();
 
         voteResult.doVote(vote, user, doVote.getChoice());
@@ -84,7 +87,7 @@ public class VoteService {
         return voteListData;
     }
 
-    public Vote getVote(Long voteId) throws  VoteNotFoundException {
+    public Vote getVote(Long voteId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
         return vote;
@@ -98,7 +101,7 @@ public class VoteService {
         vote.update(updateVoteRequest);
     }
 
-    public void deleteVote(Long voteId, Long userId) throws UserNotFoundException {
+    public void deleteVote(Long voteId, Long userId) {
 
         User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);

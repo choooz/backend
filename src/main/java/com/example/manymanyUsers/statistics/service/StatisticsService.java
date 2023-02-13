@@ -32,9 +32,6 @@ public class StatisticsService {
 
         Long totalVoteCount = voteResultRepository.countByVote(vote);
 
-//        int totalCountA = voteResultRepository.countChoiceAByVote(vote);
-//        int totalCountB = voteResultRepository.countChoiceBByVote(vote);
-
         int totalCountA = voteResultRepository.countByVoteAndChoice(vote, Choice.A);
         int totalCountB = voteResultRepository.countByVoteAndChoice(vote, Choice.B);
 
