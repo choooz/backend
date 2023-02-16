@@ -73,10 +73,16 @@ public class VoteService {
         Slice<Vote> voteSlice;
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
 
+        Slice<VoteListData> voteListData = getVoteSortByTime(category, pageRequest);
+        return voteListData;
+    }
+
+    private Slice<VoteListData> getVoteSortByTime(Category category, PageRequest pageRequest) {
+        Slice<Vote> voteSlice;
         if (category == null) {
             voteSlice = voteRepository.findSliceBy(pageRequest);
         }else{
-            voteSlice = voteRepository.findByCategory(category,pageRequest);
+            voteSlice = voteRepository.findByCategory(category, pageRequest);
         }
 
         Slice<VoteListData> voteListData = voteSlice.map(vote -> {
@@ -86,6 +92,9 @@ public class VoteService {
         });
         return voteListData;
     }
+
+
+    
 
     public Vote getVote(Long voteId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
