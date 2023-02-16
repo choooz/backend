@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -108,6 +110,24 @@ public class VoteService {
 
         voteRepository.deleteById(voteId);
 
+    }
+
+    public List<Vote> getVotesByUser(Long userId, String type) {
+        User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        List<Vote> voteList = new ArrayList<>();
+        //작성한 vote
+        if (type.equals("created")){
+            voteList=voteRepository.findAllByPostedUser(findUser);
+        }
+        //참여한 vote
+        else if(type.equals("participated")){
+            voteList=voteRepository.findAllByVoteResultList(findUser);
+        }
+        //북마크한 vote
+        else if(type.equals("bookmarked")){
+            voteList=voteRepository.findAllByBookmarked(findUser);
+        }
+        return voteList;
     }
 
 }

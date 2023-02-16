@@ -46,6 +46,6 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             "ORDER BY c.createdDate DESC")
     List<Comment> findNewestComments(@Param("voteId") Long voteId, @Param("gender") Gender gender, @Param("age") Age age, @Param("mbti") MBTI mbti, Pageable pageable);
 
-
+    Long countCommentsByVoteId(@Param("voteId") Long voteId);
 
 }

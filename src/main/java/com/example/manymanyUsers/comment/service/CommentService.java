@@ -215,6 +215,12 @@ public class CommentService {
         return comment.getHateCount();
     }
 
+    public Long getCommentsCountByVote(Long voteId){
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+
+        return commentRepository.countCommentsByVoteId(voteId);
+    }
+
 
 
 }
