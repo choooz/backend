@@ -125,8 +125,4 @@ public class Vote extends BaseTimeEntity {
         return ageGroup;
     }
 
-    //김민엽
-//    public void mappingVoteResult(VoteResult voteResult){
-//        this.voteResultList.add(voteResult);
-//    }
 }

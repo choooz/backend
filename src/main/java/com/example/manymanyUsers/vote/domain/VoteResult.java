@@ -44,9 +44,5 @@ public class VoteResult {
         this.votedUser = user;
         this.choice = choice;
     }
-    //김민엽
-//    public void mappingVote(Vote vote) {
-//        this.vote = vote;
-//        vote.mappingVoteResult(this);
-//    }
+
 }
