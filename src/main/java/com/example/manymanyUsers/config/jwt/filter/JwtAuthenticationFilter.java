@@ -39,6 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
         if(requestURL.equals(baseUrl + "/oauth/login")
                 || requestURL.equals(baseUrl + "/user/addInfo")
                 || requestURL.equals(baseUrl + "/user/addInterestCategory")
+                || requestURL.contains(baseUrl + "/user/mypage")
                 || ( requestURL.contains(baseUrl + "/votes")
                     && (
                         request.getMethod().equals("POST")

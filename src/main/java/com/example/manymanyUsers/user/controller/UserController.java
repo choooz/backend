@@ -9,8 +9,8 @@ import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.service.VoteService;
 import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import javassist.NotFoundException;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/api/user")
 @RestController
@@ -28,7 +29,6 @@ public class UserController {
     private final UserService userService;
     private final VoteService voteService;
     private final StatisticsService statisticsService;
-
     private final CommentService commentService;
 
     @PostMapping("/signup")
@@ -75,17 +75,19 @@ public class UserController {
     }
 
 
+    @Operation(description = "마이페이지 타입별 voteList 요청 api")
     @GetMapping("/mypage")
-    public ResponseEntity<List<MyPageResponse>> getVotesByUser(@RequestParam(defaultValue = "created") String type, @RequestAttribute Claims claims){
+    public ResponseEntity<List<MyPageResponse>> getVotesByUser(@Parameter(description = "created,participated,bookmarked", required = true, example = "created") @RequestParam String voteType, @RequestAttribute Claims claims){
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
         List<MyPageResponse> responses = new ArrayList<>();
 
-        List<Vote> voteList = voteService.getVotesByUser(longId,type);
+        List<Vote> voteList = voteService.getVotesByUser(longId, voteType);
 
         for(Vote vote : voteList){
             MyPageResponse myPageResponse = MyPageResponse.builder()
+                    .voteId(vote.getId())
                     .imageA(vote.getImageA())
                     .imageB(vote.getImageB())
                     .title(vote.getTotalTitle())
@@ -97,6 +99,23 @@ public class UserController {
         }
 
         return new ResponseEntity(responses,HttpStatus.OK);
+
+    }
+
+    @Operation(description = "마이페이지 타입별 voteCount 요청 api")
+    @GetMapping("/mypage/count")
+    public ResponseEntity<MyPageCountResponse> getMyPageCount(@RequestAttribute Claims claims){
+        Integer userId = (int) claims.get("userId");
+        Long longId = Long.valueOf(userId);
+
+        Map<String,Long> map = userService.getMyPageCount(longId);
+        Long countCreatedVote = map.get("CreatedVote");
+        Long countParticipatedVote = map.get("ParticipatedVote");
+
+        MyPageCountResponse myPageCountResponse = new MyPageCountResponse(countCreatedVote,countParticipatedVote);
+
+
+        return new ResponseEntity(myPageCountResponse,HttpStatus.OK);
 
     }
 

@@ -1,5 +1,6 @@
 package com.example.manymanyUsers.vote.domain;
 
+import com.example.manymanyUsers.comment.domain.CommentEmotion;
 import com.example.manymanyUsers.common.domain.BaseTimeEntity;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.vote.dto.UpdateVoteRequest;
@@ -31,7 +32,7 @@ public class Vote extends BaseTimeEntity {
     private User postedUser;
 
 
-    @OneToMany(mappedBy = "votedUser", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "vote", fetch = FetchType.LAZY)
     private List<VoteResult> voteResultList = new ArrayList<>();
 
     @Column
@@ -123,4 +124,9 @@ public class Vote extends BaseTimeEntity {
         }
         return ageGroup;
     }
+
+    //김민엽
+//    public void mappingVoteResult(VoteResult voteResult){
+//        this.voteResultList.add(voteResult);
+//    }
 }

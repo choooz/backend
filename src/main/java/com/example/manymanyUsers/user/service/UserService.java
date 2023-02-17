@@ -1,5 +1,6 @@
 package com.example.manymanyUsers.user.service;
 
+import com.example.manymanyUsers.exception.user.UserNotFoundException;
 import com.example.manymanyUsers.user.domain.CategoryEntity;
 import com.example.manymanyUsers.user.domain.CategoryRespository;
 import com.example.manymanyUsers.user.dto.AddInfoRequest;
@@ -8,10 +9,14 @@ import com.example.manymanyUsers.user.domain.UserRepository;
 import com.example.manymanyUsers.user.dto.AddInterestCategoryRequest;
 import com.example.manymanyUsers.user.dto.GetUserNickNameRequest;
 import com.example.manymanyUsers.user.dto.SignUpRequest;
+import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
+import com.example.manymanyUsers.vote.repository.VoteRepository;
+import com.example.manymanyUsers.vote.repository.VoteResultRepository;
+import com.example.manymanyUsers.vote.service.VoteService;
 import javassist.NotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +27,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RequiredArgsConstructor(access = AccessLevel.PUBLIC)
 @Service
@@ -31,6 +35,11 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final CategoryRespository categoryRespository;
+
+    private final VoteRepository voteRepository;
+
+    private final VoteResultRepository voteResultRepository;
+
 
     public Long registerUser(SignUpRequest signUpRequestDto) throws Exception{
         if (userRepository.existsByProviderId(signUpRequestDto.getProviderId())) {
@@ -119,5 +128,25 @@ public class UserService {
 
         userRepository.save(user);
     }
+
+    public Map<String, Long> getMyPageCount(Long userId) {
+        User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Map<String, Long> map = new HashMap<>();
+
+        Long countCreatedVote = 0L;
+        Long countParticipatedVote = 0L;
+
+
+        countCreatedVote = voteRepository.countVoteByPostedUser(findUser);
+        countParticipatedVote = voteResultRepository.countByVotedUser(findUser);
+//        Long countBookmarkedVote =
+
+        map.put("CreatedVote",countCreatedVote);
+        map.put("ParticipatedVote",countParticipatedVote);
+
+        return map;
+    }
+
+
 
 }

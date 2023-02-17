@@ -134,16 +134,5 @@ public class VoteController {
 
         return new ResponseEntity(commonResponse ,HttpStatus.OK);
     }
-
-    @Operation(description = "투표 리스트 조회")
-    @GetMapping("")
-    public ResponseEntity<GetVoteListResponse> getVoteListByUser(@RequestParam SortBy sortBy, @RequestParam int page, @RequestParam int size, @RequestParam(required = false) Category category) {
-        Slice<VoteListData> voteListData = voteService.getVoteList(sortBy, page, size, category);
-        GetVoteListResponse voteResponse = GetVoteListResponse.builder()
-                .voteSlice(voteListData)
-                .build();
-        return new ResponseEntity(voteResponse, HttpStatus.OK);
-    }
-
-
+    
 }

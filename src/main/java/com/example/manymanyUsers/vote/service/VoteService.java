@@ -66,6 +66,9 @@ public class VoteService {
 
         voteResult.doVote(vote, user, doVote.getChoice());
 
+        //김민엽
+//        voteResult.mappingVote(vote);
+
         voteResultRepository.save(voteResult);
 
     }
@@ -121,12 +124,12 @@ public class VoteService {
         }
         //참여한 vote
         else if(type.equals("participated")){
-            voteList=voteRepository.findAllByVoteResultList(findUser);
+            voteList=voteRepository.findParticipatedVoteByUser(findUser);
         }
         //북마크한 vote
-        else if(type.equals("bookmarked")){
-            voteList=voteRepository.findAllByBookmarked(findUser);
-        }
+//        else if(type.equals("bookmarked")){
+//            voteList=voteRepository.findAllByBookmarked(findUser);
+//        }
         return voteList;
     }
 

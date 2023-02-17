@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 public class MyPageResponse {
+    private Long voteId;
     private String imageA;
 
     private String imageB;
@@ -26,7 +27,8 @@ public class MyPageResponse {
 
 
     @Builder
-    public MyPageResponse(String imageA, String imageB, String title, Long countChoice,Long countComment , LocalDateTime createdDate){
+    public MyPageResponse(Long voteId,String imageA, String imageB, String title, Long countChoice,Long countComment , LocalDateTime createdDate){
+        this.voteId = voteId;
         this.imageA = imageA;
         this.imageB = imageB;
         this.title = title;
