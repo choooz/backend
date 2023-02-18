@@ -7,7 +7,10 @@ import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.domain.VoteResult;
-import com.example.manymanyUsers.vote.dto.*;
+import com.example.manymanyUsers.vote.dto.CreateVoteRequest;
+import com.example.manymanyUsers.vote.dto.DoVote;
+import com.example.manymanyUsers.vote.dto.UpdateVoteRequest;
+import com.example.manymanyUsers.vote.dto.VoteListData;
 import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.SortBy;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -70,15 +74,25 @@ public class VoteService {
 
     public Slice<VoteListData> getVoteList(SortBy sortBy, Integer page, Integer size, Category category){
 
-        Slice<Vote> voteSlice;
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
+        Slice<VoteListData> voteListData = null;
 
-        Slice<VoteListData> voteListData = getVoteSortByTime(category, pageRequest);
+        if(sortBy.equals(SortBy.ByTime)){
+            PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
+            voteListData = getVoteSortByTime(category, pageRequest);
+        } else if (sortBy.equals(SortBy.ByPopularity)) {
+            PageRequest pageRequest = PageRequest.of(page, size);
+            voteListData = getVoteByPopularity(category, pageRequest);
+        }else {
+            throw new RuntimeException("잘못된 요청입니다.");
+        }
+
         return voteListData;
     }
 
     private Slice<VoteListData> getVoteSortByTime(Category category, PageRequest pageRequest) {
+
         Slice<Vote> voteSlice;
+
         if (category == null) {
             voteSlice = voteRepository.findSliceBy(pageRequest);
         }else{
@@ -90,11 +104,22 @@ public class VoteService {
             Long countVoted = voteResultRepository.countByVote(vote);
             return new VoteListData(vote, countVoted);
         });
+
         return voteListData;
     }
 
+    private Slice<VoteListData> getVoteByPopularity(Category category, PageRequest pageRequest) {
 
-    
+        //VoteResult 먼저 불러오고 불러올때 Vote와 같이 불러옴 -> ManyToOne으로 불러오므로 조인을해도 페이지네이션도 가능
+
+        Slice<Vote> voteSlice = voteRepository.findWithVoteResult(pageRequest);
+        Slice<VoteListData> voteListData = voteSlice.map(vote -> {
+            Long countVoted = voteResultRepository.countByVote(vote);
+            return new VoteListData(vote, countVoted);
+        });
+        return voteListData;
+    }
+
 
     public Vote getVote(Long voteId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
@@ -104,7 +129,7 @@ public class VoteService {
 
     public void updateVote(@Valid UpdateVoteRequest updateVoteRequest, Long userId, Long voteId) throws UserNotFoundException, VoteNotFoundException {
 
-        User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
         vote.update(updateVoteRequest);
@@ -112,8 +137,8 @@ public class VoteService {
 
     public void deleteVote(Long voteId, Long userId) {
 
-        User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
         voteRepository.deleteById(voteId);
 
