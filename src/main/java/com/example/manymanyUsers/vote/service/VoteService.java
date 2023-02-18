@@ -110,9 +110,8 @@ public class VoteService {
 
     private Slice<VoteListData> getVoteByPopularity(Category category, PageRequest pageRequest) {
 
-        //VoteResult 먼저 불러오고 불러올때 Vote와 같이 불러옴 -> ManyToOne으로 불러오므로 조인을해도 페이지네이션도 가능
+        Slice<Vote> voteSlice = voteRepository.findWithVoteResult(category, pageRequest);
 
-        Slice<Vote> voteSlice = voteRepository.findWithVoteResult(pageRequest);
         Slice<VoteListData> voteListData = voteSlice.map(vote -> {
             Long countVoted = voteResultRepository.countByVote(vote);
             return new VoteListData(vote, countVoted);

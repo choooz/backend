@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,8 +27,13 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
 //    @Query(value = "SELECT v FROM VoteResult vr JOIN fetch vr.vote v")
 //    List<Vote> findSliceByVoteResult();
 
-    @Query("SELECT v FROM Vote v left join FETCH v.voteResultList vr join FETCH v.postedUser pu GROUP BY v.id, vr.id order by count(vr.vote.id) DESC")
-    Slice<Vote> findWithVoteResult(PageRequest pageRequest);
+    @Query("SELECT v FROM Vote v " +
+            "left join FETCH v.voteResultList vr " +
+            "join FETCH v.postedUser pu " +
+            "WHERE v.category IS NULL OR v.category = :category " +
+            "GROUP BY v.id, vr.id " +
+            "order by count(vr.vote.id) DESC")
+    Slice<Vote> findWithVoteResult(@Param("category") Category category, PageRequest pageRequest);
 
 
 }
