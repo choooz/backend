@@ -9,7 +9,6 @@ import com.example.manymanyUsers.common.dto.CommonResponse;
 import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.SortBy;
 import com.example.manymanyUsers.vote.service.VoteService;
-import com.nimbusds.jose.shaded.json.JSONObject;
 import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -17,14 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @RequestMapping("/api/votes")
 @RestController
@@ -52,6 +46,16 @@ public class VoteController {
     @GetMapping("")
     public ResponseEntity<GetVoteListResponse> getVoteList(@RequestParam SortBy sortBy, @RequestParam int page, @RequestParam int size, @RequestParam(required = false) Category category) {
         Slice<VoteListData> voteListData = voteService.getVoteList(sortBy, page, size, category);
+        GetVoteListResponse voteResponse = GetVoteListResponse.builder()
+                .voteSlice(voteListData)
+                .build();
+        return new ResponseEntity(voteResponse, HttpStatus.OK);
+    }
+
+    @Operation(description = "투표 리스트 검색")
+    @GetMapping("/search")
+    public ResponseEntity<GetVoteListResponse> getVoteSearchList(@RequestParam String keyword, @RequestParam SortBy sortBy, @RequestParam int page, @RequestParam int size, @RequestParam(required = false) Category category) {
+        Slice<VoteListData> voteListData =  voteService.getSearchVoteList(keyword, sortBy, page, size, category);
         GetVoteListResponse voteResponse = GetVoteListResponse.builder()
                 .voteSlice(voteListData)
                 .build();
