@@ -8,6 +8,7 @@ import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -31,7 +32,8 @@ public class Vote extends BaseTimeEntity {
     private User postedUser;
 
 
-    @OneToMany(mappedBy = "votedUser", fetch = FetchType.LAZY)
+    @BatchSize(size = 1000)
+    @OneToMany(mappedBy = "vote", fetch = FetchType.LAZY)
     private List<VoteResult> voteResultList = new ArrayList<>();
 
     @Column
