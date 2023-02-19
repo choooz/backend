@@ -4,7 +4,10 @@ import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.domain.VoteResult;
 import com.example.manymanyUsers.vote.enums.Choice;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
