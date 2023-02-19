@@ -68,7 +68,7 @@ public class VoteController {
         GetVoteUserResponse getVoteUserResponse = GetVoteUserResponse.builder()
                 .userImage(writer.getImageUrl())
                 .userGender(writer.getGender())
-                .userAge(vote.classifyAge(writer.getAge()))
+                .userAge(writer.classifyAge(writer.getAge()))
                 .userMbti(writer.getMbti())
                 .nickName(writer.getNickname())
                 .build();

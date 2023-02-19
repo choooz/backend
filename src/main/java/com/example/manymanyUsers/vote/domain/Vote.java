@@ -100,29 +100,5 @@ public class Vote extends BaseTimeEntity {
         this.voteResultList.add(voteResult);
     }
 
-    public Age classifyAge(Integer age){
-        Age ageGroup;
-        switch (age/10){
-            case 1:
-                ageGroup = Age.teenager;
-                break;
-            case 2:
-                ageGroup = Age.twenties;
-                break;
-            case 3:
-                ageGroup = Age.thirties;
-                break;
-            case 4:
-                ageGroup = Age.fourties;
-                break;
-            case 5:
-                ageGroup = Age.fifties;
-                break;
-            default:
-                ageGroup = Age.NULL;
-                break;
-        }
-        return ageGroup;
-    }
 
 }

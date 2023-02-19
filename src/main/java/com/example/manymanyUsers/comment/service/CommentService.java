@@ -55,8 +55,8 @@ public class CommentService {
                 .commentUser(user)
                 .mbti(user.getMbti())
                 .gender(user.getGender())
+                .age(user.classifyAge(user.getAge()))
                 .build();
-        comment.classifyAge(user.getAge());   //comment의 Age 정보는 user 정보와 상이하기 때문에 ClassifyAge를 사용하여 따로 저장해주었음.
         if(null != parent){
             comment.updateParent(parent);
         }
