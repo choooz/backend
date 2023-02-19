@@ -55,7 +55,7 @@ public class VoteController {
     @Operation(description = "투표 리스트 검색")
     @GetMapping("/search")
     public ResponseEntity<GetVoteListResponse> getVoteSearchList(@RequestParam String keyword, @RequestParam SortBy sortBy, @RequestParam int page, @RequestParam int size, @RequestParam(required = false) Category category) {
-        Slice<VoteListData> voteListData =  voteService.getSearchVoteList(keyword, sortBy, page, size, category);
+        Slice<VoteListData> voteListData = voteService.getSearchVoteList(keyword, sortBy, page, size, category);
         GetVoteListResponse voteResponse = GetVoteListResponse.builder()
                 .voteSlice(voteListData)
                 .build();
