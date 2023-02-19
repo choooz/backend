@@ -1,7 +1,9 @@
 package com.example.manymanyUsers.user.controller;
 
 import com.example.manymanyUsers.comment.service.CommentService;
+import com.example.manymanyUsers.config.oauth2.kakao.dto.GetUserInfoResponse;
 import com.example.manymanyUsers.statistics.service.StatisticsService;
+import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.dto.*;
 import com.example.manymanyUsers.user.service.UserService;
 import com.example.manymanyUsers.common.dto.CommonResponse;
@@ -118,5 +120,19 @@ public class UserController {
         return new ResponseEntity(myPageCountResponse,HttpStatus.OK);
 
     }
+
+    @Operation(description = "프로필 수정")
+    @PatchMapping("/mypage/edit")
+    public ResponseEntity<GetUserResponse> updateUser(@RequestBody UpdateUserRequest updateUserRequest, @RequestAttribute Claims claims) throws NotFoundException {
+        Integer userId = (int) claims.get("userId");
+        Long longId = Long.valueOf(userId);
+
+        User user = userService.updateUser(longId, updateUserRequest.getNickname(), updateUserRequest.getImage(), updateUserRequest.getMbti(), updateUserRequest.getCategoryList());
+
+        GetUserResponse getUserResponse = new GetUserResponse(user.getId(), user.getImageUrl(), user.getNickname(), user.getGender(), user.getAge(), user.classifyAge(user.getAge()), user.getMbti());
+
+        return new ResponseEntity(getUserResponse, HttpStatus.OK);
+    }
+
 
 }

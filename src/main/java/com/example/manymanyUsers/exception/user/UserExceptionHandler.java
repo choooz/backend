@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class UserExceptionHandler {
 
     @ExceptionHandler(AlreadyExistUserException.class)
-    public ResponseEntity<ExceptionMessage> handle(AlreadyExistUserException e){
+    public ResponseEntity<ExceptionMessage> handle(AlreadyExistUserException e) {
         final ExceptionMessage message = ExceptionMessage.of(e.getStatus(), e.getMessage());
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
@@ -25,5 +25,12 @@ public class UserExceptionHandler {
         final ExceptionMessage message = ExceptionMessage.of(e.getStatus(), e.getMessage());
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(UserIllegalStateException.class)
+    public ResponseEntity<ExceptionMessage> handle(UserIllegalStateException e) {
+        final ExceptionMessage message = ExceptionMessage.of(e.getStatus(), e.getMessage());
+        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+    }
+
 
 }
