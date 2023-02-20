@@ -119,6 +119,17 @@ public class VoteService {
         return voteListData;
     }
 
+//    private Slice<VoteListData> getVoteByPopularity(Category category, PageRequest pageRequest) {
+//
+//        Slice<VoteResult> voteSlice = voteResultRepository.findWithVoteFROMResult(category, pageRequest);
+//
+//        Slice<VoteListData> voteListData = voteSlice.map(voteResult -> {
+////            Long countVoted = voteResultRepository.countByVote(voteResult.getVote());
+//            return new VoteListData(voteResult.getVote());
+//        });
+//        return voteListData;
+//    }
+
 
     public Vote getVote(Long voteId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);

@@ -36,4 +36,5 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
     Slice<Vote> findWithVoteResult(@Param("category") Category category, PageRequest pageRequest);
 
 
+
 }

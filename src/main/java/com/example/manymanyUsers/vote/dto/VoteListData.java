@@ -56,4 +56,21 @@ public class VoteListData {
         UserData userData = new UserData(vote.getPostedUser());
         this.writer = userData;
     }
+
+    public VoteListData(final Vote vote) {
+        this.voteId = vote.getId();
+        this.totalTitle = vote.getTotalTitle();
+        this.category = vote.getCategory();
+        this.filteredGender = vote.getFilteredGender();
+        this.filteredAge = vote.getFilteredAge();
+        this.filteredMbti = vote.getFilteredMbti();
+        this.imageA = vote.getImageA();
+        this.imageB = vote.getImageB();
+        this.modifiedDate = vote.getModifiedDate();
+        this.titleA = vote.getTitleA();
+        this.titleB = vote.getTitleB();
+        this.countVoted = 0L;
+        UserData userData = new UserData(vote.getPostedUser());
+        this.writer = userData;
+    }
 }
