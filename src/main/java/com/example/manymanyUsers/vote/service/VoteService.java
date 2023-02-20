@@ -1,17 +1,20 @@
 package com.example.manymanyUsers.vote.service;
 
 import com.example.manymanyUsers.exception.user.UserNotFoundException;
+import com.example.manymanyUsers.exception.vote.AlreadyUserDoVoteException;
 import com.example.manymanyUsers.exception.vote.VoteNotFoundException;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.domain.VoteResult;
-import com.example.manymanyUsers.vote.dto.*;
+import com.example.manymanyUsers.vote.dto.CreateVoteRequest;
+import com.example.manymanyUsers.vote.dto.DoVote;
+import com.example.manymanyUsers.vote.dto.UpdateVoteRequest;
+import com.example.manymanyUsers.vote.dto.VoteListData;
 import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.SortBy;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import com.example.manymanyUsers.vote.repository.VoteResultRepository;
-import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -21,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
+
 
 @RequiredArgsConstructor
 @Service
@@ -52,19 +55,14 @@ public class VoteService {
     }
 
 
-    public void doVote(DoVote doVote) throws NotFoundException{
-        Optional<Vote> byId = voteRepository.findById(doVote.getVoteId());
-        if (byId.isEmpty()) {
-            throw new NotFoundException("해당 아이디를 가진 투표가 없습니다. 아이디 값을 다시 한번 확인하세요.");
-        }
+    public void doVote(DoVote doVote) {
 
-        Optional<User> find = userRepository.findById(doVote.getUserId());
-        if(find.isEmpty()){
-            throw new NotFoundException("해당 아이디를 가진 유저가 없습니다. 아이디 값을 다시 한번 확인하세요.");
-        }
+        Vote vote = voteRepository.findById(doVote.getVoteId()).orElseThrow(VoteNotFoundException::new);
+        User user = userRepository.findById(doVote.getUserId()).orElseThrow(UserNotFoundException::new);
 
-        Vote vote = byId.get();
-        User user = find.get();
+        if(voteResultRepository.existsByVoteAndVotedUser(vote, user)) {
+            throw new AlreadyUserDoVoteException();
+        }
 
         VoteResult voteResult = new VoteResult();
 
@@ -72,28 +70,57 @@ public class VoteService {
 
         voteResultRepository.save(voteResult);
 
-
     }
 
     public Slice<VoteListData> getVoteList(SortBy sortBy, Integer page, Integer size, Category category){
 
+        Slice<VoteListData> voteListData = null;
+
+        if(sortBy.equals(SortBy.ByTime)){
+            PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
+            voteListData = getVoteSortByTime(category, pageRequest);
+        } else if (sortBy.equals(SortBy.ByPopularity)) {
+            PageRequest pageRequest = PageRequest.of(page, size);
+            voteListData = getVoteByPopularity(category, pageRequest);
+        }else {
+            throw new RuntimeException("잘못된 요청입니다.");
+        }
+
+        return voteListData;
+    }
+
+    private Slice<VoteListData> getVoteSortByTime(Category category, PageRequest pageRequest) {
+
         Slice<Vote> voteSlice;
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
 
         if (category == null) {
             voteSlice = voteRepository.findSliceBy(pageRequest);
         }else{
-            voteSlice = voteRepository.findByCategory(category,pageRequest);
+            voteSlice = voteRepository.findByCategory(category, pageRequest);
         }
 
         Slice<VoteListData> voteListData = voteSlice.map(vote -> {
             vote.getPostedUser(); //프록시 처리된 user 엔티티 가져오기 위함
-            return new VoteListData(vote);
+            Long countVoted = voteResultRepository.countByVote(vote);
+            return new VoteListData(vote, countVoted);
+        });
+
+        return voteListData;
+    }
+
+    private Slice<VoteListData> getVoteByPopularity(Category category, PageRequest pageRequest) {
+
+        Slice<Vote> voteSlice = voteRepository.findWithVoteResult(category, pageRequest);
+
+        Slice<VoteListData> voteListData = voteSlice.map(vote -> {
+            Long countVoted = voteResultRepository.countByVote(vote);
+            return new VoteListData(vote, countVoted);
         });
         return voteListData;
     }
 
-    public Vote getVote(Long voteId) throws  VoteNotFoundException {
+
+    public Vote getVote(Long voteId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
         return vote;
@@ -101,19 +128,16 @@ public class VoteService {
 
     public void updateVote(@Valid UpdateVoteRequest updateVoteRequest, Long userId, Long voteId) throws UserNotFoundException, VoteNotFoundException {
 
-        User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-
+        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
-
 
         vote.update(updateVoteRequest);
-
     }
 
-    public void deleteVote(Long voteId, Long userId) throws UserNotFoundException {
+    public void deleteVote(Long voteId, Long userId) {
 
-        User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
         voteRepository.deleteById(voteId);
 

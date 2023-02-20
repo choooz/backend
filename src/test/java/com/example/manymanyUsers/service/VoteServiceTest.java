@@ -2,26 +2,26 @@ package com.example.manymanyUsers.service;
 
 import com.example.manymanyUsers.exception.user.UserNotFoundException;
 import com.example.manymanyUsers.exception.vote.VoteNotFoundException;
+import com.example.manymanyUsers.exception.vote.AlreadyUserDoVoteException;
+import com.example.manymanyUsers.statistics.dto.VoteSelectResultData;
+import com.example.manymanyUsers.statistics.service.StatisticsService;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
+import com.example.manymanyUsers.user.dto.AddInfoRequest;
 import com.example.manymanyUsers.user.dto.SignUpRequest;
 import com.example.manymanyUsers.user.enums.Providers;
 import com.example.manymanyUsers.user.service.UserService;
 import com.example.manymanyUsers.vote.domain.Vote;
-import com.example.manymanyUsers.vote.dto.CreateVoteRequest;
-import com.example.manymanyUsers.vote.dto.UpdateVoteRequest;
-import com.example.manymanyUsers.vote.dto.VoteListData;
+import com.example.manymanyUsers.vote.domain.VoteResult;
+import com.example.manymanyUsers.vote.dto.*;
 import com.example.manymanyUsers.vote.enums.*;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
+import com.example.manymanyUsers.vote.repository.VoteResultRepository;
 import com.example.manymanyUsers.vote.service.VoteService;
-import javassist.NotFoundException;
-import org.junit.Assert;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Slice;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,8 +37,11 @@ public class VoteServiceTest {
 
     @Autowired VoteService voteService;
     @Autowired UserService userService;
+    @Autowired StatisticsService statisticsService;
     @Autowired VoteRepository voteRepository;
     @Autowired UserRepository userRepository;
+
+    @Autowired VoteResultRepository voteResultRepository;
 
     @Test
     public void 투표생성_성공() throws Exception {
@@ -424,7 +427,7 @@ public class VoteServiceTest {
 
     }
 
-    @Test(expected = NotFoundException.class)
+    @Test(expected = UserNotFoundException.class)
     public void 투표삭제_실패_아이디를_가진_유저가_없음() throws Exception {
 
         //given
@@ -461,4 +464,314 @@ public class VoteServiceTest {
 
     }
 
+    @Test
+    public void 투표단건조회_성공() throws Exception{
+        //given
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
+        Long userId = userService.registerUser(request);
+
+        AddInfoRequest addInfoRequest = new AddInfoRequest();
+
+        addInfoRequest.setAge(26);
+        addInfoRequest.setGender(Gender.MALE);
+        addInfoRequest.setMbti(MBTI.INFJ);
+
+        userService.addUserInfo(addInfoRequest,userId);
+
+        CreateVoteRequest createVoteRequest = CreateVoteRequest.builder()
+                .title("투표 제목")
+                .imageA("imageA")
+                .imageB("imageB")
+                .titleA("titleA")
+                .titleB("titleB")
+                .build();
+
+        voteService.createVote(createVoteRequest,userId);
+
+        Optional<User> userById = userRepository.findById(userId);
+        User user = userById.get();
+
+        Optional<Vote> voteById = voteRepository.findByPostedUser(user);
+        Vote vote = voteById.get();
+
+        //when
+        Vote getVote = voteService.getVote(vote.getId());
+
+        //then
+        assertEquals(vote,getVote);
+        assertEquals(user,vote.getPostedUser());
+        assertEquals(vote.classifyAge(user.getAge()),Age.twenties);
+    }
+
+    @Test
+    public void 투표참여_성공() throws Exception {
+
+        //given
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
+        Long userId = userService.registerUser(request);
+
+        CreateVoteRequest createVoteRequest = CreateVoteRequest.builder()
+                .title("투표 제목")
+                .imageA("imageA")
+                .imageB("imageB")
+                .titleA("titleA")
+                .titleB("titleB")
+                .build();
+
+        voteService.createVote(createVoteRequest,userId);
+
+        Optional<User> userRepositoryByProviderId = userRepository.findById(userId);
+        User user = userRepositoryByProviderId.get();
+
+        Optional<Vote> byProviderId = voteRepository.findByPostedUser(user);
+        Vote vote = byProviderId.get();
+
+        //when
+        DoVoteRequest doVoteRequest = new DoVoteRequest(Choice.A);
+        voteService.doVote(doVoteRequest.converter(userId, vote.getId()));
+
+        //then
+        VoteResult voteResult = voteResultRepository.findByVote(vote);
+        assertEquals(vote.getId(), voteResult.getVote().getId());
+        assertEquals(user.getId(), voteResult.getVotedUser().getId());
+        assertEquals(Choice.A, voteResult.getChoice());
+
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void 투표참여_실패_아이디를_가진_유저가_없음() throws Exception {
+        //given
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
+        Long userId = userService.registerUser(request);
+
+        CreateVoteRequest createVoteRequest = CreateVoteRequest.builder()
+                .title("투표 제목")
+                .imageA("imageA")
+                .imageB("imageB")
+                .titleA("titleA")
+                .titleB("titleB")
+                .build();
+
+        voteService.createVote(createVoteRequest,userId);
+
+        Optional<User> userRepositoryByProviderId = userRepository.findById(userId);
+        User user = userRepositoryByProviderId.get();
+
+        Optional<Vote> byProviderId = voteRepository.findByPostedUser(user);
+        Vote vote = byProviderId.get();
+
+        //when
+        DoVoteRequest doVoteRequest = new DoVoteRequest(Choice.A);
+        voteService.doVote(doVoteRequest.converter(100L, vote.getId()));
+
+        //then
+        VoteResult voteResult = voteResultRepository.findByVote(vote);
+        assertEquals(vote.getId(), voteResult.getVote().getId());
+        assertEquals(user.getId(), voteResult.getVotedUser().getId());
+        assertEquals(Choice.A, voteResult.getChoice());
+    }
+
+    @Test(expected = VoteNotFoundException.class)
+    public void 투표참여_실패_아이디를_가진_투표가_없음() throws Exception {
+        //given
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
+        Long userId = userService.registerUser(request);
+
+        CreateVoteRequest createVoteRequest = CreateVoteRequest.builder()
+                .title("투표 제목")
+                .imageA("imageA")
+                .imageB("imageB")
+                .titleA("titleA")
+                .titleB("titleB")
+                .build();
+
+        voteService.createVote(createVoteRequest,userId);
+
+        Optional<User> userRepositoryByProviderId = userRepository.findById(userId);
+        User user = userRepositoryByProviderId.get();
+
+        Optional<Vote> byProviderId = voteRepository.findByPostedUser(user);
+        Vote vote = byProviderId.get();
+
+        //when
+        DoVoteRequest doVoteRequest = new DoVoteRequest(Choice.A);
+        voteService.doVote(doVoteRequest.converter(userId, 100L));
+
+        //then
+        VoteResult voteResult = voteResultRepository.findByVote(vote);
+        assertEquals(vote.getId(), voteResult.getVote().getId());
+        assertEquals(user.getId(), voteResult.getVotedUser().getId());
+        assertEquals(Choice.A, voteResult.getChoice());
+    }
+
+    @Test(expected = AlreadyUserDoVoteException.class)
+    public void 투표참여_실패_중복투표() throws Exception {
+        //given
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
+        Long userId = userService.registerUser(request);
+
+        CreateVoteRequest createVoteRequest = CreateVoteRequest.builder()
+                .title("투표 제목")
+                .imageA("imageA")
+                .imageB("imageB")
+                .titleA("titleA")
+                .titleB("titleB")
+                .build();
+
+        voteService.createVote(createVoteRequest,userId);
+
+        Optional<User> userRepositoryByProviderId = userRepository.findById(userId);
+        User user = userRepositoryByProviderId.get();
+
+        Optional<Vote> byProviderId = voteRepository.findByPostedUser(user);
+        Vote vote = byProviderId.get();
+
+        //when
+        DoVoteRequest doVoteRequest = new DoVoteRequest(Choice.A);
+        voteService.doVote(doVoteRequest.converter(userId, vote.getId()));
+        voteService.doVote(doVoteRequest.converter(userId, vote.getId()));
+
+        //then
+        VoteResult voteResult = voteResultRepository.findByVote(vote);
+        assertEquals(vote.getId(), voteResult.getVote().getId());
+        assertEquals(user.getId(), voteResult.getVotedUser().getId());
+        assertEquals(Choice.A, voteResult.getChoice());
+    }
+
+    @Test(expected = AlreadyUserDoVoteException.class)
+    public void 투표참여_실패_중복투표_수정() throws Exception {
+        //given
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
+        Long userId = userService.registerUser(request);
+
+        CreateVoteRequest createVoteRequest = CreateVoteRequest.builder()
+                .title("투표 제목")
+                .imageA("imageA")
+                .imageB("imageB")
+                .titleA("titleA")
+                .titleB("titleB")
+                .build();
+
+        voteService.createVote(createVoteRequest,userId);
+
+        Optional<User> userRepositoryByProviderId = userRepository.findById(userId);
+        User user = userRepositoryByProviderId.get();
+
+        Optional<Vote> byProviderId = voteRepository.findByPostedUser(user);
+        Vote vote = byProviderId.get();
+
+        //when
+        DoVoteRequest firstDoVoteRequest = new DoVoteRequest(Choice.A);
+
+        DoVoteRequest secondDoVoteRequest = new DoVoteRequest(Choice.B);
+
+        voteService.doVote(firstDoVoteRequest.converter(userId, vote.getId()));
+        voteService.doVote(secondDoVoteRequest.converter(userId, vote.getId()));
+
+        //then
+        VoteResult voteResult = voteResultRepository.findByVote(vote);
+        assertEquals(vote.getId(), voteResult.getVote().getId());
+        assertEquals(user.getId(), voteResult.getVotedUser().getId());
+        assertEquals(Choice.A, voteResult.getChoice());
+    }
+
+    @Test
+    public void 투표결과_조회() throws Exception {
+        //given
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
+        Long userId = userService.registerUser(request);
+
+        SignUpRequest secondRequest = new SignUpRequest("testUser2", "test@gmail.com", "password234", Providers.KAKAO, "providerId");
+        Long secondUserId = userService.registerUser(secondRequest);
+
+        SignUpRequest thirdRequest = new SignUpRequest("testUser3", "test@nate.com", "password1234", Providers.KAKAO, "providerId");
+        Long thirdUserId = userService.registerUser(thirdRequest);
+
+        CreateVoteRequest createVoteRequest = CreateVoteRequest.builder()
+                .title("투표 제목")
+                .imageA("imageA")
+                .imageB("imageB")
+                .titleA("titleA")
+                .titleB("titleB")
+                .build();
+
+        voteService.createVote(createVoteRequest,userId);
+
+        Optional<User> userRepositoryByProviderId = userRepository.findById(userId);
+        User user = userRepositoryByProviderId.get();
+
+        Optional<Vote> byProviderId = voteRepository.findByPostedUser(user);
+        Vote vote = byProviderId.get();
+
+        DoVoteRequest firstDoVoteRequest = new DoVoteRequest(Choice.A);
+        DoVoteRequest secondDoVoteRequest = new DoVoteRequest(Choice.B);
+        DoVoteRequest thirdDoVoteRequest = new DoVoteRequest(Choice.A);
+
+        voteService.doVote(firstDoVoteRequest.converter(userId, vote.getId()));
+        voteService.doVote(secondDoVoteRequest.converter(secondUserId, vote.getId()));
+        voteService.doVote(thirdDoVoteRequest.converter(thirdUserId, vote.getId()));
+
+        //when
+        long totalVoteCount = statisticsService.getTotalStatistics(vote.getId());
+        VoteSelectResultData voteSelectResultData = statisticsService.getSelectStatistics(vote.getId());
+
+        //then
+        assertEquals(3L, totalVoteCount);
+        assertEquals(2L, voteSelectResultData.getTotalCountA());
+        assertEquals(1L, voteSelectResultData.getTotalCountB());
+        assertEquals(66, voteSelectResultData.getPercentA());
+        assertEquals(33, voteSelectResultData.getPercentB());
+
+    }
+
+    @Test
+    public void 투표결과_조회_실패_아이디를_가진_투표가_없음() throws Exception {
+        //given
+        SignUpRequest request = new SignUpRequest("testUser", "test@naver.com", "password", Providers.KAKAO, "providerId");
+        Long userId = userService.registerUser(request);
+
+        SignUpRequest secondRequest = new SignUpRequest("testUser2", "test@gmail.com", "password234", Providers.KAKAO, "providerId");
+        Long secondUserId = userService.registerUser(secondRequest);
+
+        SignUpRequest thirdRequest = new SignUpRequest("testUser3", "test@nate.com", "password1234", Providers.KAKAO, "providerId");
+        Long thirdUserId = userService.registerUser(thirdRequest);
+
+        CreateVoteRequest createVoteRequest = CreateVoteRequest.builder()
+                .title("투표 제목")
+                .imageA("imageA")
+                .imageB("imageB")
+                .titleA("titleA")
+                .titleB("titleB")
+                .build();
+
+        voteService.createVote(createVoteRequest,userId);
+
+        Optional<User> userRepositoryByProviderId = userRepository.findById(userId);
+        User user = userRepositoryByProviderId.get();
+
+        Optional<Vote> byProviderId = voteRepository.findByPostedUser(user);
+        Vote vote = byProviderId.get();
+
+        DoVoteRequest firstDoVoteRequest = new DoVoteRequest(Choice.A);
+        DoVoteRequest secondDoVoteRequest = new DoVoteRequest(Choice.B);
+        DoVoteRequest thirdDoVoteRequest = new DoVoteRequest(Choice.A);
+
+        voteService.doVote(firstDoVoteRequest.converter(userId, vote.getId()));
+        voteService.doVote(secondDoVoteRequest.converter(secondUserId, vote.getId()));
+        voteService.doVote(thirdDoVoteRequest.converter(thirdUserId, vote.getId()));
+
+        //when
+        long totalVoteCount = statisticsService.getTotalStatistics(vote.getId());
+        VoteSelectResultData voteSelectResultData = statisticsService.getSelectStatistics(vote.getId());
+
+        //then
+        assertEquals(3L, totalVoteCount);
+        assertEquals(2L, voteSelectResultData.getTotalCountA());
+        assertEquals(1L, voteSelectResultData.getTotalCountB());
+        assertEquals(66, voteSelectResultData.getPercentA());
+        assertEquals(33, voteSelectResultData.getPercentB());
+
+    }
+
 }
+

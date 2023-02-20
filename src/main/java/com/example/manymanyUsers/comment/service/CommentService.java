@@ -40,7 +40,7 @@ public class CommentService {
     private final VoteRepository voteRepository;
 
 
-    public void createComment(Long voteId, CommentCreateRequest commentCreateRequest, Long userId) throws UserNotFoundException,VoteNotFoundException {
+    public void createComment(Long voteId, CommentCreateRequest commentCreateRequest, Long userId) {
 
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
@@ -68,6 +68,7 @@ public class CommentService {
 
 
     public List<Comment> getComments(Long voteId, Gender gender, Age age, MBTI mbti, int size, int page, CommentSortBy sortBy) throws VoteNotFoundException{
+
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
         Pageable pageable = PageRequest.of(page,size);
@@ -114,7 +115,7 @@ public class CommentService {
     }
 
 
-    public void updateComment(Long voteId, Long commentId, Long userId, CommentUpdateRequest commentUpdateRequest) throws UserNotFoundException,VoteNotFoundException,CommentNotFoundException{
+    public void updateComment(Long voteId, Long commentId, Long userId, CommentUpdateRequest commentUpdateRequest) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
@@ -122,7 +123,7 @@ public class CommentService {
         comment.update(commentUpdateRequest);
     }
 
-    public void deleteComment(Long voteId, Long commentId , Long userId) throws UserNotFoundException,VoteNotFoundException,CommentNotFoundException{
+    public void deleteComment(Long voteId, Long commentId , Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
@@ -132,7 +133,7 @@ public class CommentService {
     }
 
 
-    public Long likeComment(Long voteId, Long commentId, Long userId) throws UserNotFoundException,VoteNotFoundException,CommentNotFoundException  {
+    public Long likeComment(Long voteId, Long commentId, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
@@ -182,7 +183,7 @@ public class CommentService {
         return comment.getLikeCount();
     }
 
-    public Long hateComment(Long voteId, Long commentId, Long userId) throws UserNotFoundException,VoteNotFoundException,CommentNotFoundException {
+    public Long hateComment(Long voteId, Long commentId, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
