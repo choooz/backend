@@ -8,11 +8,10 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface VoteRepository extends JpaRepository<Vote, Long> {
-    Optional<Vote> findByPostedUser(User postedUser);
+    Optional<Vote> findByPostedUser (User postedUser);
 
     Slice<Vote> findSliceBy(Pageable pageable);
 
@@ -29,6 +28,8 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
 
 //    List<Vote> findAllByBookmarked(User user);
 
+  
+    Slice<Vote> findByCategoryAndTotalTitleContains(Category category, String keyword, Pageable pageable);
 
 
 }
