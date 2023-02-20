@@ -30,4 +30,9 @@ public class CategoryEntity {
     public Category toCategory() {
         return this.getCategory();
     }
+
+    public CategoryEntity(Long id, Category category){
+        this.id = id;
+        this.category = category;
+    }
 }
