@@ -4,11 +4,13 @@ import com.example.manymanyUsers.comment.domain.CommentEmotion;
 import com.example.manymanyUsers.common.domain.BaseTimeEntity;
 import com.example.manymanyUsers.user.enums.Providers;
 import com.example.manymanyUsers.user.enums.Role;
+import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +54,9 @@ public class User extends BaseTimeEntity {
     @JoinColumn(name = "USER_ID")
     private List<CategoryEntity> categoryLists = new ArrayList<>();
 
+    @Column(name = "modified_MBTI_Date")
+    private LocalDateTime modifiedMBTIDate;
+
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<CommentEmotion> commentEmotionList = new ArrayList<>();
@@ -60,8 +65,15 @@ public class User extends BaseTimeEntity {
         this.commentEmotionList.add(commentEmotion);
     }
 
+    public void updateProfile(String nickname, String image, MBTI mbti, LocalDateTime modifiedMBTIDate) {
+        this.nickname = nickname;
+        this.imageUrl = image;
+        this.mbti = mbti;
+        this.modifiedMBTIDate = modifiedMBTIDate;
+    }
+
     @Builder
-    public User(Long id, String nickname, String email, String imageUrl, String password, Providers provider, String providerId, Role role, Integer age, Gender gender, MBTI mbti, List<CategoryEntity> categoryLists) {
+    public User(Long id, String nickname, String email, String imageUrl, String password, Providers provider, String providerId, Role role, Integer age, Gender gender, MBTI mbti, List<CategoryEntity> categoryLists, LocalDateTime modifiedMBTIDate) {
         this.id = id;
         this.nickname = nickname;
         this.email = email;
@@ -74,5 +86,32 @@ public class User extends BaseTimeEntity {
         this.gender = gender;
         this.mbti = mbti;
         this.categoryLists = categoryLists;
+        this.modifiedMBTIDate = modifiedMBTIDate;
     }
+
+    public Age classifyAge(Integer age){
+        Age ageGroup;
+        switch (age/10){
+            case 1:
+                ageGroup = Age.teenager;
+                break;
+            case 2:
+                ageGroup = Age.twenties;
+                break;
+            case 3:
+                ageGroup = Age.thirties;
+                break;
+            case 4:
+                ageGroup = Age.fourties;
+                break;
+            case 5:
+                ageGroup = Age.fifties;
+                break;
+            default:
+                ageGroup = Age.NULL;
+                break;
+        }
+        return ageGroup;
+    }
+
 }

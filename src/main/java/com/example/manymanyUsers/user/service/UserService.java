@@ -1,17 +1,19 @@
 package com.example.manymanyUsers.user.service;
 
+import com.example.manymanyUsers.exception.user.UserIllegalStateException;
+import com.example.manymanyUsers.exception.user.UserNotFoundException;
 import com.example.manymanyUsers.user.domain.CategoryEntity;
 import com.example.manymanyUsers.user.domain.CategoryRespository;
 import com.example.manymanyUsers.user.dto.AddInfoRequest;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
-import com.example.manymanyUsers.user.dto.AddInterestCategoryRequest;
 import com.example.manymanyUsers.user.dto.GetUserNickNameRequest;
 import com.example.manymanyUsers.user.dto.SignUpRequest;
-import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
+import com.example.manymanyUsers.vote.repository.VoteRepository;
+import com.example.manymanyUsers.vote.repository.VoteResultRepository;
 import javassist.NotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +24,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor(access = AccessLevel.PUBLIC)
 @Service
@@ -31,6 +34,11 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final CategoryRespository categoryRespository;
+
+    private final VoteRepository voteRepository;
+
+    private final VoteResultRepository voteResultRepository;
+
 
     public Long registerUser(SignUpRequest signUpRequestDto) throws Exception{
         if (userRepository.existsByProviderId(signUpRequestDto.getProviderId())) {
@@ -69,6 +77,8 @@ public class UserService {
         user.setAge(addInfoRequest.getAge());
         user.setGender(addInfoRequest.getGender());
         user.setMbti(addInfoRequest.getMbti());
+        //MBTI 수정 DATE 계산하기 위한 LocalDate
+        user.setModifiedMBTIDate(LocalDateTime.now());
 
 
         userRepository.save(user);
@@ -118,6 +128,56 @@ public class UserService {
         }
 
         userRepository.save(user);
+    }
+
+    public Map<String, Long> getMyPageCount(Long userId) {
+        User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Map<String, Long> map = new HashMap<>();
+
+        Long countCreatedVote = 0L;
+        Long countParticipatedVote = 0L;
+
+
+        countCreatedVote = voteRepository.countVoteByPostedUser(findUser);
+        countParticipatedVote = voteResultRepository.countByVotedUser(findUser);
+//        Long countBookmarkedVote =
+
+        map.put("CreatedVote",countCreatedVote);
+        map.put("ParticipatedVote",countParticipatedVote);
+
+        return map;
+    }
+
+
+    public User updateUser(Long userId, String nickname, String image, MBTI mbti, List<Category> categoryList) throws NotFoundException {
+        User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+        //MBTI 로직
+        if (!Objects.equals(mbti, findUser.getMbti())) {
+            LocalDateTime now = LocalDateTime.now();
+            if (findUser.getModifiedMBTIDate() != null && now.isBefore(findUser.getModifiedMBTIDate().plusMonths(2))) { // 현재 시간이 특정 사용자의 마지막 MBTI 수정 일자보다 2개월 이내인지를 확인
+                throw new UserIllegalStateException();
+            } else {
+                findUser.updateProfile(nickname, image, mbti, now);
+            }
+        }
+
+        //CategoryEntity -> Category 로 변환해서 비교해주기 위해
+        List<Category> categoryEntityList = findUser.getCategoryLists().stream()
+                .map(CategoryEntity::toCategory)
+                .collect(Collectors.toList());
+
+        boolean isEqual = categoryEntityList.stream().sorted().collect(Collectors.toList())
+                .equals(categoryList.stream().sorted().collect(Collectors.toList()));
+
+
+        if (!isEqual) {
+            categoryRespository.deleteByUser(findUser);
+            addInterestCategory(categoryList, userId);
+        }
+
+
+        return findUser;
     }
 
 }

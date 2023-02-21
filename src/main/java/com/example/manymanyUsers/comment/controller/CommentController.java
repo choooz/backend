@@ -49,7 +49,9 @@ public class CommentController {
     @Operation(description = "댓글 조회")
     @GetMapping("/votes/{voteId}/comments")
     public ResponseEntity<List<CommentGetResponse>> getComment(@PathVariable Long voteId, @ModelAttribute CommentGetRequest commentGetRequest) {
+
         List<Comment> comments = commentService.getComments(voteId, commentGetRequest.getGender(), commentGetRequest.getAge(), commentGetRequest.getMbti(), commentGetRequest.getSize(),commentGetRequest.getPage(),commentGetRequest.getSortBy());
+   
         List<CommentGetResponse> commentGetResponse = new ArrayList<>();
         Map<Long, CommentGetResponse> map = new HashMap<>();
 
