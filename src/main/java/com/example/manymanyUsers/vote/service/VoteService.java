@@ -7,10 +7,7 @@ import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.domain.VoteResult;
-import com.example.manymanyUsers.vote.dto.CreateVoteRequest;
-import com.example.manymanyUsers.vote.dto.DoVote;
-import com.example.manymanyUsers.vote.dto.UpdateVoteRequest;
-import com.example.manymanyUsers.vote.dto.VoteListData;
+import com.example.manymanyUsers.vote.dto.*;
 import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.SortBy;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
@@ -119,6 +116,8 @@ public class VoteService {
         return voteListData;
     }
 
+
+
 //    private Slice<VoteListData> getVoteByPopularity(Category category, PageRequest pageRequest) {
 //
 //        Slice<VoteResult> voteSlice = voteResultRepository.findWithVoteFROMResult(category, pageRequest);
@@ -129,6 +128,25 @@ public class VoteService {
 //        });
 //        return voteListData;
 //    }
+
+    public Slice<VoteListData> getSearchVoteList(String keyword, SortBy sortBy, int page, int size, Category category) {
+
+        Slice<Vote> voteSlice;
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
+
+        if (category == null) {
+            voteSlice = voteRepository.findSliceByTotalTitleContains(keyword, pageRequest);
+        }else{
+            voteSlice = voteRepository.findByCategoryAndTotalTitleContains(category, keyword, pageRequest);
+        }
+
+        Slice<VoteListData> voteListData = voteSlice.map(vote -> {
+            vote.getPostedUser(); //프록시 처리된 user 엔티티 가져오기 위함
+            Long countVoted = voteResultRepository.countByVote(vote);
+            return new VoteListData(vote, countVoted);
+        });
+        return voteListData;
+    }
 
 
     public Vote getVote(Long voteId) {

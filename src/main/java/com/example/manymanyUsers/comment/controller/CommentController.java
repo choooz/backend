@@ -49,8 +49,8 @@ public class CommentController {
     @Operation(description = "댓글 조회")
     @GetMapping("/votes/{voteId}/comments")
     public ResponseEntity<List<CommentGetResponse>> getComment(@PathVariable Long voteId, @ModelAttribute CommentGetRequest commentGetRequest) {
-        List<Comment> comments = commentService.getComments(voteId, commentGetRequest.getGender(), commentGetRequest.getAge(), commentGetRequest.getMbti());
-        List<CommentGetResponse> commentGetRespons = new ArrayList<>();
+        List<Comment> comments = commentService.getComments(voteId, commentGetRequest.getGender(), commentGetRequest.getAge(), commentGetRequest.getMbti(), commentGetRequest.getSize(),commentGetRequest.getPage(),commentGetRequest.getSortBy());
+        List<CommentGetResponse> commentGetResponse = new ArrayList<>();
         Map<Long, CommentGetResponse> map = new HashMap<>();
 
         for (Comment comment : comments) {
@@ -77,15 +77,16 @@ public class CommentController {
                 map.get(comment.getParent().getId()).getChildren().add(dto);
             }
 
-            else commentGetRespons.add(dto);
+            else commentGetResponse.add(dto);
         }
-        return ResponseEntity.ok().body(commentGetRespons);
+        return ResponseEntity.ok().body(commentGetResponse);
     }
+
     @Operation(description = "맛보기 댓글 조회")
     @GetMapping("/votes/{voteId}/comments/hot")
     public ResponseEntity<List<CommentGetResponse>> getHotComment(@PathVariable Long voteId, @ModelAttribute CommentGetRequest commentGetRequest) {
         List<Comment> comments = commentService.getHotComments(voteId, commentGetRequest.getGender(), commentGetRequest.getAge(), commentGetRequest.getMbti());
-        List<CommentGetResponse> commentGetRespons = new ArrayList<>();
+        List<CommentGetResponse> commentGetResponse = new ArrayList<>();
         Map<Long, CommentGetResponse> map = new HashMap<>();
 
         for (Comment comment : comments) {
@@ -112,9 +113,9 @@ public class CommentController {
                 map.get(comment.getParent().getId()).getChildren().add(dto);
             }
 
-            else commentGetRespons.add(dto);
+            else commentGetResponse.add(dto);
         }
-        return ResponseEntity.ok().body(commentGetRespons);
+        return ResponseEntity.ok().body(commentGetResponse);
     }
     @Operation(description = "댓글 수정")
     @PatchMapping("/votes/{voteId}/comments/{commentId}")
