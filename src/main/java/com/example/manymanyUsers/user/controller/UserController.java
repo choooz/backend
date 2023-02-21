@@ -1,10 +1,17 @@
 package com.example.manymanyUsers.user.controller;
 
+import com.example.manymanyUsers.comment.service.CommentService;
+import com.example.manymanyUsers.config.oauth2.kakao.dto.GetUserInfoResponse;
+import com.example.manymanyUsers.statistics.service.StatisticsService;
+import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.dto.*;
 import com.example.manymanyUsers.user.service.UserService;
 import com.example.manymanyUsers.common.dto.CommonResponse;
+import com.example.manymanyUsers.vote.domain.Vote;
+import com.example.manymanyUsers.vote.service.VoteService;
 import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
@@ -13,12 +20,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/api/user")
 @RestController
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final VoteService voteService;
+    private final StatisticsService statisticsService;
+    private final CommentService commentService;
 
     @PostMapping("/signup")
     public ResponseEntity<CommonResponse> registerUser(@Valid @RequestBody SignUpRequest signUpRequestDto) {
@@ -62,5 +75,64 @@ public class UserController {
         CommonResponse response = new CommonResponse("유저 관심사 카테고리 추가에 성공했습니다.");
         return new ResponseEntity(response, HttpStatus.OK);
     }
+
+
+    @Operation(description = "마이페이지 타입별 voteList 요청 api")
+    @GetMapping("/mypage")
+    public ResponseEntity<List<MyPageResponse>> getVotesByUser(@Parameter(description = "created,participated,bookmarked", required = true, example = "created") @RequestParam String voteType, @RequestAttribute Claims claims){
+        Integer userId = (int) claims.get("userId");
+        Long longId = Long.valueOf(userId);
+
+        List<MyPageResponse> responses = new ArrayList<>();
+
+        List<Vote> voteList = voteService.getVotesByUser(longId, voteType);
+
+        for(Vote vote : voteList){
+            MyPageResponse myPageResponse = MyPageResponse.builder()
+                    .voteId(vote.getId())
+                    .imageA(vote.getImageA())
+                    .imageB(vote.getImageB())
+                    .title(vote.getTotalTitle())
+                    .countChoice(statisticsService.getTotalStatistics(vote.getId()))
+                    .countComment(commentService.getCommentsCountByVote(vote.getId()))
+                    .createdDate(vote.getCreatedDate())
+                    .build();
+            responses.add(myPageResponse);
+        }
+
+        return new ResponseEntity(responses,HttpStatus.OK);
+
+    }
+
+    @Operation(description = "마이페이지 타입별 voteCount 요청 api")
+    @GetMapping("/mypage/count")
+    public ResponseEntity<MyPageCountResponse> getMyPageCount(@RequestAttribute Claims claims){
+        Integer userId = (int) claims.get("userId");
+        Long longId = Long.valueOf(userId);
+
+        Map<String,Long> map = userService.getMyPageCount(longId);
+        Long countCreatedVote = map.get("CreatedVote");
+        Long countParticipatedVote = map.get("ParticipatedVote");
+
+        MyPageCountResponse myPageCountResponse = new MyPageCountResponse(countCreatedVote,countParticipatedVote);
+
+
+        return new ResponseEntity(myPageCountResponse,HttpStatus.OK);
+
+    }
+
+    @Operation(description = "프로필 수정")
+    @PatchMapping("/mypage/edit")
+    public ResponseEntity<GetUserResponse> updateUser(@RequestBody UpdateUserRequest updateUserRequest, @RequestAttribute Claims claims) throws NotFoundException {
+        Integer userId = (int) claims.get("userId");
+        Long longId = Long.valueOf(userId);
+
+        User user = userService.updateUser(longId, updateUserRequest.getNickname(), updateUserRequest.getImage(), updateUserRequest.getMbti(), updateUserRequest.getCategoryList());
+
+        GetUserResponse getUserResponse = new GetUserResponse(user.getId(), user.getImageUrl(), user.getNickname(), user.getGender(), user.getAge(), user.classifyAge(user.getAge()), user.getMbti());
+
+        return new ResponseEntity(getUserResponse, HttpStatus.OK);
+    }
+
 
 }

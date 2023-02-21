@@ -47,10 +47,14 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             "ORDER BY c.createdDate DESC")
     List<Comment> findNewestComments(@Param("voteId") Long voteId, @Param("gender") Gender gender, @Param("age") Age age, @Param("mbti") MBTI mbti, Pageable pageable);
 
+
+    Long countCommentsByVoteId(@Param("voteId") Long voteId);
+
     //댓글에 속하는 대댓글 조회
     @Query("SELECT c FROM Comment c " +
             "WHERE c.voteId= :voteId AND c.parent= :parentComment AND (:gender IS NULL OR  (c.gender = :gender)) AND (:age IS NULL OR  (c.age = :age)) AND (:mbti IS NULL OR  (c.mbti = :mbti))" +
             "ORDER BY c.id ASC")
     List<Comment> findChildComments(@Param("voteId") Long voteId, @Param("gender") Gender gender, @Param("age") Age age, @Param("mbti") MBTI mbti, @Param("parentComment") Comment parentComment);
+
 
 }

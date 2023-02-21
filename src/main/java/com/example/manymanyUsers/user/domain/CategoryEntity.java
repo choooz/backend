@@ -23,4 +23,16 @@ public class CategoryEntity {
     @Enumerated(EnumType.STRING)
     private Category category;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
+
+    public Category toCategory() {
+        return this.getCategory();
+    }
+
+    public CategoryEntity(Long id, Category category){
+        this.id = id;
+        this.category = category;
+    }
 }

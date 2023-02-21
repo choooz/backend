@@ -1,5 +1,6 @@
 package com.example.manymanyUsers.vote.domain;
 
+import com.example.manymanyUsers.comment.domain.Comment;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.vote.enums.Choice;
 import lombok.AccessLevel;
@@ -43,4 +44,5 @@ public class VoteResult {
         this.votedUser = user;
         this.choice = choice;
     }
+
 }

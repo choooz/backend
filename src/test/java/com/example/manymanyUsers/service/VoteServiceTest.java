@@ -500,7 +500,7 @@ public class VoteServiceTest {
         //then
         assertEquals(vote,getVote);
         assertEquals(user,vote.getPostedUser());
-        assertEquals(vote.classifyAge(user.getAge()),Age.twenties);
+        assertEquals(user.classifyAge(user.getAge()),Age.twenties);
     }
 
     @Test

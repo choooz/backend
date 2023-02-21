@@ -22,6 +22,16 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
 
     Optional<Vote> findById(Long voteId);
 
+    List<Vote> findAllByPostedUser(User user);
+
+    @Query("SELECT v FROM Vote v JOIN v.voteResultList vr where vr.votedUser = :user")
+    List<Vote> findParticipatedVoteByUser(User user);
+
+    Long countVoteByPostedUser(User user);
+
+//    List<Vote> findAllByBookmarked(User user);
+
+  
     Slice<Vote> findByCategoryAndTotalTitleContains(Category category, String keyword, Pageable pageable);
 
     Slice<Vote> findSliceByTotalTitleContains(String keyword, Pageable pageable);
@@ -38,4 +48,5 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
             "GROUP BY v.id, vr.id " +
             "order by count(vr.vote.id) DESC")
     Slice<Vote> findWithVoteResult(@Param("category") Category category, PageRequest pageRequest);
+
 }

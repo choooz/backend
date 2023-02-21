@@ -18,8 +18,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -64,6 +64,9 @@ public class VoteService {
         VoteResult voteResult = new VoteResult();
 
         voteResult.doVote(vote, user, doVote.getChoice());
+
+        //김민엽
+//        voteResult.mappingVote(vote);
 
         voteResultRepository.save(voteResult);
 
@@ -170,6 +173,24 @@ public class VoteService {
 
         voteRepository.deleteById(voteId);
 
+    }
+
+    public List<Vote> getVotesByUser(Long userId, String type) {
+        User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        List<Vote> voteList = new ArrayList<>();
+        //작성한 vote
+        if (type.equals("created")){
+            voteList=voteRepository.findAllByPostedUser(findUser);
+        }
+        //참여한 vote
+        else if(type.equals("participated")){
+            voteList=voteRepository.findParticipatedVoteByUser(findUser);
+        }
+        //북마크한 vote
+//        else if(type.equals("bookmarked")){
+//            voteList=voteRepository.findAllByBookmarked(findUser);
+//        }
+        return voteList;
     }
 
 }
