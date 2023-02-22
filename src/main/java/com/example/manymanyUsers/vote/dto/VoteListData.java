@@ -17,7 +17,7 @@ public class VoteListData {
 
     private final UserData writer;
 
-    private final String totalTitle;
+    private final String title;
 
     private final Category category;
 
@@ -42,7 +42,7 @@ public class VoteListData {
 
     public VoteListData(final Vote vote, final Long countVoted) {
         this.voteId = vote.getId();
-        this.totalTitle = vote.getTotalTitle();
+        this.title = vote.getTotalTitle();
         this.category = vote.getCategory();
         this.filteredGender = vote.getFilteredGender();
         this.filteredAge = vote.getFilteredAge();
@@ -59,7 +59,7 @@ public class VoteListData {
 
     public VoteListData(final Vote vote) {
         this.voteId = vote.getId();
-        this.totalTitle = vote.getTotalTitle();
+        this.title = vote.getTotalTitle();
         this.category = vote.getCategory();
         this.filteredGender = vote.getFilteredGender();
         this.filteredAge = vote.getFilteredAge();
