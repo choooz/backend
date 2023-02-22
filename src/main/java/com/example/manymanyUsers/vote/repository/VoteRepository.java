@@ -33,9 +33,9 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
 //    List<Vote> findAllByBookmarked(User user);
 
   
-    Slice<Vote> findByCategoryAndTotalTitleContains(Category category, String keyword, Pageable pageable);
+    Slice<Vote> findByCategoryAndTitleContains(Category category, String keyword, Pageable pageable);
 
-    Slice<Vote> findSliceByTotalTitleContains(String keyword, Pageable pageable);
+    Slice<Vote> findSliceByTitleContains(String keyword, Pageable pageable);
 
 
     //    @Query("SELECT v,vr FROM VoteResult vr JOIN fetch vr.vote v GROUP BY v ORDER BY COUNT(v) DESC")

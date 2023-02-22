@@ -81,7 +81,7 @@ public class VoteController {
                 .user(getVoteUserResponse)
                 .voteCreatedDate(vote.getCreatedDate())
                 .category(vote.getCategory())
-                .title(vote.getTotalTitle())
+                .title(vote.getTitle())
                 .imageA(vote.getImageA())
                 .imageB(vote.getImageB())
                 .filteredGender(vote.getFilteredGender())

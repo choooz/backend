@@ -92,7 +92,7 @@ public class UserController {
                     .voteId(vote.getId())
                     .imageA(vote.getImageA())
                     .imageB(vote.getImageB())
-                    .title(vote.getTotalTitle())
+                    .title(vote.getTitle())
                     .countChoice(statisticsService.getTotalStatistics(vote.getId()))
                     .countComment(commentService.getCommentsCountByVote(vote.getId()))
                     .createdDate(vote.getCreatedDate())

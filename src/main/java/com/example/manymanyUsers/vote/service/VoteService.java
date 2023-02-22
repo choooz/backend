@@ -38,7 +38,7 @@ public class VoteService {
 
         Vote vote = Vote.builder()
                 .postedUser(findUser)
-                .totalTitle(createVoteRequest.getTitle())
+                .title(createVoteRequest.getTitle())
                 .imageA(createVoteRequest.getImageA())
                 .imageB(createVoteRequest.getImageB())
                 .titleA(createVoteRequest.getTitleA())
@@ -138,9 +138,9 @@ public class VoteService {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
 
         if (category == null) {
-            voteSlice = voteRepository.findSliceByTotalTitleContains(keyword, pageRequest);
+            voteSlice = voteRepository.findSliceByTitleContains(keyword, pageRequest);
         }else{
-            voteSlice = voteRepository.findByCategoryAndTotalTitleContains(category, keyword, pageRequest);
+            voteSlice = voteRepository.findByCategoryAndTitleContains(category, keyword, pageRequest);
         }
 
         Slice<VoteListData> voteListData = voteSlice.map(vote -> {
