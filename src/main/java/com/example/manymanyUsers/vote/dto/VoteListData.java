@@ -17,7 +17,7 @@ public class VoteListData {
 
     private final UserData writer;
 
-    private final String totalTitle;
+    private final String title;
 
     private final Category category;
 
@@ -35,6 +35,7 @@ public class VoteListData {
 
     private final String titleB;
 
+    private final String detail;
 
     private final LocalDateTime modifiedDate;
 
@@ -42,7 +43,7 @@ public class VoteListData {
 
     public VoteListData(final Vote vote, final Long countVoted) {
         this.voteId = vote.getId();
-        this.totalTitle = vote.getTotalTitle();
+        this.title = vote.getTitle();
         this.category = vote.getCategory();
         this.filteredGender = vote.getFilteredGender();
         this.filteredAge = vote.getFilteredAge();
@@ -52,24 +53,8 @@ public class VoteListData {
         this.modifiedDate = vote.getModifiedDate();
         this.titleA = vote.getTitleA();
         this.titleB = vote.getTitleB();
+        this.detail = vote.getDetail();
         this.countVoted = countVoted;
-        UserData userData = new UserData(vote.getPostedUser());
-        this.writer = userData;
-    }
-
-    public VoteListData(final Vote vote) {
-        this.voteId = vote.getId();
-        this.totalTitle = vote.getTotalTitle();
-        this.category = vote.getCategory();
-        this.filteredGender = vote.getFilteredGender();
-        this.filteredAge = vote.getFilteredAge();
-        this.filteredMbti = vote.getFilteredMbti();
-        this.imageA = vote.getImageA();
-        this.imageB = vote.getImageB();
-        this.modifiedDate = vote.getModifiedDate();
-        this.titleA = vote.getTitleA();
-        this.titleB = vote.getTitleB();
-        this.countVoted = 0L;
         UserData userData = new UserData(vote.getPostedUser());
         this.writer = userData;
     }

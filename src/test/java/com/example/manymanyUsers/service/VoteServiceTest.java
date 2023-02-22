@@ -71,7 +71,7 @@ public class VoteServiceTest {
 
         //then
         assertEquals(vote.getPostedUser(), user);
-        assertEquals(vote.getTotalTitle(), createVoteRequest.getTitle());
+        assertEquals(vote.getTitle(), createVoteRequest.getTitle());
         assertEquals(vote.getImageA(), createVoteRequest.getImageA());
         assertEquals(vote.getImageB(), createVoteRequest.getImageB());
         assertEquals(vote.getTitleA(), createVoteRequest.getTitleA());
@@ -233,7 +233,7 @@ public class VoteServiceTest {
 
         Optional<Vote> byProviderId = voteRepository.findByPostedUser(user);
         Vote vote = byProviderId.get();
-        System.out.println("수정 전 타이틀: " + vote.getTotalTitle());
+        System.out.println("수정 전 타이틀: " + vote.getTitle());
         System.out.println("수정 전 이미지: " + vote.getImageA());
         System.out.println("수정 전 이미지: " + vote.getImageB());
         System.out.println("수정 전 타이틀A " + vote.getTitleA());
@@ -255,12 +255,12 @@ public class VoteServiceTest {
         //then
 
         assertEquals(vote.getPostedUser(), user);
-        assertEquals(vote.getTotalTitle(), updateVoteRequest.getTitle());
+        assertEquals(vote.getTitle(), updateVoteRequest.getTitle());
         assertEquals(vote.getCategory(), updateVoteRequest.getCategory());
         assertEquals(vote.getDetail(), updateVoteRequest.getDetail());
         assertEquals(vote.getCategory(), updateVoteRequest.getCategory());
 
-        System.out.println("수정 후 타이틀: " + vote.getTotalTitle());
+        System.out.println("수정 후 타이틀: " + vote.getTitle());
         System.out.println("수정 후 이미지: " + vote.getImageA());
         System.out.println("수정 후 이미지: " + vote.getImageB());
         System.out.println("수정 후 타이틀A " + vote.getTitleA());
@@ -303,7 +303,7 @@ public class VoteServiceTest {
 
         //then
         assertEquals(vote.getPostedUser(), user);
-        assertEquals(vote.getTotalTitle(), updateVoteRequest.getTitle());
+        assertEquals(vote.getTitle(), updateVoteRequest.getTitle());
         assertEquals(vote.getCategory(), updateVoteRequest.getCategory());
         assertEquals(vote.getDetail(), updateVoteRequest.getDetail());
         assertEquals(vote.getCategory(), updateVoteRequest.getCategory());
@@ -346,7 +346,7 @@ public class VoteServiceTest {
 
         //then
         assertEquals(vote.getPostedUser(), user);
-        assertEquals(vote.getTotalTitle(), updateVoteRequest.getTitle());
+        assertEquals(vote.getTitle(), updateVoteRequest.getTitle());
         assertEquals(vote.getCategory(), updateVoteRequest.getCategory());
         assertEquals(vote.getDetail(), updateVoteRequest.getDetail());
         assertEquals(vote.getCategory(), updateVoteRequest.getCategory());

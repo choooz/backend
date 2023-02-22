@@ -38,7 +38,7 @@ public class Vote extends BaseTimeEntity {
     private List<VoteResult> voteResultList = new ArrayList<>();
 
     @Column
-    private String totalTitle;
+    private String title;
 
     @Column
     private String imageA;
@@ -76,9 +76,9 @@ public class Vote extends BaseTimeEntity {
     private MBTI filteredMbti;
 
     @Builder
-    public Vote(User postedUser, String totalTitle, String imageA, String imageB, String titleA, String titleB, String detail, Category category, Gender filteredGender, Age filteredAge, MBTI filteredMbti) {
+    public Vote(User postedUser, String title, String imageA, String imageB, String titleA, String titleB, String detail, Category category, Gender filteredGender, Age filteredAge, MBTI filteredMbti) {
         this.postedUser = postedUser;
-        this.totalTitle = totalTitle;
+        this.title = title;
         this.imageA = imageA;
         this.imageB = imageB;
         this.titleA = titleA;
@@ -91,7 +91,7 @@ public class Vote extends BaseTimeEntity {
     }
 
     public void  update(UpdateVoteRequest updateVoteRequest) {
-        this.totalTitle = updateVoteRequest.getTitle();
+        this.title = updateVoteRequest.getTitle();
         this.titleA = updateVoteRequest.getTitleA();
         this.titleB = updateVoteRequest.getTitleB();
         this.detail = updateVoteRequest.getDetail();
