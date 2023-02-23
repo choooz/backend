@@ -28,6 +28,7 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
     @Query("SELECT v FROM Vote v JOIN v.voteResultList vr where vr.votedUser = :user")
     Slice<Vote> findParticipatedVoteByUser(User user,PageRequest pageRequest);
 
+
     Long countVoteByPostedUser(User user);
 
 //    List<Vote> findAllByBookmarked(User user);
