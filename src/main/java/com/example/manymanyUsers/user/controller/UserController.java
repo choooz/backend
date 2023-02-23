@@ -95,9 +95,9 @@ public class UserController {
                     .imageA(vote.getImageA())
                     .imageB(vote.getImageB())
                     .title(vote.getTitle())
-                    .countChoice(statisticsService.getTotalStatistics(vote.getId()))
+                    .countVoted(statisticsService.getTotalStatistics(vote.getId()))
                     .countComment(commentService.getCommentsCountByVote(vote.getId()))
-                    .createdDate(vote.getCreatedDate())
+                    .modifiedDate(vote.getModifiedDate())
                     .build();
             responses.add(myPageResponse);
         }

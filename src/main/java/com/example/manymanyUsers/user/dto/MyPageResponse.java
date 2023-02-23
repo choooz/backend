@@ -16,24 +16,24 @@ public class MyPageResponse {
 
     private String title;
 
-    private Long countChoice;
+    private Long countVoted;
 
     private Long countComment;
 
-    private LocalDateTime createdDate;
+    private LocalDateTime modifiedDate;
 
 
 
 
 
     @Builder
-    public MyPageResponse(Long voteId,String imageA, String imageB, String title, Long countChoice,Long countComment , LocalDateTime createdDate){
+    public MyPageResponse(Long voteId, String imageA, String imageB, String title, Long countVoted, Long countComment , LocalDateTime modifiedDate){
         this.voteId = voteId;
         this.imageA = imageA;
         this.imageB = imageB;
         this.title = title;
-        this.countChoice =countChoice;
+        this.countVoted = countVoted;
         this.countComment = countComment;
-        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
     }
 }
