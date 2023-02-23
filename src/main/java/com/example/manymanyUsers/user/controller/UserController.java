@@ -8,6 +8,7 @@ import com.example.manymanyUsers.user.dto.*;
 import com.example.manymanyUsers.user.service.UserService;
 import com.example.manymanyUsers.common.dto.CommonResponse;
 import com.example.manymanyUsers.vote.domain.Vote;
+import com.example.manymanyUsers.vote.enums.VoteType;
 import com.example.manymanyUsers.vote.service.VoteService;
 import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -79,15 +81,15 @@ public class UserController {
 
     @Operation(description = "마이페이지 타입별 voteList 요청 api")
     @GetMapping("/mypage")
-    public ResponseEntity<List<MyPageResponse>> getVotesByUser(@Parameter(description = "created,participated,bookmarked", required = true, example = "created") @RequestParam String voteType, @RequestAttribute Claims claims){
+    public ResponseEntity<List<MyPageResponse>> getVotesByUser(@Parameter(description = "created,participated,bookmarked", required = true) @RequestParam VoteType voteType, @RequestParam int page, @RequestParam int size, @RequestAttribute Claims claims) {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
         List<MyPageResponse> responses = new ArrayList<>();
 
-        List<Vote> voteList = voteService.getVotesByUser(longId, voteType);
+        Slice<Vote> voteList = voteService.getVotesByUser(longId, voteType, page, size);
 
-        for(Vote vote : voteList){
+        for (Vote vote : voteList) {
             MyPageResponse myPageResponse = MyPageResponse.builder()
                     .voteId(vote.getId())
                     .imageA(vote.getImageA())
@@ -100,7 +102,7 @@ public class UserController {
             responses.add(myPageResponse);
         }
 
-        return new ResponseEntity(responses,HttpStatus.OK);
+        return new ResponseEntity(responses, HttpStatus.OK);
 
     }
 
