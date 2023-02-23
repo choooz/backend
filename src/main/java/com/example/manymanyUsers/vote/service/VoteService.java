@@ -10,9 +10,11 @@ import com.example.manymanyUsers.vote.domain.VoteResult;
 import com.example.manymanyUsers.vote.dto.*;
 import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.SortBy;
+import com.example.manymanyUsers.vote.enums.VoteType;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import com.example.manymanyUsers.vote.repository.VoteResultRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Request;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -175,16 +177,17 @@ public class VoteService {
 
     }
 
-    public List<Vote> getVotesByUser(Long userId, String type) {
+    public Slice<Vote> getVotesByUser(Long userId, VoteType type , int page, int size) {
         User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        List<Vote> voteList = new ArrayList<>();
+        Slice<Vote> voteList = null;
+        PageRequest pageRequest = PageRequest.of(page,size);
         //작성한 vote
-        if (type.equals("created")){
-            voteList=voteRepository.findAllByPostedUser(findUser);
+        if (type == VoteType.created){
+            voteList=voteRepository.findAllByPostedUser(findUser,pageRequest);
         }
         //참여한 vote
-        else if(type.equals("participated")){
-            voteList=voteRepository.findParticipatedVoteByUser(findUser);
+        else if(type == VoteType.participated){
+            voteList=voteRepository.findParticipatedVoteByUser(findUser,pageRequest);
         }
         //북마크한 vote
 //        else if(type.equals("bookmarked")){
