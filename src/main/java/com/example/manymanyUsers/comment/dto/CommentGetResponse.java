@@ -39,11 +39,9 @@ public class CommentGetResponse {
 
     private Long likeCount;
 
-
     private Long hateCount;
 
     private List<CommentGetResponse> children = new ArrayList<>();
-
 
 
 }
