@@ -65,8 +65,7 @@ public class VoteController {
     @Operation(description = "투표 단건 조회")
     @GetMapping("/{voteId}")
     public ResponseEntity<GetVoteResponse> getVote(@PathVariable Long voteId, @RequestAttribute Long userId) {
-        System.out.println("userId = " + userId);
-        Vote vote = voteService.getVote(voteId);
+        Vote vote = voteService.getVote(voteId, userId);
 
         User writer = vote.getPostedUser(); // 투표 작성자
 
@@ -79,7 +78,7 @@ public class VoteController {
                 .build();
 
         GetVoteResponse getVoteResponse = GetVoteResponse.builder()
-                .user(getVoteUserResponse)
+                .writer(getVoteUserResponse)
                 .voteCreatedDate(vote.getCreatedDate())
                 .category(vote.getCategory())
                 .title(vote.getTitle())

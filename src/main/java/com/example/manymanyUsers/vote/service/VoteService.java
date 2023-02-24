@@ -154,8 +154,9 @@ public class VoteService {
     }
 
 
-    public Vote getVote(Long voteId) {
+    public Vote getVote(Long voteId, Long userId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+
 
         return vote;
     }
