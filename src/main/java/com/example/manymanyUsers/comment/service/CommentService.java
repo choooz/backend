@@ -40,52 +40,51 @@ public class CommentService {
     private final VoteRepository voteRepository;
 
 
-    public void createComment(Long voteId, CommentCreateRequest commentCreateRequest, Long userId) {
+    public void createComment(Long voteId, Long parentId, String content, Long userId) {
 
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        Comment parentComment = null;
 
-        Comment parent = null;
         //대댓글 이면
-        if(commentCreateRequest.getParentId() != null){
-            Optional<Comment> byParentId = commentRepository.findById(commentCreateRequest.getParentId());
-            parent = byParentId.get();
+        if (parentId != null) {
+            parentComment = commentRepository.findById(parentId).orElseThrow(CommentNotFoundException::new);
         }
 
         Comment comment = Comment.builder()
                 .voteId(voteId)
-                .content(commentCreateRequest.getContent())
+                .content(content)
                 .commentUser(user)
                 .mbti(user.getMbti())
                 .gender(user.getGender())
                 .age(user.classifyAge(user.getAge()))
                 .build();
-        if(null != parent){
-            comment.updateParent(parent);
-        }
+        comment.updateParent(parentComment);
         commentRepository.save(comment);
     }
 
 
-    public List<Comment> getComments(Long voteId, Gender gender, Age age, MBTI mbti, int size, int page, CommentSortBy sortBy) throws VoteNotFoundException{
+    public List<Comment> getComments(Long voteId, Gender gender, Age age, MBTI mbti, int size, int page, CommentSortBy sortBy) throws VoteNotFoundException {
 
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
-        Pageable pageable = PageRequest.of(page,size);
+        Pageable pageable = PageRequest.of(page, size);
 
         List<Comment> comments = new ArrayList<>(); //댓글
         List<Comment> childComments = new ArrayList<>(); //대댓글
 
-        if(sortBy.equals(CommentSortBy.ByPopularity)) {
+        if (CommentSortBy.ByPopularity == sortBy) {
+            //인기순
             comments = commentRepository.findHotComments(voteId, gender, age, mbti, pageable);
-        }
-        else{
-            comments = commentRepository.findNewestComments(voteId,gender,age,mbti,pageable);
+        } 
+        else if (CommentSortBy.ByTime == sortBy){
+            //최신순
+            comments = commentRepository.findNewestComments(voteId, gender, age, mbti, pageable);
         }
 
-
-        for(Comment parentComment : comments){
-            childComments.addAll(commentRepository.findChildComments(voteId,gender,age,mbti,parentComment));
+        //대댓글 가져오기
+        for (Comment parentComment : comments) {
+            childComments.addAll(commentRepository.findChildComments(voteId, gender, age, mbti, parentComment));
         }
 
         comments.addAll(childComments);

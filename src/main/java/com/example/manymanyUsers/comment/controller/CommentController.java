@@ -36,7 +36,7 @@ public class CommentController {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
-        commentService.createComment(voteId,commentCreateRequest,longId);
+        commentService.createComment(voteId,commentCreateRequest.getParentId(),commentCreateRequest.getContent(),longId);
 
         CommonResponse commonResponse = CommonResponse.builder()
                 .message("댓글 생성에 성공했습니다.")
