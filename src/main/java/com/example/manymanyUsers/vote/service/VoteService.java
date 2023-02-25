@@ -1,7 +1,5 @@
 package com.example.manymanyUsers.vote.service;
 
-import com.example.manymanyUsers.comment.domain.CommentEmotion;
-import com.example.manymanyUsers.comment.enums.Emotion;
 import com.example.manymanyUsers.exception.user.UserNotFoundException;
 import com.example.manymanyUsers.exception.vote.AlreadyUserDoVoteException;
 import com.example.manymanyUsers.exception.vote.VoteNotFoundException;
@@ -24,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

@@ -140,7 +140,6 @@ public class VoteController {
         return new ResponseEntity(commonResponse ,HttpStatus.OK);
     }
 
-
     @Operation(description = "투표 검색어 추천")
     @GetMapping("/recommend")
     public ResponseEntity recommendVote(@RequestParam String keyword, @RequestParam(required = false) Category category) {
@@ -154,8 +153,6 @@ public class VoteController {
 
 
     }
-
-}
 
     @Operation(description = "투표 북마크")
     @PostMapping("/{voteId}/bookmark")
