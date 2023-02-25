@@ -1,7 +1,5 @@
 package com.example.manymanyUsers.vote.service;
 
-import com.example.manymanyUsers.comment.domain.CommentEmotion;
-import com.example.manymanyUsers.comment.enums.Emotion;
 import com.example.manymanyUsers.exception.user.UserNotFoundException;
 import com.example.manymanyUsers.exception.vote.AlreadyUserDoVoteException;
 import com.example.manymanyUsers.exception.vote.VoteNotFoundException;
@@ -18,15 +16,12 @@ import com.example.manymanyUsers.vote.enums.VoteType;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import com.example.manymanyUsers.vote.repository.VoteResultRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Request;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -37,7 +32,6 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;
     private final VoteResultRepository voteResultRepository;
-
     private final BookmarkRepository bookmarkRepository;
 
 
@@ -197,9 +191,9 @@ public class VoteService {
             voteList=voteRepository.findParticipatedVoteByUser(findUser,pageRequest);
         }
         //북마크한 vote
-//        else if(type.equals("bookmarked")){
-//            voteList=voteRepository.findAllByBookmarked(findUser);
-//        }
+        else if(type == VoteType.bookmarked){
+            voteList=voteRepository.findBookmarkedVoteByUser(findUser,pageRequest);
+        }
         return voteList;
     }
 

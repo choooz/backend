@@ -11,10 +11,11 @@ public class MyPageCountResponse {
 
     Long countParticipatedVote;
 
-//    Long countBookmarkedVote;
+    Long countBookmarkedVote;
 
-    public MyPageCountResponse(Long countCreatedVote, Long countParticipatedVote){
+    public MyPageCountResponse(Long countCreatedVote, Long countParticipatedVote, Long countBookmarkedVote) {
         this.countCreatedVote = countCreatedVote;
         this.countParticipatedVote = countParticipatedVote;
+        this.countBookmarkedVote = countBookmarkedVote;
     }
 }
