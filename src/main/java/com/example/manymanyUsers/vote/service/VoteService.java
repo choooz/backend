@@ -1,15 +1,19 @@
 package com.example.manymanyUsers.vote.service;
 
+import com.example.manymanyUsers.comment.domain.CommentEmotion;
+import com.example.manymanyUsers.comment.enums.Emotion;
 import com.example.manymanyUsers.exception.user.UserNotFoundException;
 import com.example.manymanyUsers.exception.vote.AlreadyUserDoVoteException;
 import com.example.manymanyUsers.exception.vote.VoteNotFoundException;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
+import com.example.manymanyUsers.vote.domain.Bookmark;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.domain.VoteResult;
 import com.example.manymanyUsers.vote.dto.*;
 import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.SortBy;
+import com.example.manymanyUsers.vote.repository.BookmarkRepository;
 import com.example.manymanyUsers.vote.enums.VoteType;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import com.example.manymanyUsers.vote.repository.VoteResultRepository;
@@ -20,8 +24,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @RequiredArgsConstructor
@@ -31,6 +35,8 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;
     private final VoteResultRepository voteResultRepository;
+
+    private final BookmarkRepository bookmarkRepository;
 
 
 
@@ -151,10 +157,14 @@ public class VoteService {
     }
 
 
-    public Vote getVote(Long voteId) {
+    public FindVoteData getVote(Long voteId, Long userId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
-        return vote;
+        List<VoteResult> byVotedUserId = voteResultRepository.findByVotedUserId(userId);
+
+        boolean isVoted = byVotedUserId.isEmpty() ? false : true;
+
+        return new FindVoteData(vote, isVoted);
     }
 
     public void updateVote(@Valid UpdateVoteRequest updateVoteRequest, Long userId, Long voteId) throws UserNotFoundException, VoteNotFoundException {
@@ -193,6 +203,7 @@ public class VoteService {
         return voteList;
     }
 
+
     public List<String> getRecommendVoteList(String keyword, Category category) {
 
         List<Vote> voteList = voteRepository.findByCategoryAndTitleContains(category, keyword);
@@ -207,6 +218,33 @@ public class VoteService {
         }
 
         return recommendKeywordList;
+    }
+
+
+    public void bookmarkVote(Long userId, Long voteId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+
+        Optional<Bookmark> byVoteAndUser = bookmarkRepository.findByVoteAndUser(vote, user);
+
+        byVoteAndUser.ifPresentOrElse(
+                bookmark -> {
+                    //북마크를 눌렀는데 또 눌렀을 경우 북마크 취소
+                    bookmarkRepository.delete(bookmark);
+                    vote.removeBookmark(bookmark);
+                },
+                // 북마크가 없을 경우 북마크 추가
+                () -> {
+                    Bookmark bookmark = new Bookmark();
+
+                    bookmark.mappingVote(vote);
+                    bookmark.mappingUser(user);
+
+                    bookmarkRepository.save(bookmark);
+
+                }
+        );
+
     }
 
 }

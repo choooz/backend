@@ -10,8 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-
-import java.util.List;
 import java.util.Optional;
 
 public interface VoteRepository extends JpaRepository<Vote, Long> {
@@ -21,12 +19,21 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
 
     Slice<Vote> findByCategory(Category category, Pageable pageable);
 
+
     Optional<Vote> findById(Long voteId);
 
     Slice<Vote> findAllByPostedUser(User user,PageRequest pageRequest);
 
     @Query("SELECT v FROM Vote v JOIN v.voteResultList vr where vr.votedUser = :user")
     Slice<Vote> findParticipatedVoteByUser(User user,PageRequest pageRequest);
+
+
+    //투표와 투표 안의 작성자(User)를 불러와야하고 조회하는(User)가 현재 투표에 참여했는지 여부를 판별해야함
+    //조회하는 User의 id로 vote와 매칭되는 voteResult가 있으면 => isVoted 에 true
+    @Query("SELECT v FROM Vote v " +
+            "join v.postedUser " +
+            "where v.id = :voteId")
+    Optional<Vote> findById(@Param("voteId") Long voteId);
 
 
     Long countVoteByPostedUser(User user);
