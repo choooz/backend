@@ -67,14 +67,14 @@ public class VoteController {
     public ResponseEntity<GetVoteResponse> getVote(@PathVariable Long voteId, @RequestAttribute Long userId) {
         Vote vote = voteService.getVote(voteId, userId);
 
-        User writer = vote.getPostedUser(); // 투표 작성자
+
 
         GetVoteUserResponse getVoteUserResponse = GetVoteUserResponse.builder()
-                .userImage(writer.getImageUrl())
-                .userGender(writer.getGender())
-                .userAge(writer.classifyAge(writer.getAge()))
-                .userMbti(writer.getMbti())
-                .nickName(writer.getNickname())
+                .userImage(vote.getPostedUser().getImageUrl())
+                .userGender(vote.getPostedUser().getGender())
+                .userAge(vote.getPostedUser().classifyAge(vote.getPostedUser().getAge()))
+                .userMbti(vote.getPostedUser().getMbti())
+                .nickName(vote.getPostedUser().getNickname())
                 .build();
 
         GetVoteResponse getVoteResponse = GetVoteResponse.builder()
