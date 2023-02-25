@@ -25,7 +25,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -161,10 +160,14 @@ public class VoteService {
     }
 
 
-    public Vote getVote(Long voteId) {
+    public FindVoteData getVote(Long voteId, Long userId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
-        return vote;
+        List<VoteResult> byVotedUserId = voteResultRepository.findByVotedUserId(userId);
+
+        boolean isVoted = byVotedUserId.isEmpty() ? false : true;
+
+        return new FindVoteData(vote, isVoted);
     }
 
     public void updateVote(@Valid UpdateVoteRequest updateVoteRequest, Long userId, Long voteId) throws UserNotFoundException, VoteNotFoundException {

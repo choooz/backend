@@ -59,6 +59,31 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                     throw jwtException;
                 }
         }
+
+        if( requestURL.contains(baseUrl + "/votes")
+                && (
+                request.getMethod().equals("GET")
+        )
+        ){
+            String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+            if (authorizationHeader == null) {
+                Long userId = 0L;
+                request.setAttribute("userId",userId);
+            }else {
+                try {
+                    HashMap<String, Object> parseJwtTokenMap = jwtTokenProvider.parseJwtToken(authorizationHeader);
+                    Claims claims = (Claims)parseJwtTokenMap.get("claims");
+                    String token = (String) parseJwtTokenMap.get("token");
+                    Integer Id = (int) claims.get("userId");
+                    Long userId = Long.valueOf(Id);
+                    request.setAttribute("userId", userId); // jwt 정보 컨트롤러에서 사용할 수 있게 request에 담기
+                    request.setAttribute("token",token);
+                } catch (ExpiredJwtException jwtException) {
+                    throw jwtException;
+                }
+            }
+        }
+
             filterChain.doFilter(request, response);
     }
 
