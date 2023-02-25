@@ -51,4 +51,12 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
             "order by count(vr.vote.id) DESC")
     Slice<Vote> findWithVoteResult(@Param("category") Category category, PageRequest pageRequest);
 
+    @Query("SELECT distinct v FROM Vote v " +
+            "left join FETCH v.voteResultList vr " +
+            "join FETCH v.postedUser pu " +
+            "WHERE v.category IS NULL OR v.category = :category AND (v.title LIKE :keyword%)" +
+            "GROUP BY v.id, vr.id " +
+            "order by count(vr.vote.id) DESC")
+    List<Vote> findByCategoryAndTitleContains(@Param("category")Category category, @Param("keyword")String keyword);
+
 }
