@@ -65,9 +65,8 @@ public class VoteController {
     @Operation(description = "투표 단건 조회")
     @GetMapping("/{voteId}")
     public ResponseEntity<GetVoteResponse> getVote(@PathVariable Long voteId, @RequestAttribute Long userId) {
-        Vote vote = voteService.getVote(voteId, userId);
-
-
+        FindVoteData findVoteData = voteService.getVote(voteId, userId);
+        Vote vote = findVoteData.getVote();
 
         GetVoteUserResponse getVoteUserResponse = GetVoteUserResponse.builder()
                 .userImage(vote.getPostedUser().getImageUrl())
@@ -90,6 +89,7 @@ public class VoteController {
                 .titleA(vote.getTitleA())
                 .titleB(vote.getTitleB())
                 .description(vote.getDetail())
+                .isVoted(findVoteData.isVoted())
                 .build();
 
         return new ResponseEntity(getVoteResponse,HttpStatus.OK);

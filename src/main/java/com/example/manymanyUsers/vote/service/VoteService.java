@@ -14,14 +14,12 @@ import com.example.manymanyUsers.vote.enums.VoteType;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import com.example.manymanyUsers.vote.repository.VoteResultRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Request;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -154,11 +152,14 @@ public class VoteService {
     }
 
 
-    public Vote getVote(Long voteId, Long userId) {
+    public FindVoteData getVote(Long voteId, Long userId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
+        List<VoteResult> byVotedUserId = voteResultRepository.findByVotedUserId(userId);
 
-        return vote;
+        boolean isVoted = byVotedUserId.isEmpty() ? false : true;
+
+        return new FindVoteData(vote, isVoted);
     }
 
     public void updateVote(@Valid UpdateVoteRequest updateVoteRequest, Long userId, Long voteId) throws UserNotFoundException, VoteNotFoundException {
