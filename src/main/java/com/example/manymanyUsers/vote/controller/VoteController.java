@@ -138,5 +138,20 @@ public class VoteController {
 
         return new ResponseEntity(commonResponse ,HttpStatus.OK);
     }
+
+    @Operation(description = "투표 북마크")
+    @PostMapping("/{voteId}/bookmark")
+    public ResponseEntity<CommonResponse> bookmarkVote(@PathVariable Long voteId, @RequestAttribute Claims claims) {
+        Integer userId = (int) claims.get("userId");
+        Long longId = Long.valueOf(userId);
+        voteService.bookmarkVote(longId, voteId);
+
+        CommonResponse commonResponse = CommonResponse.builder()
+                .message("투표 북마크 처리를 성공했습니다.")
+                .build();
+
+        return new ResponseEntity(commonResponse,HttpStatus.OK);
+    }
+
     
 }
