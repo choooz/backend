@@ -18,7 +18,6 @@ import com.example.manymanyUsers.vote.enums.VoteType;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import com.example.manymanyUsers.vote.repository.VoteResultRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Request;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -127,8 +126,6 @@ public class VoteService {
         return voteListData;
     }
 
-
-
 //    private Slice<VoteListData> getVoteByPopularity(Category category, PageRequest pageRequest) {
 //
 //        Slice<VoteResult> voteSlice = voteResultRepository.findWithVoteFROMResult(category, pageRequest);
@@ -206,6 +203,24 @@ public class VoteService {
         return voteList;
     }
 
+
+    public List<String> getRecommendVoteList(String keyword, Category category) {
+
+        List<Vote> voteList = voteRepository.findByCategoryAndTitleContains(category, keyword);
+        List<String> recommendKeywordList = new ArrayList<>();
+
+        int i = 0;
+        for(Vote vote : voteList) {
+            recommendKeywordList.add(vote.getTitle());
+            i++;
+            if(i == 5)
+                break;
+        }
+
+        return recommendKeywordList;
+    }
+
+
     public void bookmarkVote(Long userId, Long voteId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
@@ -231,4 +246,5 @@ public class VoteService {
         );
 
     }
+
 }

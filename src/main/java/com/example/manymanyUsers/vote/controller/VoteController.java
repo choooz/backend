@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RequestMapping("/api/votes")
 @RestController
@@ -138,6 +139,23 @@ public class VoteController {
 
         return new ResponseEntity(commonResponse ,HttpStatus.OK);
     }
+
+
+    @Operation(description = "투표 검색어 추천")
+    @GetMapping("/recommend")
+    public ResponseEntity recommendVote(@RequestParam String keyword, @RequestParam(required = false) Category category) {
+
+        List<String> voteRecommendListData = voteService.getRecommendVoteList(keyword, category);
+
+        GetVoteRecommendListResponse voteResponse = GetVoteRecommendListResponse.builder()
+                .recommendKeywords(voteRecommendListData)
+                .build();
+        return new ResponseEntity(voteResponse, HttpStatus.OK);
+
+
+    }
+
+}
 
     @Operation(description = "투표 북마크")
     @PostMapping("/{voteId}/bookmark")
