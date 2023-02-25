@@ -4,6 +4,7 @@ import com.example.manymanyUsers.comment.domain.CommentEmotion;
 import com.example.manymanyUsers.common.domain.BaseTimeEntity;
 import com.example.manymanyUsers.user.enums.Providers;
 import com.example.manymanyUsers.user.enums.Role;
+import com.example.manymanyUsers.vote.domain.Bookmark;
 import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
@@ -57,12 +58,19 @@ public class User extends BaseTimeEntity {
     @Column(name = "modified_MBTI_Date")
     private LocalDateTime modifiedMBTIDate;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Bookmark> bookmarkList = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<CommentEmotion> commentEmotionList = new ArrayList<>();
 
+
     public void mappingCommentLike(CommentEmotion commentEmotion) {
         this.commentEmotionList.add(commentEmotion);
+    }
+
+    public void mappingBookmark(Bookmark bookmark) {
+        this.bookmarkList.add(bookmark);
     }
 
     public void updateProfile(String nickname, String image, MBTI mbti, LocalDateTime modifiedMBTIDate) {
