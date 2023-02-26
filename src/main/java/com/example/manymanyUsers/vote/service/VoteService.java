@@ -196,6 +196,7 @@ public class VoteService {
             voteList=voteRepository.findParticipatedVoteByUser(findUser,pageRequest);
         }
         //북마크한 vote
+
 //        else if(type.equals("bookmarked")){
 //            voteList=voteRepository.findAllByBookmarked(findUser);
 //        }
