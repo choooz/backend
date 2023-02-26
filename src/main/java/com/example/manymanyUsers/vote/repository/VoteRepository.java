@@ -20,9 +20,6 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
 
     Slice<Vote> findByCategory(Category category, Pageable pageable);
 
-
-    Optional<Vote> findById(Long voteId);
-
     Slice<Vote> findAllByPostedUser(User user,PageRequest pageRequest);
 
     @Query("SELECT v FROM Vote v JOIN v.voteResultList vr where vr.votedUser = :user")
