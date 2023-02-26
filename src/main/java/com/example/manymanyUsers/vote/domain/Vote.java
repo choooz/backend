@@ -75,6 +75,13 @@ public class Vote extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MBTI filteredMbti;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Bookmark> bookmarkList = new ArrayList<>();
+
+    public void removeBookmark(Bookmark bookmark) {
+        this.bookmarkList.remove(bookmark);
+    }
+
     @Builder
     public Vote(User postedUser, String title, String imageA, String imageB, String titleA, String titleB, String detail, Category category, Gender filteredGender, Age filteredAge, MBTI filteredMbti) {
         this.postedUser = postedUser;
@@ -100,6 +107,10 @@ public class Vote extends BaseTimeEntity {
 
     public void addVoteResult(VoteResult voteResult) {
         this.voteResultList.add(voteResult);
+    }
+
+    public void mappingBookmark(Bookmark bookmark) {
+        this.bookmarkList.add(bookmark);
     }
 
 

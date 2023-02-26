@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RequestMapping("/api/votes")
 @RestController
@@ -64,21 +65,20 @@ public class VoteController {
 
     @Operation(description = "투표 단건 조회")
     @GetMapping("/{voteId}")
-    public ResponseEntity<GetVoteResponse> getVote(@PathVariable Long voteId) {
-        Vote vote = voteService.getVote(voteId);
-
-        User writer = vote.getPostedUser(); // 투표 작성자
+    public ResponseEntity<GetVoteResponse> getVote(@PathVariable Long voteId, @RequestAttribute Long userId) {
+        FindVoteData findVoteData = voteService.getVote(voteId, userId);
+        Vote vote = findVoteData.getVote();
 
         GetVoteUserResponse getVoteUserResponse = GetVoteUserResponse.builder()
-                .userImage(writer.getImageUrl())
-                .userGender(writer.getGender())
-                .userAge(writer.classifyAge(writer.getAge()))
-                .userMbti(writer.getMbti())
-                .nickName(writer.getNickname())
+                .userImage(vote.getPostedUser().getImageUrl())
+                .userGender(vote.getPostedUser().getGender())
+                .userAge(vote.getPostedUser().classifyAge(vote.getPostedUser().getAge()))
+                .userMbti(vote.getPostedUser().getMbti())
+                .nickName(vote.getPostedUser().getNickname())
                 .build();
 
         GetVoteResponse getVoteResponse = GetVoteResponse.builder()
-                .user(getVoteUserResponse)
+                .writer(getVoteUserResponse)
                 .voteCreatedDate(vote.getCreatedDate())
                 .category(vote.getCategory())
                 .title(vote.getTitle())
@@ -90,6 +90,7 @@ public class VoteController {
                 .titleA(vote.getTitleA())
                 .titleB(vote.getTitleB())
                 .description(vote.getDetail())
+                .isVoted(findVoteData.isVoted())
                 .build();
 
         return new ResponseEntity(getVoteResponse,HttpStatus.OK);
@@ -138,5 +139,34 @@ public class VoteController {
 
         return new ResponseEntity(commonResponse ,HttpStatus.OK);
     }
+
+    @Operation(description = "투표 검색어 추천")
+    @GetMapping("/recommend")
+    public ResponseEntity recommendVote(@RequestParam String keyword, @RequestParam(required = false) Category category) {
+
+        List<String> voteRecommendListData = voteService.getRecommendVoteList(keyword, category);
+
+        GetVoteRecommendListResponse voteResponse = GetVoteRecommendListResponse.builder()
+                .recommendKeywords(voteRecommendListData)
+                .build();
+        return new ResponseEntity(voteResponse, HttpStatus.OK);
+
+
+    }
+
+    @Operation(description = "투표 북마크")
+    @PostMapping("/{voteId}/bookmark")
+    public ResponseEntity<CommonResponse> bookmarkVote(@PathVariable Long voteId, @RequestAttribute Claims claims) {
+        Integer userId = (int) claims.get("userId");
+        Long longId = Long.valueOf(userId);
+        voteService.bookmarkVote(longId, voteId);
+
+        CommonResponse commonResponse = CommonResponse.builder()
+                .message("투표 북마크 처리를 성공했습니다.")
+                .build();
+
+        return new ResponseEntity(commonResponse,HttpStatus.OK);
+    }
+
     
 }
