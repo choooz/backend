@@ -122,8 +122,6 @@ public class VoteService {
         return voteListData;
     }
 
-
-
 //    private Slice<VoteListData> getVoteByPopularity(Category category, PageRequest pageRequest) {
 //
 //        Slice<VoteResult> voteSlice = voteResultRepository.findWithVoteFROMResult(category, pageRequest);
@@ -155,10 +153,14 @@ public class VoteService {
     }
 
 
-    public Vote getVote(Long voteId) {
+    public FindVoteData getVote(Long voteId, Long userId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
-        return vote;
+        List<VoteResult> byVotedUserId = voteResultRepository.findByVotedUserId(userId);
+
+        boolean isVoted = byVotedUserId.isEmpty() ? false : true;
+
+        return new FindVoteData(vote, isVoted);
     }
 
     public void updateVote(@Valid UpdateVoteRequest updateVoteRequest, Long userId, Long voteId) throws UserNotFoundException, VoteNotFoundException {
@@ -197,6 +199,24 @@ public class VoteService {
         return voteList;
     }
 
+
+    public List<String> getRecommendVoteList(String keyword, Category category) {
+
+        List<Vote> voteList = voteRepository.findByCategoryAndTitleContains(category, keyword);
+        List<String> recommendKeywordList = new ArrayList<>();
+
+        int i = 0;
+        for(Vote vote : voteList) {
+            recommendKeywordList.add(vote.getTitle());
+            i++;
+            if(i == 5)
+                break;
+        }
+
+        return recommendKeywordList;
+    }
+
+
     public void bookmarkVote(Long userId, Long voteId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
@@ -222,4 +242,5 @@ public class VoteService {
         );
 
     }
+
 }

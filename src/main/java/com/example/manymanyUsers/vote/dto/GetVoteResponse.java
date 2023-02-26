@@ -1,5 +1,6 @@
 package com.example.manymanyUsers.vote.dto;
 
+import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.Gender;
@@ -16,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 public class GetVoteResponse {
 
-    private GetVoteUserResponse user;
+    private GetVoteUserResponse writer;
 
     private LocalDateTime voteCreatedDate;
 
@@ -40,10 +41,12 @@ public class GetVoteResponse {
 
     private String description;
 
+    private boolean IsVoted;
+
     @Builder
-    public GetVoteResponse(GetVoteUserResponse user,String nickName, LocalDateTime voteCreatedDate, Category category, String title, String imageA
-    ,String imageB, Gender filteredGender, Age filteredAge, MBTI filteredMbti, String titleA, String titleB, String description){
-        this.user = user;
+    public GetVoteResponse(GetVoteUserResponse writer,String nickName, LocalDateTime voteCreatedDate, Category category, String title, String imageA
+    ,String imageB, Gender filteredGender, Age filteredAge, MBTI filteredMbti, String titleA, String titleB, String description, boolean isVoted){
+        this.writer = writer;
         this.voteCreatedDate = voteCreatedDate;
         this.category = category;
         this.title = title;
@@ -55,6 +58,7 @@ public class GetVoteResponse {
         this.titleA = titleA;
         this.titleB = titleB;
         this.description = description;
+        this.IsVoted = isVoted;
     }
 
 }
