@@ -121,5 +121,4 @@ public class User extends BaseTimeEntity {
         }
         return ageGroup;
     }
-
 }
