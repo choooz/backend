@@ -172,8 +172,15 @@ public class UserService {
 
 
         if (!isEqual) {
-            categoryRespository.deleteByUser(findUser);
-            addInterestCategory(categoryList, userId);
+            List<CategoryEntity> findUserCategoryLists = findUser.getCategoryLists();
+            for (Category list : categoryList) {
+                CategoryEntity category = new CategoryEntity();
+                category.setCategory(list);
+                categoryRespository.save(category);
+
+                findUserCategoryLists.add(category);
+                userRepository.save(findUser);
+            }
         }
 
 
