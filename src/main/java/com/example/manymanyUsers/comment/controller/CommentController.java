@@ -12,6 +12,10 @@ import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -48,9 +52,11 @@ public class CommentController {
 
     @Operation(description = "댓글 조회")
     @GetMapping("/votes/{voteId}/comments")
-    public ResponseEntity<List<CommentGetResponse>> getComment(@PathVariable Long voteId, @ModelAttribute CommentGetRequest commentGetRequest) {
+    public ResponseEntity<Slice<CommentGetResponse>> getComment(@PathVariable Long voteId, @ModelAttribute CommentGetRequest commentGetRequest) {
 
         List<Comment> comments = commentService.getComments(voteId, commentGetRequest.getGender(), commentGetRequest.getAge(), commentGetRequest.getMbti(), commentGetRequest.getSize(), commentGetRequest.getPage(), commentGetRequest.getSortBy());
+
+        Pageable pageable = PageRequest.of(commentGetRequest.getPage(), commentGetRequest.getSize());
 
         List<CommentGetResponse> commentGetResponse = new ArrayList<>();
         Map<Long, CommentGetResponse> map = new HashMap<>();
@@ -79,7 +85,11 @@ public class CommentController {
                 map.get(comment.getParent().getId()).getChildren().add(dto);
             } else commentGetResponse.add(dto);
         }
-        return ResponseEntity.ok().body(commentGetResponse);
+        boolean isLast = map.size() < commentGetRequest.getSize();
+
+
+        Slice<CommentGetResponse> slice = new SliceImpl<>(commentGetResponse, pageable, isLast);
+        return ResponseEntity.ok().body(slice);
     }
 
     @Operation(description = "맛보기 댓글 조회")

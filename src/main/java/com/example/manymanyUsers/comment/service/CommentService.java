@@ -23,6 +23,8 @@ import com.example.manymanyUsers.vote.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -81,13 +83,13 @@ public class CommentService {
             comments = commentRepository.findNewestComments(voteId, gender, age, mbti, pageable);
         }
 
+
         //대댓글 가져오기
         for (Comment parentComment : comments) {
             childComments.addAll(commentRepository.findChildComments(voteId, gender, age, mbti, parentComment));
         }
 
         comments.addAll(childComments);
-
 
         return comments;
     }

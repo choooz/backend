@@ -17,6 +17,7 @@ import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -81,13 +82,15 @@ public class UserController {
 
     @Operation(description = "마이페이지 타입별 voteList 요청 api")
     @GetMapping("/mypage")
-    public ResponseEntity<List<MyPageResponse>> getVotesByUser(@Parameter(description = "created,participated,bookmarked", required = true) @RequestParam VoteType voteType, @RequestParam int page, @RequestParam int size, @RequestAttribute Claims claims) {
+    public ResponseEntity<Slice<MyPageResponse>> getVotesByUser(@Parameter(description = "created,participated,bookmarked", required = true) @RequestParam VoteType voteType, @RequestParam int page, @RequestParam int size, @RequestAttribute Claims claims) {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
         List<MyPageResponse> responses = new ArrayList<>();
 
         Slice<Vote> voteList = voteService.getVotesByUser(longId, voteType, page, size);
+
+        boolean isLast = voteList.getSize() < size;
 
         for (Vote vote : voteList) {
             MyPageResponse myPageResponse = MyPageResponse.builder()
@@ -102,7 +105,10 @@ public class UserController {
             responses.add(myPageResponse);
         }
 
-        return new ResponseEntity(responses, HttpStatus.OK);
+        Slice<MyPageResponse> sliceResponse = new SliceImpl<>(responses, voteList.getPageable(), isLast);
+
+
+        return new ResponseEntity<>(sliceResponse, HttpStatus.OK);
 
     }
 
