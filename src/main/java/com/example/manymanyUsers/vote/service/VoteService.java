@@ -134,14 +134,8 @@ public class VoteService {
     }
 
 
-    public FindVoteData getVote(Long voteId, Long userId) {
-        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
-
-        List<VoteResult> byVotedUserId = voteResultRepository.findByVotedUserId(userId);
-
-        boolean isVoted = byVotedUserId.isEmpty() ? false : true;
-
-        return new FindVoteData(vote, isVoted);
+    public Vote getVote(Long voteId) {
+        return voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
     }
 
     public void updateVote(@Valid UpdateVoteRequest updateVoteRequest, Long userId, Long voteId) throws UserNotFoundException, VoteNotFoundException {

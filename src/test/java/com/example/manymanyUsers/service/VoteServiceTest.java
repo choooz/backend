@@ -188,7 +188,7 @@ public class VoteServiceTest {
             }
         }
         //when
-        Slice<VoteListData> voteSlice = voteService.getVoteList(SortBy.ByTime, 0, 10, null, 0L);
+        Slice<VoteListData> voteSlice = voteService.getVoteList(SortBy.ByTime, 0, 10, null);
         List<VoteListData> voteResultList = voteSlice.getContent();
         //then
         voteTestList.sort((v1,v2)-> {
@@ -495,8 +495,8 @@ public class VoteServiceTest {
         Vote vote = voteById.get();
 
         //when
-        FindVoteData findVoteData = voteService.getVote(vote.getId(), user.getId());
-        Vote getVote = findVoteData.getVote();
+        Vote getVote = voteService.getVote(vote.getId());
+
 
         //then
         assertEquals(vote,getVote);

@@ -33,13 +33,11 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
             "where v.id = :voteId")
     Optional<Vote> findById(@Param("voteId") Long voteId);
 
-
     Long countVoteByPostedUser(User user);
   
     Slice<Vote> findByCategoryAndTitleContains(Category category, String keyword, Pageable pageable);
 
     Slice<Vote> findSliceByTitleContains(String keyword, Pageable pageable);
-
 
     @Query("SELECT v FROM Vote v " +
             "left join FETCH v.voteResultList vr " +

@@ -41,11 +41,10 @@ public class GetVoteResponse {
 
     private String description;
 
-    private boolean IsVoted;
 
     @Builder
     public GetVoteResponse(GetVoteUserResponse writer,String nickName, LocalDateTime voteCreatedDate, Category category, String title, String imageA
-    ,String imageB, Gender filteredGender, Age filteredAge, MBTI filteredMbti, String titleA, String titleB, String description, boolean isVoted){
+    ,String imageB, Gender filteredGender, Age filteredAge, MBTI filteredMbti, String titleA, String titleB, String description){
         this.writer = writer;
         this.voteCreatedDate = voteCreatedDate;
         this.category = category;
@@ -58,7 +57,6 @@ public class GetVoteResponse {
         this.titleA = titleA;
         this.titleB = titleB;
         this.description = description;
-        this.IsVoted = isVoted;
     }
 
 }
