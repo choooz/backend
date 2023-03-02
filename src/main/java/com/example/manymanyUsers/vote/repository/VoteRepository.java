@@ -21,10 +21,9 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
 //    SELECT
 //    v.*, (SELECT count(vr.vote_id) FROM vote_result vr WHERE v.vote_id = vr.vote_id) AS cnt
 //    FROM vote v;
-    @Query("SELECT new com.example.manymanyUsers.vote.dto.FindVoteListData(v,(SELECT count(vr.vote) FROM VoteResult vr WHERE vr.vote = v)) FROM Vote v ORDER BY v.createdDate desc ")
-    Slice<FindVoteListData> findSliceBy(Pageable pageable);
-
-    Slice<Vote> findByCategory(Category category, Pageable pageable);
+    @Query("SELECT new com.example.manymanyUsers.vote.dto.FindVoteListData(v,(SELECT count(vr.vote) FROM VoteResult vr WHERE vr.vote = v))" +
+            "FROM Vote v WHERE (:category is null or v.category = :category)")
+    Slice<FindVoteListData> findSliceBy(@Param("category") Category category ,Pageable pageable);
 
     Slice<Vote> findAllByPostedUser(User user,PageRequest pageRequest);
 

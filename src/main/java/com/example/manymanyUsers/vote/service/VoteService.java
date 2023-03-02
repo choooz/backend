@@ -71,9 +71,6 @@ public class VoteService {
 
         voteResult.doVote(vote, user, doVote.getChoice());
 
-        //김민엽
-//        voteResult.mappingVote(vote);
-
         voteResultRepository.save(voteResult);
 
     }
@@ -96,21 +93,10 @@ public class VoteService {
     }
 
     private Slice<VoteListData> getVoteSortByTime(Category category, PageRequest pageRequest) {
-
-        Slice<Vote> voteSlice;
         Slice<VoteListData> voteListData;
 
-        if (category == null) {
-            Slice<FindVoteListData> sliceBy = voteRepository.findSliceBy(pageRequest);
-            voteListData = sliceBy.map(findVoteListData -> new VoteListData(findVoteListData.getVote(), findVoteListData.getCnt()));
-        }else{
-            voteSlice = voteRepository.findByCategory(category, pageRequest);
-             voteListData = voteSlice.map(vote -> {
-                vote.getPostedUser(); //프록시 처리된 user 엔티티 가져오기 위함
-                Long countVoted = voteResultRepository.countByVote(vote);
-                return new VoteListData(vote, countVoted);
-            });
-        }
+        Slice<FindVoteListData> sliceBy = voteRepository.findSliceBy(category, pageRequest);
+        voteListData = sliceBy.map(findVoteListData -> new VoteListData(findVoteListData.getVote(), findVoteListData.getCnt()));
 
 
         return voteListData;
