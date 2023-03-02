@@ -188,7 +188,7 @@ public class VoteServiceTest {
             }
         }
         //when
-        Slice<VoteListData> voteSlice = voteService.getVoteList(SortBy.ByTime, 0, 10, null);
+        Slice<VoteListData> voteSlice = voteService.getVoteList(SortBy.ByTime, 0, 10, null, 0L);
         List<VoteListData> voteResultList = voteSlice.getContent();
         //then
         voteTestList.sort((v1,v2)-> {

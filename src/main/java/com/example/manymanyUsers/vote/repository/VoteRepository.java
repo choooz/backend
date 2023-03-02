@@ -18,9 +18,6 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
     Optional<Vote> findByPostedUser(User postedUser);
 
 
-//    SELECT
-//    v.*, (SELECT count(vr.vote_id) FROM vote_result vr WHERE v.vote_id = vr.vote_id) AS cnt
-//    FROM vote v;
     @Query("SELECT new com.example.manymanyUsers.vote.dto.FindVoteListData(v,(SELECT count(vr.vote) FROM VoteResult vr WHERE vr.vote = v))" +
             "FROM Vote v WHERE (:category is null or v.category = :category)")
     Slice<FindVoteListData> findSliceBy(@Param("category") Category category ,Pageable pageable);
@@ -31,8 +28,6 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
     Slice<Vote> findParticipatedVoteByUser(User user,PageRequest pageRequest);
 
 
-    //투표와 투표 안의 작성자(User)를 불러와야하고 조회하는(User)가 현재 투표에 참여했는지 여부를 판별해야함
-    //조회하는 User의 id로 vote와 매칭되는 voteResult가 있으면 => isVoted 에 true
     @Query("SELECT v FROM Vote v " +
             "join v.postedUser " +
             "where v.id = :voteId")
@@ -40,18 +35,11 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
 
 
     Long countVoteByPostedUser(User user);
-
-//    List<Vote> findAllByBookmarked(User user);
-
   
     Slice<Vote> findByCategoryAndTitleContains(Category category, String keyword, Pageable pageable);
 
     Slice<Vote> findSliceByTitleContains(String keyword, Pageable pageable);
 
-
-    //    @Query("SELECT v,vr FROM VoteResult vr JOIN fetch vr.vote v GROUP BY v ORDER BY COUNT(v) DESC")
-    //    @Query(value = "SELECT v FROM VoteResult vr JOIN fetch vr.vote v")
-    //    List<Vote> findSliceByVoteResult();
 
     @Query("SELECT v FROM Vote v " +
             "left join FETCH v.voteResultList vr " +

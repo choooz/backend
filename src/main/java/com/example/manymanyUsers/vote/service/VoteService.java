@@ -25,6 +25,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 @RequiredArgsConstructor
@@ -75,13 +76,13 @@ public class VoteService {
 
     }
 
-    public Slice<VoteListData> getVoteList(SortBy sortBy, Integer page, Integer size, Category category){
+    public Slice<VoteListData> getVoteList(SortBy sortBy, Integer page, Integer size, Category category, Long userId){
 
         Slice<VoteListData> voteListData = null;
 
         if(sortBy.equals(SortBy.ByTime)){
             PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
-            voteListData = getVoteSortByTime(category, pageRequest);
+            voteListData = getVoteSortByTime(category, pageRequest, userId);
         } else if (sortBy.equals(SortBy.ByPopularity)) {
             PageRequest pageRequest = PageRequest.of(page, size);
             voteListData = getVoteByPopularity(category, pageRequest);
@@ -92,7 +93,7 @@ public class VoteService {
         return voteListData;
     }
 
-    private Slice<VoteListData> getVoteSortByTime(Category category, PageRequest pageRequest) {
+    private Slice<VoteListData> getVoteSortByTime(Category category, PageRequest pageRequest, Long userId) {
         Slice<VoteListData> voteListData;
 
         Slice<FindVoteListData> sliceBy = voteRepository.findSliceBy(category, pageRequest);
@@ -112,17 +113,6 @@ public class VoteService {
         });
         return voteListData;
     }
-
-//    private Slice<VoteListData> getVoteByPopularity(Category category, PageRequest pageRequest) {
-//
-//        Slice<VoteResult> voteSlice = voteResultRepository.findWithVoteFROMResult(category, pageRequest);
-//
-//        Slice<VoteListData> voteListData = voteSlice.map(voteResult -> {
-////            Long countVoted = voteResultRepository.countByVote(voteResult.getVote());
-//            return new VoteListData(voteResult.getVote());
-//        });
-//        return voteListData;
-//    }
 
     public Slice<VoteListData> getSearchVoteList(String keyword, SortBy sortBy, int page, int size, Category category) {
 
