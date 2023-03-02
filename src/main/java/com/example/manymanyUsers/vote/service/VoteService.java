@@ -76,13 +76,13 @@ public class VoteService {
 
     }
 
-    public Slice<VoteListData> getVoteList(SortBy sortBy, Integer page, Integer size, Category category, Long userId){
+    public Slice<VoteListData> getVoteList(SortBy sortBy, Integer page, Integer size, Category category){
 
         Slice<VoteListData> voteListData = null;
 
         if(sortBy.equals(SortBy.ByTime)){
             PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
-            voteListData = getVoteSortByTime(category, pageRequest, userId);
+            voteListData = getVoteSortByTime(category, pageRequest);
         } else if (sortBy.equals(SortBy.ByPopularity)) {
             PageRequest pageRequest = PageRequest.of(page, size);
             voteListData = getVoteByPopularity(category, pageRequest);
@@ -93,7 +93,7 @@ public class VoteService {
         return voteListData;
     }
 
-    private Slice<VoteListData> getVoteSortByTime(Category category, PageRequest pageRequest, Long userId) {
+    private Slice<VoteListData> getVoteSortByTime(Category category, PageRequest pageRequest) {
         Slice<VoteListData> voteListData;
 
         Slice<FindVoteListData> sliceBy = voteRepository.findSliceBy(category, pageRequest);
