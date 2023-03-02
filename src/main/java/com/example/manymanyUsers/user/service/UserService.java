@@ -12,6 +12,7 @@ import com.example.manymanyUsers.user.dto.SignUpRequest;
 import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
+import com.example.manymanyUsers.vote.repository.BookmarkRepository;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import com.example.manymanyUsers.vote.repository.VoteResultRepository;
 import javassist.NotFoundException;
@@ -34,10 +35,10 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final CategoryRespository categoryRespository;
-
     private final VoteRepository voteRepository;
-
     private final VoteResultRepository voteResultRepository;
+
+    private final BookmarkRepository bookmarkRepository;
 
 
     public Long registerUser(SignUpRequest signUpRequestDto) throws Exception{
@@ -134,16 +135,18 @@ public class UserService {
         User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Map<String, Long> map = new HashMap<>();
 
-        Long countCreatedVote = 0L;
-        Long countParticipatedVote = 0L;
+        Long createdVoteCount = 0L;
+        Long participatedVoteCount = 0L;
+        Long bookmarkedVoteCount = 0L;
 
 
-        countCreatedVote = voteRepository.countVoteByPostedUser(findUser);
-        countParticipatedVote = voteResultRepository.countByVotedUser(findUser);
-//        Long countBookmarkedVote =
+        createdVoteCount = voteRepository.countVoteByPostedUser(findUser);
+        participatedVoteCount = voteResultRepository.countByVotedUser(findUser);
+        bookmarkedVoteCount = bookmarkRepository.countByUser(findUser);
 
-        map.put("CreatedVote",countCreatedVote);
-        map.put("ParticipatedVote",countParticipatedVote);
+        map.put("CREATED_VOTE", createdVoteCount);
+        map.put("PARTICIPATED_VOTE", participatedVoteCount);
+        map.put("BOOKMARKED_VOTE", bookmarkedVoteCount);
 
         return map;
     }

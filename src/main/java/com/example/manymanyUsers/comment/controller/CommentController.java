@@ -12,6 +12,10 @@ import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +40,7 @@ public class CommentController {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
-        commentService.createComment(voteId,commentCreateRequest,longId);
+        commentService.createComment(voteId, commentCreateRequest.getParentId(), commentCreateRequest.getContent(), longId);
 
         CommonResponse commonResponse = CommonResponse.builder()
                 .message("댓글 생성에 성공했습니다.")
@@ -48,10 +52,12 @@ public class CommentController {
 
     @Operation(description = "댓글 조회")
     @GetMapping("/votes/{voteId}/comments")
-    public ResponseEntity<List<CommentGetResponse>> getComment(@PathVariable Long voteId, @ModelAttribute CommentGetRequest commentGetRequest) {
+    public ResponseEntity<Slice<CommentGetResponse>> getComment(@PathVariable Long voteId, @ModelAttribute CommentGetRequest commentGetRequest) {
 
-        List<Comment> comments = commentService.getComments(voteId, commentGetRequest.getGender(), commentGetRequest.getAge(), commentGetRequest.getMbti(), commentGetRequest.getSize(),commentGetRequest.getPage(),commentGetRequest.getSortBy());
-   
+        List<Comment> comments = commentService.getComments(voteId, commentGetRequest.getGender(), commentGetRequest.getAge(), commentGetRequest.getMbti(), commentGetRequest.getSize(), commentGetRequest.getPage(), commentGetRequest.getSortBy());
+
+        Pageable pageable = PageRequest.of(commentGetRequest.getPage(), commentGetRequest.getSize());
+
         List<CommentGetResponse> commentGetResponse = new ArrayList<>();
         Map<Long, CommentGetResponse> map = new HashMap<>();
 
@@ -75,13 +81,15 @@ public class CommentController {
             }
             map.put(dto.getId(), dto);
 
-            if(comment.getParent() != null) {
+            if (comment.getParent() != null) {
                 map.get(comment.getParent().getId()).getChildren().add(dto);
-            }
-
-            else commentGetResponse.add(dto);
+            } else commentGetResponse.add(dto);
         }
-        return ResponseEntity.ok().body(commentGetResponse);
+        boolean isLast = map.size() < commentGetRequest.getSize();
+
+
+        Slice<CommentGetResponse> slice = new SliceImpl<>(commentGetResponse, pageable, isLast);
+        return ResponseEntity.ok().body(slice);
     }
 
     @Operation(description = "맛보기 댓글 조회")
@@ -111,21 +119,20 @@ public class CommentController {
             }
             map.put(dto.getId(), dto);
 
-            if(comment.getParent() != null) {
+            if (comment.getParent() != null) {
                 map.get(comment.getParent().getId()).getChildren().add(dto);
-            }
-
-            else commentGetResponse.add(dto);
+            } else commentGetResponse.add(dto);
         }
         return ResponseEntity.ok().body(commentGetResponse);
     }
+
     @Operation(description = "댓글 수정")
     @PatchMapping("/votes/{voteId}/comments/{commentId}")
     public ResponseEntity<CommonResponse> updateComment(@PathVariable Long voteId, @PathVariable Long commentId, @Valid @RequestBody CommentUpdateRequest commentUpdateRequest, @RequestAttribute Claims claims) throws UserNotFoundException, VoteNotFoundException, CommentNotFoundException {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
-        commentService.updateComment(voteId,commentId,longId,commentUpdateRequest);
+        commentService.updateComment(voteId, commentId, longId, commentUpdateRequest);
 
         CommonResponse commentResponse = CommonResponse.builder()
                 .message("댓글 수정에 성공했습니다.")
@@ -137,11 +144,11 @@ public class CommentController {
 
     @Operation(description = "댓글 삭제")
     @DeleteMapping("/votes/{voteId}/comments/{commentId}")
-    public ResponseEntity<CommonResponse> deleteComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Claims claims) throws UserNotFoundException,VoteNotFoundException,CommentNotFoundException{
+    public ResponseEntity<CommonResponse> deleteComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Claims claims) throws UserNotFoundException, VoteNotFoundException, CommentNotFoundException {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
-        commentService.deleteComment(voteId,commentId,longId);
+        commentService.deleteComment(voteId, commentId, longId);
 
         CommonResponse commentResponse = CommonResponse.builder()
                 .message("댓글 삭제에 성공했습니다.")
@@ -152,14 +159,14 @@ public class CommentController {
 
     @Operation(description = "댓글 좋아요")
     @PostMapping("/votes/{voteId}/comments/{commentId}/likers")
-    public ResponseEntity<Map<String,Object>> likeComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Claims claims) throws UserNotFoundException {
+    public ResponseEntity<Map<String, Object>> likeComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Claims claims) throws UserNotFoundException {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
-        Long likeCount = commentService.likeComment(voteId,commentId,longId);
+        Long likeCount = commentService.likeComment(voteId, commentId, longId);
 
-        Map<String,Object> result = new HashMap<>();
-        result.put("message","성공 코드." );
+        Map<String, Object> result = new HashMap<>();
+        result.put("message", "성공 코드.");
         result.put("count", likeCount);
 
         return ResponseEntity.ok().body(result);
@@ -167,14 +174,14 @@ public class CommentController {
 
     @Operation(description = "댓글 싫어요")
     @PostMapping("/votes/{voteId}/comments/{commentId}/haters")
-    public ResponseEntity<Map<String,Object>> hateComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Claims claims) throws UserNotFoundException {
+    public ResponseEntity<Map<String, Object>> hateComment(@PathVariable Long voteId, @PathVariable Long commentId, @RequestAttribute Claims claims) throws UserNotFoundException {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
-        Long hateCount = commentService.hateComment(voteId,commentId,longId);
+        Long hateCount = commentService.hateComment(voteId, commentId, longId);
 
-        Map<String,Object> result = new HashMap<>();
-        result.put("message","성공 코드." );
+        Map<String, Object> result = new HashMap<>();
+        result.put("message", "성공 코드.");
         result.put("count", hateCount);
 
         return ResponseEntity.ok().body(result);

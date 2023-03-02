@@ -23,6 +23,8 @@ import com.example.manymanyUsers.vote.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,73 +42,71 @@ public class CommentService {
     private final VoteRepository voteRepository;
 
 
-    public void createComment(Long voteId, CommentCreateRequest commentCreateRequest, Long userId) {
+    public void createComment(Long voteId, Long parentId, String content, Long userId) {
 
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+        Comment parentComment = null;
 
-        Comment parent = null;
         //대댓글 이면
-        if(commentCreateRequest.getParentId() != null){
-            Optional<Comment> byParentId = commentRepository.findById(commentCreateRequest.getParentId());
-            parent = byParentId.get();
+        if (parentId != null) {
+            parentComment = commentRepository.findById(parentId).orElseThrow(CommentNotFoundException::new);
         }
 
         Comment comment = Comment.builder()
                 .voteId(voteId)
-                .content(commentCreateRequest.getContent())
+                .content(content)
                 .commentUser(user)
                 .mbti(user.getMbti())
                 .gender(user.getGender())
                 .age(user.classifyAge(user.getAge()))
                 .build();
-        if(null != parent){
-            comment.updateParent(parent);
-        }
+        comment.updateParent(parentComment);
         commentRepository.save(comment);
     }
 
 
-    public List<Comment> getComments(Long voteId, Gender gender, Age age, MBTI mbti, int size, int page, CommentSortBy sortBy) throws VoteNotFoundException{
+    public List<Comment> getComments(Long voteId, Gender gender, Age age, MBTI mbti, int size, int page, CommentSortBy sortBy) throws VoteNotFoundException {
 
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
-        Pageable pageable = PageRequest.of(page,size);
+        Pageable pageable = PageRequest.of(page, size);
 
         List<Comment> comments = new ArrayList<>(); //댓글
         List<Comment> childComments = new ArrayList<>(); //대댓글
 
-        if(sortBy.equals(CommentSortBy.ByPopularity)) {
+        if (CommentSortBy.ByPopularity == sortBy) {
+            //인기순
             comments = commentRepository.findHotComments(voteId, gender, age, mbti, pageable);
-        }
-        else{
-            comments = commentRepository.findNewestComments(voteId,gender,age,mbti,pageable);
+        } else if (CommentSortBy.ByTime == sortBy) {
+            //최신순
+            comments = commentRepository.findNewestComments(voteId, gender, age, mbti, pageable);
         }
 
 
-        for(Comment parentComment : comments){
-            childComments.addAll(commentRepository.findChildComments(voteId,gender,age,mbti,parentComment));
+        //대댓글 가져오기
+        for (Comment parentComment : comments) {
+            childComments.addAll(commentRepository.findChildComments(voteId, gender, age, mbti, parentComment));
         }
 
         comments.addAll(childComments);
 
-
         return comments;
     }
 
-    public List<Comment> getHotComments(Long voteId, Gender gender, Age age, MBTI mbti){
+    public List<Comment> getHotComments(Long voteId, Gender gender, Age age, MBTI mbti) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
-        Comment topComment = commentRepository.findHotComments(voteId,gender,age,mbti,PageRequest.of(0,1)).get(0);
-        List<Comment> newestComment = commentRepository.findNewestComments(voteId,gender,age,mbti,PageRequest.of(0,3));
+        Comment topComment = commentRepository.findHotComments(voteId, gender, age, mbti, PageRequest.of(0, 1)).get(0);
+        List<Comment> newestComment = commentRepository.findNewestComments(voteId, gender, age, mbti, PageRequest.of(0, 3));
 
         List<Comment> hotComments = new ArrayList<>();
         hotComments.add(topComment);
 
-        for(Comment comment : newestComment){
-            if(!comment.equals(topComment)){
+        for (Comment comment : newestComment) {
+            if (!comment.equals(topComment)) {
                 hotComments.add(comment);
             }
-            if(hotComments.size()==3){
+            if (hotComments.size() == 3) {
                 break;
             }
         }
@@ -123,7 +123,7 @@ public class CommentService {
         comment.update(commentUpdateRequest);
     }
 
-    public void deleteComment(Long voteId, Long commentId , Long userId) {
+    public void deleteComment(Long voteId, Long commentId, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
@@ -141,7 +141,7 @@ public class CommentService {
         Optional<CommentEmotion> byCommentAndUser = commentEmotionRepository.findByCommentAndUser(comment, user);
 
         //본인은 본인 댓글에 좋아요 하지 못하도록 설정
-        if(!comment.getCommentUser().equals(user)) {
+        if (!comment.getCommentUser().equals(user)) {
             byCommentAndUser.ifPresentOrElse(
                     commentEmotion -> {
                         //좋아요를 눌렀는데 또 눌렀을 경우 좋아요 취소
@@ -191,7 +191,7 @@ public class CommentService {
         Optional<CommentEmotion> byCommentAndUser = commentEmotionRepository.findByCommentAndUser(comment, user);
 
         //본인은 본인 댓글에 싫어요 하지 못하도록 설정
-        if(!comment.getCommentUser().equals(user)){
+        if (!comment.getCommentUser().equals(user)) {
             byCommentAndUser.ifPresentOrElse(
                     commentEmotion -> {
                         //싫어요를 눌렀는데 또 눌렀을 경우 싫어요 취소
@@ -234,12 +234,11 @@ public class CommentService {
         return comment.getHateCount();
     }
 
-    public Long getCommentsCountByVote(Long voteId){
+    public Long getCommentsCountByVote(Long voteId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
         return commentRepository.countCommentsByVoteId(voteId);
     }
-
 
 
 }
