@@ -2,6 +2,7 @@ package com.example.manymanyUsers.vote.repository;
 
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.vote.domain.Vote;
+import com.example.manymanyUsers.vote.dto.FindVoteListData;
 import com.example.manymanyUsers.vote.enums.Category;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +17,12 @@ import java.util.Optional;
 public interface VoteRepository extends JpaRepository<Vote, Long> {
     Optional<Vote> findByPostedUser(User postedUser);
 
-    Slice<Vote> findSliceBy(Pageable pageable);
+
+//    SELECT
+//    v.*, (SELECT count(vr.vote_id) FROM vote_result vr WHERE v.vote_id = vr.vote_id) AS cnt
+//    FROM vote v;
+    @Query("SELECT new com.example.manymanyUsers.vote.dto.FindVoteListData(v,(SELECT count(vr.vote) FROM VoteResult vr WHERE vr.vote = v)) FROM Vote v ORDER BY v.createdDate desc ")
+    Slice<FindVoteListData> findSliceBy(Pageable pageable);
 
     Slice<Vote> findByCategory(Category category, Pageable pageable);
 
