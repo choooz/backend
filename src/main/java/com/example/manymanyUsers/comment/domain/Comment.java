@@ -61,19 +61,18 @@ public class Comment extends BaseTimeEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "comment")
     private List<CommentEmotion> commentEmotionList = new ArrayList<>();
 
-    public void mappingCommentEmotion(CommentEmotion commentEmotion){
+    public void mappingCommentEmotion(CommentEmotion commentEmotion) {
         this.commentEmotionList.add(commentEmotion);
     }
 
     public void updateLikeHateCount() {
         int likecnt = 0;
         int hatecnt = 0;
-        for (CommentEmotion commentEmotion : commentEmotionList ){
-            if(commentEmotion.getEmotion().equals(Emotion.LIKE)){
-                likecnt +=1;
-            }
-            else {
-                hatecnt +=1;
+        for (CommentEmotion commentEmotion : commentEmotionList) {
+            if (commentEmotion.getEmotion().equals(Emotion.LIKE)) {
+                likecnt += 1;
+            } else {
+                hatecnt += 1;
             }
         }
         this.likeCount = (long) likecnt;
@@ -88,10 +87,9 @@ public class Comment extends BaseTimeEntity {
         this.content = commentUpdateRequest.getContent();
     }
 
-    public void updateParent(Comment parent){
+    public void updateParent(Comment parent) {
         this.parent = parent;
     }
-
 
 
 }

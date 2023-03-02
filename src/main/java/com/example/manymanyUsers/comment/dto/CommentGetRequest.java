@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 
 @Getter
 @Setter
@@ -21,9 +23,12 @@ public class CommentGetRequest {
 
     private Gender gender;
 
-    private CommentSortBy sortBy = CommentSortBy.ByTime;
+    @NotNull
+    private CommentSortBy sortBy;
 
-    private int page = 0;
+    @NotNull
+    private int page;
 
-    private int size = 5;
+    @NotNull
+    private int size;
 }

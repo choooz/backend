@@ -20,11 +20,11 @@ public class CommentEmotion {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="USER_ID")
+    @JoinColumn(name = "USER_ID")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="COMMENT_ID")
+    @JoinColumn(name = "COMMENT_ID")
     private Comment comment;
 
     @Column
@@ -32,8 +32,8 @@ public class CommentEmotion {
     private Emotion emotion;
 
     @Builder
-    public CommentEmotion(User user, Comment comment, Emotion emotion){
-        this.user =user;
+    public CommentEmotion(User user, Comment comment, Emotion emotion) {
+        this.user = user;
         this.comment = comment;
         this.emotion = emotion;
     }
@@ -47,10 +47,12 @@ public class CommentEmotion {
         this.user = user;
         user.mappingCommentLike(this);
     }
-    public void setEmotionLike(){
+
+    public void setEmotionLike() {
         this.emotion = Emotion.LIKE;
     }
-    public void setEmotionHate(){
+
+    public void setEmotionHate() {
         this.emotion = Emotion.HATE;
     }
 }

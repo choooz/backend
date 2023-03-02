@@ -17,6 +17,7 @@ import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -81,7 +82,7 @@ public class UserController {
 
     @Operation(description = "마이페이지 타입별 voteList 요청 api")
     @GetMapping("/mypage")
-    public ResponseEntity<List<MyPageResponse>> getVotesByUser(@Parameter(description = "created,participated,bookmarked", required = true) @RequestParam VoteType voteType, @RequestParam int page, @RequestParam int size, @RequestAttribute Claims claims) {
+    public ResponseEntity<Slice<MyPageResponse>> getVotesByUser(@Parameter(description = "created,participated,bookmarked", required = true) @RequestParam VoteType voteType, @RequestParam int page, @RequestParam int size, @RequestAttribute Claims claims) {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
@@ -89,37 +90,43 @@ public class UserController {
 
         Slice<Vote> voteList = voteService.getVotesByUser(longId, voteType, page, size);
 
+        boolean isLast = voteList.getSize() < size;
+
         for (Vote vote : voteList) {
             MyPageResponse myPageResponse = MyPageResponse.builder()
                     .voteId(vote.getId())
                     .imageA(vote.getImageA())
                     .imageB(vote.getImageB())
                     .title(vote.getTitle())
-                    .countChoice(statisticsService.getTotalStatistics(vote.getId()))
-                    .countComment(commentService.getCommentsCountByVote(vote.getId()))
-                    .createdDate(vote.getCreatedDate())
+                    .countVoted(statisticsService.getTotalStatistics(vote.getId())) //총 투표인원  조회로 쿼리가 size 만큼 더 발생하는 문제
+                    .countComment(commentService.getCommentsCountByVote(vote.getId())) //comment 조회로 쿼리가 size 만큼 더 발생하는 문제
+                    .modifiedDate(vote.getModifiedDate())
                     .build();
             responses.add(myPageResponse);
         }
 
-        return new ResponseEntity(responses, HttpStatus.OK);
+        Slice<MyPageResponse> sliceResponse = new SliceImpl<>(responses, voteList.getPageable(), isLast);
+
+
+        return new ResponseEntity<>(sliceResponse, HttpStatus.OK);
 
     }
 
     @Operation(description = "마이페이지 타입별 voteCount 요청 api")
     @GetMapping("/mypage/count")
-    public ResponseEntity<MyPageCountResponse> getMyPageCount(@RequestAttribute Claims claims){
+    public ResponseEntity<MyPageCountResponse> getMyPageCount(@RequestAttribute Claims claims) {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
-        Map<String,Long> map = userService.getMyPageCount(longId);
-        Long countCreatedVote = map.get("CreatedVote");
-        Long countParticipatedVote = map.get("ParticipatedVote");
+        Map<String, Long> map = userService.getMyPageCount(longId);
+        Long countCreatedVote = map.get("CREATED_VOTE");
+        Long countParticipatedVote = map.get("PARTICIPATED_VOTE");
+        Long countBookmarkedVote = map.get("BOOKMARKED_VOTE");
 
-        MyPageCountResponse myPageCountResponse = new MyPageCountResponse(countCreatedVote,countParticipatedVote);
+        MyPageCountResponse myPageCountResponse = new MyPageCountResponse(countCreatedVote, countParticipatedVote, countBookmarkedVote);
 
 
-        return new ResponseEntity(myPageCountResponse,HttpStatus.OK);
+        return new ResponseEntity(myPageCountResponse, HttpStatus.OK);
 
     }
 
