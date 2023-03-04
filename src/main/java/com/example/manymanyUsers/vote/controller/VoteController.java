@@ -3,6 +3,7 @@ package com.example.manymanyUsers.vote.controller;
 import com.example.manymanyUsers.common.dto.CommonResponse;
 import com.example.manymanyUsers.exception.user.UserNotFoundException;
 import com.example.manymanyUsers.exception.vote.VoteNotFoundException;
+import com.example.manymanyUsers.user.dto.GetBookmarkedResponse;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.dto.*;
 import com.example.manymanyUsers.vote.enums.Category;
@@ -169,5 +170,16 @@ public class VoteController {
         GetIsUserVotedResponse getIsUserVotedResponse = new GetIsUserVotedResponse();
         getIsUserVotedResponse.converter(userVoted);
         return new ResponseEntity(getIsUserVotedResponse,HttpStatus.OK);
+    }
+
+    @Operation(description = "북마크 여부 조회")
+    @GetMapping("{voteId}/bookmark")
+    public ResponseEntity checkBookmarked(@PathVariable Long voteId, @RequestAttribute Long userId){
+
+        boolean result = voteService.checkBookmarked(userId, voteId);
+
+        GetBookmarkedResponse getBookmarkedResponse = new GetBookmarkedResponse(result);
+
+        return new ResponseEntity<>(getBookmarkedResponse,HttpStatus.OK);
     }
 }
