@@ -2,6 +2,7 @@ package com.example.manymanyUsers.statistics.service;
 
 import com.example.manymanyUsers.exception.vote.VoteNotFoundException;
 import com.example.manymanyUsers.statistics.dto.VoteSelectResultData;
+import com.example.manymanyUsers.timer.Timer;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.enums.Choice;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
@@ -17,6 +18,8 @@ public class StatisticsService {
 
     private final VoteResultRepository voteResultRepository;
     private final VoteRepository voteRepository;
+
+    @Timer
     public Long getTotalStatistics(Long voteId) {
 
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
@@ -26,6 +29,7 @@ public class StatisticsService {
         return totalVoteCount;
     }
 
+    @Timer
     public VoteSelectResultData getSelectStatistics(Long voteId) {
 
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
