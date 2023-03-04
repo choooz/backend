@@ -8,15 +8,12 @@ import lombok.NoArgsConstructor;
 @Getter
 public class GetIsUserVotedResponse {
 
-    private String message;
-
     private boolean isVoted;
 
     private Choice userChoice;
 
-    public void converter(GetIsUserVoted getIsUserVoted,String message) {
+    public void converter(GetIsUserVoted getIsUserVoted) {
         isVoted = getIsUserVoted.isVoted();
         userChoice = getIsUserVoted.getUserChoice();
-        this.message = message;
     }
 }
