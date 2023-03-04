@@ -10,7 +10,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +23,7 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
 
     Slice<Vote> findAllByPostedUser(User user,PageRequest pageRequest);
 
-    @Query("SELECT v FROM Vote v JOIN v.voteResultList vr where vr.votedUser = :user")
+    @Query("SELECT v FROM Vote v JOIN v.voteResultList vr WHERE vr.votedUser = :user")
     Slice<Vote> findParticipatedVoteByUser(User user,PageRequest pageRequest);
 
 
@@ -34,6 +33,11 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
     Optional<Vote> findById(@Param("voteId") Long voteId);
 
     Long countVoteByPostedUser(User user);
+
+    @Query("SELECT v FROM Vote v JOIN v.bookmarkList b WHERE b.user = :user")
+    Slice<Vote> findBookmarkedVoteByUser(User user, PageRequest pageRequest);
+
+
   
     Slice<Vote> findByCategoryAndTitleContains(Category category, String keyword, Pageable pageable);
 

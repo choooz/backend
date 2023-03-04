@@ -35,7 +35,6 @@ public class VoteService {
     private final VoteRepository voteRepository;
     private final UserRepository userRepository;
     private final VoteResultRepository voteResultRepository;
-
     private final BookmarkRepository bookmarkRepository;
 
 
@@ -168,10 +167,9 @@ public class VoteService {
             voteList=voteRepository.findParticipatedVoteByUser(findUser,pageRequest);
         }
         //북마크한 vote
-
-//        else if(type.equals("bookmarked")){
-//            voteList=voteRepository.findAllByBookmarked(findUser);
-//        }
+        else if(type == VoteType.bookmarked){
+            voteList=voteRepository.findBookmarkedVoteByUser(findUser,pageRequest);
+        }
         return voteList;
     }
 

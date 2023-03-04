@@ -75,7 +75,7 @@ public class Vote extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MBTI filteredMbti;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "vote", cascade = CascadeType.REMOVE)
     private List<Bookmark> bookmarkList = new ArrayList<>();
 
     public void removeBookmark(Bookmark bookmark) {
