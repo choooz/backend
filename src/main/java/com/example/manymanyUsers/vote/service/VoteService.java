@@ -121,7 +121,7 @@ public class VoteService {
         if (category == null) {
             voteSlice = voteRepository.findSliceByTitleContains(keyword, pageRequest);
         }else{
-            voteSlice = voteRepository.findByCategoryAndTitleContains(category, keyword, pageRequest);
+            voteSlice = voteRepository.findSliceByCategoryAndTitleContains(category, keyword, pageRequest);
         }
 
         Slice<VoteListData> voteListData = voteSlice.map(vote -> {
