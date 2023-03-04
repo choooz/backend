@@ -1,15 +1,16 @@
 package com.example.manymanyUsers.timer;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 
 @Aspect
 @Component
+@Slf4j
 public class TimerAop {
     @Pointcut("@annotation(com.example.manymanyUsers.timer.Timer)")
     private void enableTimer() {}
@@ -23,8 +24,7 @@ public class TimerAop {
 
         stopWatch.stop();
 
-        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-        System.out.println("total time is : " + stopWatch.getTotalTimeMillis());
+        log.info(String.valueOf(stopWatch.getTotalTimeMillis()) + "millis");
 
         return result;
     }
