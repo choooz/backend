@@ -25,6 +25,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 @RequiredArgsConstructor
@@ -70,9 +71,6 @@ public class VoteService {
 
         voteResult.doVote(vote, user, doVote.getChoice());
 
-        //김민엽
-//        voteResult.mappingVote(vote);
-
         voteResultRepository.save(voteResult);
 
     }
@@ -95,20 +93,11 @@ public class VoteService {
     }
 
     private Slice<VoteListData> getVoteSortByTime(Category category, PageRequest pageRequest) {
+        Slice<VoteListData> voteListData;
 
-        Slice<Vote> voteSlice;
+        Slice<FindVoteListData> sliceBy = voteRepository.findSliceBy(category, pageRequest);
+        voteListData = sliceBy.map(findVoteListData -> new VoteListData(findVoteListData.getVote(), findVoteListData.getCnt()));
 
-        if (category == null) {
-            voteSlice = voteRepository.findSliceBy(pageRequest);
-        }else{
-            voteSlice = voteRepository.findByCategory(category, pageRequest);
-        }
-
-        Slice<VoteListData> voteListData = voteSlice.map(vote -> {
-            vote.getPostedUser(); //프록시 처리된 user 엔티티 가져오기 위함
-            Long countVoted = voteResultRepository.countByVote(vote);
-            return new VoteListData(vote, countVoted);
-        });
 
         return voteListData;
     }
@@ -123,17 +112,6 @@ public class VoteService {
         });
         return voteListData;
     }
-
-//    private Slice<VoteListData> getVoteByPopularity(Category category, PageRequest pageRequest) {
-//
-//        Slice<VoteResult> voteSlice = voteResultRepository.findWithVoteFROMResult(category, pageRequest);
-//
-//        Slice<VoteListData> voteListData = voteSlice.map(voteResult -> {
-////            Long countVoted = voteResultRepository.countByVote(voteResult.getVote());
-//            return new VoteListData(voteResult.getVote());
-//        });
-//        return voteListData;
-//    }
 
     public Slice<VoteListData> getSearchVoteList(String keyword, SortBy sortBy, int page, int size, Category category) {
 
@@ -155,14 +133,8 @@ public class VoteService {
     }
 
 
-    public FindVoteData getVote(Long voteId, Long userId) {
-        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
-
-        List<VoteResult> byVotedUserId = voteResultRepository.findByVotedUserId(userId);
-
-        boolean isVoted = byVotedUserId.isEmpty() ? false : true;
-
-        return new FindVoteData(vote, isVoted);
+    public Vote getVote(Long voteId) {
+        return voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
     }
 
     public void updateVote(@Valid UpdateVoteRequest updateVoteRequest, Long userId, Long voteId) throws UserNotFoundException, VoteNotFoundException {

@@ -1,11 +1,10 @@
 package com.example.manymanyUsers.vote.controller;
 
+import com.example.manymanyUsers.common.dto.CommonResponse;
 import com.example.manymanyUsers.exception.user.UserNotFoundException;
 import com.example.manymanyUsers.exception.vote.VoteNotFoundException;
-import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.dto.*;
-import com.example.manymanyUsers.common.dto.CommonResponse;
 import com.example.manymanyUsers.vote.enums.Category;
 import com.example.manymanyUsers.vote.enums.SortBy;
 import com.example.manymanyUsers.vote.service.VoteService;
@@ -40,12 +39,11 @@ public class VoteController {
                 .message("투표 생성에 성공했습니다.")
                 .build();
         return new ResponseEntity(createVoteResponse, HttpStatus.OK);
-
     }
 
     @Operation(description = "투표 리스트 조회")
     @GetMapping("")
-    public ResponseEntity<GetVoteListResponse> getVoteList(@RequestParam SortBy sortBy, @RequestParam int page, @RequestParam int size, @RequestParam(required = false) Category category) {
+    public ResponseEntity<GetVoteListResponse> getVoteList(@RequestParam SortBy sortBy, @RequestParam int page, @RequestParam int size, @RequestParam(required = false) Category category, @RequestParam(required = false) Long userId) {
         Slice<VoteListData> voteListData = voteService.getVoteList(sortBy, page, size, category);
         GetVoteListResponse voteResponse = GetVoteListResponse.builder()
                 .voteSlice(voteListData)
@@ -65,9 +63,9 @@ public class VoteController {
 
     @Operation(description = "투표 단건 조회")
     @GetMapping("/{voteId}")
-    public ResponseEntity<GetVoteResponse> getVote(@PathVariable Long voteId, @RequestAttribute Long userId) {
-        FindVoteData findVoteData = voteService.getVote(voteId, userId);
-        Vote vote = findVoteData.getVote();
+    public ResponseEntity<GetVoteResponse> getVote(@PathVariable Long voteId) {
+        Vote vote = voteService.getVote(voteId);
+
 
         GetVoteUserResponse getVoteUserResponse = GetVoteUserResponse.builder()
                 .userImage(vote.getPostedUser().getImageUrl())
@@ -90,7 +88,6 @@ public class VoteController {
                 .titleA(vote.getTitleA())
                 .titleB(vote.getTitleB())
                 .description(vote.getDetail())
-                .isVoted(findVoteData.isVoted())
                 .build();
 
         return new ResponseEntity(getVoteResponse,HttpStatus.OK);
@@ -122,7 +119,6 @@ public class VoteController {
                 .build();
 
         return new ResponseEntity(updateVoteResponse, HttpStatus.OK);
-
     }
 
     @Operation(description = "투표 참여")
@@ -150,8 +146,6 @@ public class VoteController {
                 .recommendKeywords(voteRecommendListData)
                 .build();
         return new ResponseEntity(voteResponse, HttpStatus.OK);
-
-
     }
 
     @Operation(description = "투표 북마크")
@@ -167,6 +161,4 @@ public class VoteController {
 
         return new ResponseEntity(commonResponse,HttpStatus.OK);
     }
-
-    
 }
