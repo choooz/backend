@@ -40,4 +40,8 @@ public interface VoteResultRepository extends JpaRepository<VoteResult, Long> {
 
     @Query(value = "SELECT * FROM vote_result where user_Id = :userId",nativeQuery = true)
     List<VoteResult> findByVotedUserId(@Param("userId") Long userId);
+
+
+    @Query("SELECT vr FROM VoteResult vr WHERE vr.vote.id = :voteId and vr.votedUser.id = :userId")
+    Optional<VoteResult> getVoteResultByVoteIdAndUserId(@Param("voteId") Long voteId, @Param("userId") Long userId);
 }

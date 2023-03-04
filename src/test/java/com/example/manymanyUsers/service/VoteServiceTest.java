@@ -495,8 +495,8 @@ public class VoteServiceTest {
         Vote vote = voteById.get();
 
         //when
-        FindVoteData findVoteData = voteService.getVote(vote.getId(), user.getId());
-        Vote getVote = findVoteData.getVote();
+        Vote getVote = voteService.getVote(vote.getId());
+
 
         //then
         assertEquals(vote,getVote);

@@ -59,7 +59,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                     throw jwtException;
                 }
         }
-
         if( requestURL.contains(baseUrl + "/votes")
                 && (
                 request.getMethod().equals("GET")
@@ -83,7 +82,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                 }
             }
         }
-
             filterChain.doFilter(request, response);
     }
 
