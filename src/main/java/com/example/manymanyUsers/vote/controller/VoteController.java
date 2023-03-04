@@ -161,4 +161,13 @@ public class VoteController {
 
         return new ResponseEntity(commonResponse,HttpStatus.OK);
     }
+
+    @Operation(description = "투표 참여 여부 조회")
+    @GetMapping("/{voteId}/voted")
+    public ResponseEntity<GetIsUserVotedResponse> getIsUserVoted(@PathVariable Long voteId, @RequestAttribute Long userId) {
+        GetIsUserVoted userVoted = voteService.isUserVoted(voteId, userId);
+        GetIsUserVotedResponse getIsUserVotedResponse = new GetIsUserVotedResponse();
+        getIsUserVotedResponse.converter(userVoted);
+        return new ResponseEntity(getIsUserVotedResponse,HttpStatus.OK);
+    }
 }

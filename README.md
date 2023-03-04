@@ -34,7 +34,7 @@
 <br>
 
 ## API 문서
-- http://ec2-15-165-134-97.ap-northeast-2.compute.amazonaws.com:8080/swagger-ui/index.html
+- https://chooz.co.kr/swagger-ui/index.html
 
 <br>
 

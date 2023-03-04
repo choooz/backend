@@ -36,8 +36,6 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
 
     @Query("SELECT v FROM Vote v JOIN v.bookmarkList b WHERE b.user = :user")
     Slice<Vote> findBookmarkedVoteByUser(User user, PageRequest pageRequest);
-
-
   
     Slice<Vote> findByCategoryAndTitleContains(Category category, String keyword, Pageable pageable);
 
