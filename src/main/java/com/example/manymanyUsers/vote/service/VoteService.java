@@ -38,8 +38,7 @@ public class VoteService {
     private final BookmarkRepository bookmarkRepository;
 
 
-
-    public Long createVote(@Valid CreateVoteRequest createVoteRequest, Long userId) throws UserNotFoundException{
+    public Long createVote(@Valid CreateVoteRequest createVoteRequest, Long userId) throws UserNotFoundException {
         User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
         Vote vote = Vote.builder()
@@ -63,7 +62,7 @@ public class VoteService {
         Vote vote = voteRepository.findById(doVote.getVoteId()).orElseThrow(VoteNotFoundException::new);
         User user = userRepository.findById(doVote.getUserId()).orElseThrow(UserNotFoundException::new);
 
-        if(voteResultRepository.existsByVoteAndVotedUser(vote, user)) {
+        if (voteResultRepository.existsByVoteAndVotedUser(vote, user)) {
             throw new AlreadyUserDoVoteException();
         }
 
@@ -75,17 +74,17 @@ public class VoteService {
 
     }
 
-    public Slice<VoteListData> getVoteList(SortBy sortBy, Integer page, Integer size, Category category){
+    public Slice<VoteListData> getVoteList(SortBy sortBy, Integer page, Integer size, Category category) {
 
         Slice<VoteListData> voteListData = null;
 
-        if(sortBy.equals(SortBy.ByTime)){
+        if (sortBy.equals(SortBy.ByTime)) {
             PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
             voteListData = getVoteSortByTime(category, pageRequest);
         } else if (sortBy.equals(SortBy.ByPopularity)) {
             PageRequest pageRequest = PageRequest.of(page, size);
             voteListData = getVoteByPopularity(category, pageRequest);
-        }else {
+        } else {
             throw new RuntimeException("잘못된 요청입니다.");
         }
 
@@ -154,21 +153,21 @@ public class VoteService {
 
     }
 
-    public Slice<Vote> getVotesByUser(Long userId, VoteType type , int page, int size) {
+    public Slice<Vote> getVotesByUser(Long userId, VoteType type, int page, int size) {
         User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Slice<Vote> voteList = null;
-        PageRequest pageRequest = PageRequest.of(page,size);
+        PageRequest pageRequest = PageRequest.of(page, size);
         //작성한 vote
-        if (type == VoteType.created){
-            voteList=voteRepository.findAllByPostedUser(findUser,pageRequest);
+        if (type == VoteType.created) {
+            voteList = voteRepository.findAllByPostedUser(findUser, pageRequest);
         }
         //참여한 vote
-        else if(type == VoteType.participated){
-            voteList=voteRepository.findParticipatedVoteByUser(findUser,pageRequest);
+        else if (type == VoteType.participated) {
+            voteList = voteRepository.findParticipatedVoteByUser(findUser, pageRequest);
         }
         //북마크한 vote
-        else if(type == VoteType.bookmarked){
-            voteList=voteRepository.findBookmarkedVoteByUser(findUser,pageRequest);
+        else if (type == VoteType.bookmarked) {
+            voteList = voteRepository.findBookmarkedVoteByUser(findUser, pageRequest);
         }
         return voteList;
     }
@@ -180,10 +179,10 @@ public class VoteService {
         List<String> recommendKeywordList = new ArrayList<>();
 
         int i = 0;
-        for(Vote vote : voteList) {
+        for (Vote vote : voteList) {
             recommendKeywordList.add(vote.getTitle());
             i++;
-            if(i == 5)
+            if (i == 5)
                 break;
         }
 
@@ -225,5 +224,16 @@ public class VoteService {
             getIsUserVoted.setUserChoice(voteResult.getChoice());
         });
         return getIsUserVoted;
+    }
+
+    public boolean checkBookmarked(Long userId, Long voteId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
+
+        Optional<Bookmark> byVoteAndUser = bookmarkRepository.findByVoteAndUser(vote, user);
+
+        boolean result = byVoteAndUser.isPresent();
+
+        return result;
     }
 }
