@@ -161,29 +161,34 @@ public class UserService {
             if (findUser.getModifiedMBTIDate() != null && now.isBefore(findUser.getModifiedMBTIDate().plusMonths(2))) { // 현재 시간이 특정 사용자의 마지막 MBTI 수정 일자보다 2개월 이내인지를 확인
                 throw new UserIllegalStateException();
             } else {
-                findUser.updateProfile(nickname, image, mbti, now);
+                findUser.updateMbti(mbti, now);
             }
         }
 
+        findUser.updateProfile(nickname,image);
+
         //CategoryEntity -> Category 로 변환해서 비교해주기 위해
-        List<Category> categoryEntityList = findUser.getCategoryLists().stream()
+        List<Category> toCategoryList = findUser.getCategoryLists().stream()
                 .map(CategoryEntity::toCategory)
                 .collect(Collectors.toList());
 
-        boolean isEqual = categoryEntityList.stream().sorted().collect(Collectors.toList())
-                .equals(categoryList.stream().sorted().collect(Collectors.toList()));
+        boolean isEqual = toCategoryList.stream().collect(Collectors.toSet())
+                .equals(categoryList.stream().collect(Collectors.toSet()));
+
+
 
 
         if (!isEqual) {
             List<CategoryEntity> findUserCategoryLists = findUser.getCategoryLists();
+            findUser.clearCategoryList();
             for (Category list : categoryList) {
                 CategoryEntity category = new CategoryEntity();
                 category.setCategory(list);
                 categoryRespository.save(category);
 
                 findUserCategoryLists.add(category);
-                userRepository.save(findUser);
             }
+            userRepository.save(findUser);
         }
 
 
