@@ -22,11 +22,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
-
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -119,8 +117,8 @@ public class VoteService {
 
         if (category == null) {
             voteSlice = voteRepository.findSliceByTitleContains(keyword, pageRequest);
-        } else {
-            voteSlice = voteRepository.findByCategoryAndTitleContains(category, keyword, pageRequest);
+        }else{
+            voteSlice = voteRepository.findSliceByCategoryAndTitleContains(category, keyword, pageRequest);
         }
 
         Slice<VoteListData> voteListData = voteSlice.map(vote -> {
@@ -172,23 +170,12 @@ public class VoteService {
         return voteList;
     }
 
-
     public List<String> getRecommendVoteList(String keyword, Category category) {
-
-        List<Vote> voteList = voteRepository.findByCategoryAndTitleContains(category, keyword);
-        List<String> recommendKeywordList = new ArrayList<>();
-
-        int i = 0;
-        for (Vote vote : voteList) {
-            recommendKeywordList.add(vote.getTitle());
-            i++;
-            if (i == 5)
-                break;
-        }
-
-        return recommendKeywordList;
+        return voteRepository.findByCategoryAndTitleContains(category, keyword).stream()
+                .limit(5)
+                .map(Vote::getTitle)
+                .collect(Collectors.toList());
     }
-
 
     public void bookmarkVote(Long userId, Long voteId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
