@@ -51,7 +51,7 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MBTI mbti;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JoinColumn(name = "USER_ID")
     private List<CategoryEntity> categoryLists = new ArrayList<>();
 
@@ -73,9 +73,12 @@ public class User extends BaseTimeEntity {
         this.bookmarkList.add(bookmark);
     }
 
-    public void updateProfile(String nickname, String image, MBTI mbti, LocalDateTime modifiedMBTIDate) {
+    public void updateProfile(String nickname, String image) {
         this.nickname = nickname;
         this.imageUrl = image;
+    }
+
+    public void updateMbti(MBTI mbti, LocalDateTime modifiedMBTIDate) {
         this.mbti = mbti;
         this.modifiedMBTIDate = modifiedMBTIDate;
     }
@@ -121,4 +124,8 @@ public class User extends BaseTimeEntity {
         }
         return ageGroup;
     }
+    public void clearCategoryList(){
+        this.categoryLists.clear();
+    }
+
 }
