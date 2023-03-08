@@ -11,8 +11,4 @@ public class GetVoteRecommendListResponse {
 
     private List<String> recommendKeywords;
 
-    GetVoteRecommendListResponse(List<String> recommendKeywords) {
-        this.recommendKeywords = recommendKeywords;
-    }
-
 }
