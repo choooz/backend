@@ -173,13 +173,11 @@ public class VoteController {
     }
 
     @Operation(description = "북마크 여부 조회")
-    @GetMapping("{voteId}/bookmark")
+    @GetMapping("/{voteId}/bookmark")
     public ResponseEntity checkBookmarked(@PathVariable Long voteId, @RequestAttribute Long userId){
 
         boolean result = voteService.checkBookmarked(userId, voteId);
 
-        GetBookmarkedResponse getBookmarkedResponse = new GetBookmarkedResponse(result);
-
-        return new ResponseEntity<>(getBookmarkedResponse,HttpStatus.OK);
+        return new ResponseEntity<>(new GetBookmarkedResponse(voteService.checkBookmarked(userId, voteId)), HttpStatus.OK);
     }
 }

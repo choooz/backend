@@ -142,7 +142,7 @@ public class CommentService {
 
         byCommentAndUser.ifPresentOrElse(commentEmotion -> {
                     //좋아요를 눌렀는데 또 눌렀을 경우 좋아요 취소
-                    if (commentEmotion.getEmotion().equals(Emotion.LIKE)) {
+                    if (commentEmotion.getEmotion() == Emotion.LIKE) {
                         commentEmotionRepository.delete(commentEmotion);
                         comment.removeEmotion(commentEmotion);
                         comment.updateLikeHateCount();
@@ -189,7 +189,7 @@ public class CommentService {
         byCommentAndUser.ifPresentOrElse(
                 commentEmotion -> {
                     //싫어요를 눌렀는데 또 눌렀을 경우 싫어요 취소
-                    if (commentEmotion.getEmotion().equals(Emotion.HATE)) {
+                    if (commentEmotion.getEmotion() == Emotion.HATE) {
                         commentEmotionRepository.delete(commentEmotion);
                         comment.removeEmotion(commentEmotion);
                         comment.updateLikeHateCount();
