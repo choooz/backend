@@ -4,6 +4,7 @@ package com.example.manymanyUsers.comment.service;
 import com.example.manymanyUsers.comment.domain.Comment;
 import com.example.manymanyUsers.comment.domain.CommentEmotion;
 import com.example.manymanyUsers.comment.dto.CommentCreateRequest;
+import com.example.manymanyUsers.comment.dto.CommentListWithCount;
 import com.example.manymanyUsers.comment.dto.CommentUpdateRequest;
 import com.example.manymanyUsers.comment.enums.CommentSortBy;
 import com.example.manymanyUsers.comment.enums.Emotion;
@@ -66,7 +67,7 @@ public class CommentService {
     }
 
 
-    public List<Comment> getComments(Long voteId, Gender gender, Age age, MBTI mbti, int size, int page, CommentSortBy sortBy) throws VoteNotFoundException {
+    public CommentListWithCount getComments(Long voteId, Gender gender, Age age, MBTI mbti, int size, int page, CommentSortBy sortBy) throws VoteNotFoundException {
 
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
@@ -74,13 +75,17 @@ public class CommentService {
 
         List<Comment> comments = new ArrayList<>(); //댓글
         List<Comment> childComments = new ArrayList<>(); //대댓글
+        int countComments = 0;
 
         if (CommentSortBy.ByPopularity == sortBy) {
             //인기순
             comments = commentRepository.findHotComments(voteId, gender, age, mbti, pageable);
+            countComments = commentRepository.countHotComments(voteId, gender, age, mbti);
+
         } else if (CommentSortBy.ByTime == sortBy) {
             //최신순
             comments = commentRepository.findNewestComments(voteId, gender, age, mbti, pageable);
+            countComments = commentRepository.countNewestComments(voteId, gender, age, mbti);
         }
 
 
@@ -91,7 +96,7 @@ public class CommentService {
 
         comments.addAll(childComments);
 
-        return comments;
+        return new CommentListWithCount(comments, countComments);
     }
 
     public List<Comment> getHotComments(Long voteId, Gender gender, Age age, MBTI mbti) {
@@ -233,6 +238,8 @@ public class CommentService {
 
         return commentRepository.countCommentsByVoteId(voteId);
     }
+
+
 
 
 }

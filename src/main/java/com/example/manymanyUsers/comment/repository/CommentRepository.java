@@ -41,11 +41,19 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             " ORDER BY (c.likeCount + c.hateCount) DESC , c.createdDate DESC")
     List<Comment> findHotComments(@Param("voteId") Long voteId,@Param("gender") Gender gender, @Param("age") Age age, @Param("mbti") MBTI mbti,Pageable pageable);
 
+    @Query("SELECT COUNT(c) FROM Comment c" +
+            " WHERE c.voteId = :voteId AND c.parent IS NULL AND (:gender IS NULL OR c.gender = :gender) AND (:age IS NULL OR c.age = :age) AND (:mbti IS NULL OR c.mbti = :mbti)")
+    int countHotComments(@Param("voteId") Long voteId,@Param("gender") Gender gender, @Param("age") Age age, @Param("mbti") MBTI mbti);
+
     //최신순 댓글 조회
     @Query("SELECT c FROM Comment c" +
             " WHERE c.voteId = :voteId AND c.parent IS NULL AND (:gender IS NULL OR c.gender = :gender) AND (:age IS NULL OR c.age = :age) AND (:mbti IS NULL OR c.mbti = :mbti) " +
             "ORDER BY c.createdDate DESC")
     List<Comment> findNewestComments(@Param("voteId") Long voteId, @Param("gender") Gender gender, @Param("age") Age age, @Param("mbti") MBTI mbti, Pageable pageable);
+
+    @Query("SELECT COUNT(c) FROM Comment c" +
+            " WHERE c.voteId = :voteId AND c.parent IS NULL AND (:gender IS NULL OR c.gender = :gender) AND (:age IS NULL OR c.age = :age) AND (:mbti IS NULL OR c.mbti = :mbti) ")
+    int countNewestComments(@Param("voteId") Long voteId, @Param("gender") Gender gender, @Param("age") Age age, @Param("mbti") MBTI mbti);
 
 
     Long countCommentsByVoteId(@Param("voteId") Long voteId);
@@ -55,6 +63,8 @@ public interface CommentRepository extends JpaRepository<Comment,Long> {
             "WHERE c.voteId= :voteId AND c.parent= :parentComment AND (:gender IS NULL OR  (c.gender = :gender)) AND (:age IS NULL OR  (c.age = :age)) AND (:mbti IS NULL OR  (c.mbti = :mbti))" +
             "ORDER BY c.id ASC")
     List<Comment> findChildComments(@Param("voteId") Long voteId, @Param("gender") Gender gender, @Param("age") Age age, @Param("mbti") MBTI mbti, @Param("parentComment") Comment parentComment);
+
+
 
 
 }
