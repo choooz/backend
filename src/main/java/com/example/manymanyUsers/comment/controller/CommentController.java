@@ -54,9 +54,14 @@ public class CommentController {
     @GetMapping("/votes/{voteId}/comments")
     public ResponseEntity<Slice<CommentGetResponse>> getComment(@PathVariable Long voteId, @ModelAttribute CommentGetRequest commentGetRequest) {
 
-        List<Comment> comments = commentService.getComments(voteId, commentGetRequest.getGender(), commentGetRequest.getAge(), commentGetRequest.getMbti(), commentGetRequest.getSize(), commentGetRequest.getPage(), commentGetRequest.getSortBy());
+        CommentListWithCount commentListWithCount = commentService.getComments(voteId, commentGetRequest.getGender(), commentGetRequest.getAge(), commentGetRequest.getMbti(), commentGetRequest.getSize(), commentGetRequest.getPage(), commentGetRequest.getSortBy());
+
+        List<Comment> comments = commentListWithCount.getComments();
 
         Pageable pageable = PageRequest.of(commentGetRequest.getPage(), commentGetRequest.getSize());
+
+        int totalCommentCount = commentListWithCount.getCommentCount();
+        int lastPageNumber = (int) Math.ceil((double) totalCommentCount / commentGetRequest.getSize());
 
         List<CommentGetResponse> commentGetResponse = new ArrayList<>();
         Map<Long, CommentGetResponse> map = new HashMap<>();
@@ -85,10 +90,10 @@ public class CommentController {
                 map.get(comment.getParent().getId()).getChildren().add(dto);
             } else commentGetResponse.add(dto);
         }
-        boolean isLast = map.size() < commentGetRequest.getSize();
+        boolean hasNext = commentGetRequest.getPage() < lastPageNumber - 1;
 
 
-        Slice<CommentGetResponse> slice = new SliceImpl<>(commentGetResponse, pageable, isLast);
+        Slice<CommentGetResponse> slice = new SliceImpl<>(commentGetResponse, pageable, hasNext);
         return ResponseEntity.ok().body(slice);
     }
 
