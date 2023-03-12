@@ -84,8 +84,7 @@ public class User extends BaseTimeEntity {
     }
 
     @Builder
-    public User(Long id, String nickname, String email, String imageUrl, String password, Providers provider, String providerId, Role role, Integer age, Gender gender, MBTI mbti, List<CategoryEntity> categoryLists, LocalDateTime modifiedMBTIDate) {
-        this.id = id;
+    public User(String nickname, String email, String imageUrl, String password, Providers provider, String providerId, Role role, Integer age, Gender gender, MBTI mbti, List<CategoryEntity> categoryLists, LocalDateTime modifiedMBTIDate) {
         this.nickname = nickname;
         this.email = email;
         this.imageUrl = imageUrl;
