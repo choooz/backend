@@ -48,11 +48,8 @@ public class CommentEmotion {
         user.mappingCommentLike(this);
     }
 
-    public void setEmotionLike() {
-        this.emotion = Emotion.LIKE;
+    public void setEmote(Emotion emotion) {
+        this.emotion = emotion;
     }
 
-    public void setEmotionHate() {
-        this.emotion = Emotion.HATE;
-    }
 }

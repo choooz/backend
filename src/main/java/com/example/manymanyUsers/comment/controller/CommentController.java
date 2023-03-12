@@ -3,6 +3,7 @@ package com.example.manymanyUsers.comment.controller;
 
 import com.example.manymanyUsers.comment.domain.Comment;
 import com.example.manymanyUsers.comment.dto.*;
+import com.example.manymanyUsers.comment.enums.Emotion;
 import com.example.manymanyUsers.comment.service.CommentService;
 import com.example.manymanyUsers.common.dto.CommonResponse;
 import com.example.manymanyUsers.exception.comment.CommentNotFoundException;
@@ -168,11 +169,10 @@ public class CommentController {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
-        Long likeCount = commentService.likeComment(voteId, commentId, longId);
+        commentService.emoteComment(voteId, commentId, longId, Emotion.LIKE);
 
         Map<String, Object> result = new HashMap<>();
-        result.put("message", "성공 코드.");
-        result.put("count", likeCount);
+        result.put("message", "좋아요 성공 코드");
 
         return ResponseEntity.ok().body(result);
     }
@@ -183,11 +183,10 @@ public class CommentController {
         Integer userId = (int) claims.get("userId");
         Long longId = Long.valueOf(userId);
 
-        Long hateCount = commentService.hateComment(voteId, commentId, longId);
+        commentService.emoteComment(voteId, commentId, longId, Emotion.HATE);
 
         Map<String, Object> result = new HashMap<>();
-        result.put("message", "성공 코드.");
-        result.put("count", hateCount);
+        result.put("message", "싫어요 성공 코드");
 
         return ResponseEntity.ok().body(result);
     }
