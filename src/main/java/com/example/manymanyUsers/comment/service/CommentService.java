@@ -3,6 +3,7 @@ package com.example.manymanyUsers.comment.service;
 
 import com.example.manymanyUsers.comment.domain.Comment;
 import com.example.manymanyUsers.comment.domain.CommentEmotion;
+import com.example.manymanyUsers.comment.dto.CommentCreateRequest;
 import com.example.manymanyUsers.comment.dto.CommentListWithCount;
 import com.example.manymanyUsers.comment.dto.CommentUpdateRequest;
 import com.example.manymanyUsers.comment.enums.CommentSortBy;
