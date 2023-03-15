@@ -14,8 +14,8 @@ public class TokenService {
     private final TokenRepository tokenRepository;
     private final JwtTokenProvider jwtTokenProvider;
 
-    private int monthToMinites = 43200;
-    private int accessTokenExpriedTime = 30;
+    final private int MONTH_TO_MINITES = 43200;
+    final private int ACCESS_TOKEN_EXPIREDTIME = 30;
 
     /**
      * 엑세스 토큰 재발급 로직
@@ -24,7 +24,7 @@ public class TokenService {
      */
     public String refreshAcessToken(String refreshtoken) {
         TokenEntity tokenEntity = tokenRepository.findByRefreshToken(refreshtoken).orElseThrow(TokenNotFoundException::new);
-        String newAcessToken = jwtTokenProvider.makeJwtToken(tokenEntity.getUserId(), accessTokenExpriedTime);
+        String newAcessToken = jwtTokenProvider.makeJwtToken(tokenEntity.getUserId(), ACCESS_TOKEN_EXPIREDTIME);
         return newAcessToken;
     }
 
@@ -35,8 +35,20 @@ public class TokenService {
      */
     public String updateRefreshToken(String refreshtoken) {
         TokenEntity tokenEntity = tokenRepository.findByRefreshToken(refreshtoken).orElseThrow(TokenNotFoundException::new);
-        String newRefreshToken = jwtTokenProvider.makeJwtToken(tokenEntity.getUserId(), monthToMinites);
+        String newRefreshToken = jwtTokenProvider.makeJwtToken(tokenEntity.getUserId(), MONTH_TO_MINITES);
         tokenEntity.updateRefreshToken(newRefreshToken);
+        tokenRepository.save(tokenEntity);
+        return newRefreshToken;
+    }
+
+    /**
+     * 새로 로그인시 리프레쉬 토큰 발급
+     * @param userId
+     * @return refreshToken
+     */
+    public String issueRefreshToken(Long userId) {
+        String newRefreshToken = jwtTokenProvider.makeJwtToken(userId, MONTH_TO_MINITES);
+        TokenEntity tokenEntity = new TokenEntity(newRefreshToken, userId);
         tokenRepository.save(tokenEntity);
         return newRefreshToken;
     }

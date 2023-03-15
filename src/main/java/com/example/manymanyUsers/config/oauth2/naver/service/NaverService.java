@@ -2,6 +2,7 @@ package com.example.manymanyUsers.config.oauth2.naver.service;
 
 import com.example.manymanyUsers.config.jwt.JwtTokenProvider;
 import com.example.manymanyUsers.config.oauth2.kakao.dto.GetLoginTokenResponse;
+import com.example.manymanyUsers.token.service.TokenService;
 import com.example.manymanyUsers.user.enums.Providers;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
@@ -40,6 +41,8 @@ public class NaverService {
     private final UserRepository userRepository;
 
     private final JwtTokenProvider jwtTokenProvider;
+
+    private final TokenService tokenService;
 
     @Value("${spring.security.oauth2.client.registration.naver.client-id}")
     private String clientId;
@@ -141,11 +144,13 @@ public class NaverService {
             return GetLoginTokenResponse.builder()
                     .accessToken(this.jwtTokenProvider.makeJwtToken(user.getId(),30))
                     .isNewUser(isNewUser)
+                    .refreshToken(tokenService.issueRefreshToken(user.getId()))
                     .build();
         }
         User findUser = id.get();
         return GetLoginTokenResponse.builder()
                 .accessToken(this.jwtTokenProvider.makeJwtToken(findUser.getId(),30))
+                .refreshToken(tokenService.issueRefreshToken(findUser.getId()))
                 .isNewUser(isNewUser)
                 .build();
     }
