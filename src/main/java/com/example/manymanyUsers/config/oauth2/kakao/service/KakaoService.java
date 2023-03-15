@@ -161,11 +161,16 @@ public class KakaoService {
             user.setGender(Gender.NULL);
             userRepository.save(user);
             isNewUser = true;
-            return new GetLoginTokenResponse(this.jwtTokenProvider.makeJwtToken(user.getId(), 1), isNewUser);
-
+            return GetLoginTokenResponse.builder()
+                    .accessToken(this.jwtTokenProvider.makeJwtToken(user.getId(),30))
+                    .isNewUser(isNewUser)
+                    .build();
         }
         User findUser = id.get();
-        return new GetLoginTokenResponse(this.jwtTokenProvider.makeJwtToken(findUser.getId(), 1), isNewUser);
+        return GetLoginTokenResponse.builder()
+                .accessToken(this.jwtTokenProvider.makeJwtToken(findUser.getId(),30))
+                .isNewUser(isNewUser)
+                .build();
     }
 
 
