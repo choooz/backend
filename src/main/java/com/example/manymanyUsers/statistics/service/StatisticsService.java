@@ -8,6 +8,7 @@ import com.example.manymanyUsers.vote.enums.Choice;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import com.example.manymanyUsers.vote.repository.VoteResultRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ public class StatisticsService {
     private final VoteRepository voteRepository;
 
     @Timer
+    @Cacheable(value = "totalStatistics", key = "#voteId")
     public Long getTotalStatistics(Long voteId) {
 
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
