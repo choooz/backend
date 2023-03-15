@@ -19,13 +19,10 @@ import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
-import com.example.manymanyUsers.vote.enums.SortBy;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -138,7 +135,7 @@ public class CommentService {
     }
 
 
-    public Long likeComment(Long voteId, Long commentId, Long userId) {
+    public void emoteComment(Long voteId, Long commentId, Long userId, Emotion emotion) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
@@ -146,20 +143,20 @@ public class CommentService {
         Optional<CommentEmotion> byCommentAndUser = commentEmotionRepository.findByCommentAndUser(comment, user);
 
         byCommentAndUser.ifPresentOrElse(commentEmotion -> {
-                    //좋아요를 눌렀는데 또 눌렀을 경우 좋아요 취소
-                    if (commentEmotion.getEmotion().equals(Emotion.LIKE)) {
+                    //좋아요(싫어요)를 기존에 눌렀는데 또 눌렀을 경우 좋아요(싫어요) 취소
+                    if (emotion == commentEmotion.getEmotion()) {
                         commentEmotionRepository.delete(commentEmotion);
                         comment.removeEmotion(commentEmotion);
                         comment.updateLikeHateCount();
                     }
-                    //싫어요를 누른 상태로 좋아요를 누른 경우 싫어요 취소 후 좋아요로 등록
+                    //싫어요(좋아요)를 기존에 누른 상태로 좋아요(싫어요)를 누른 경우 싫어요(좋아요) 취소 후 좋아요(싫어요)로 등록
                     else {
                         commentEmotionRepository.delete(commentEmotion);
                         comment.removeEmotion(commentEmotion);
 
                         CommentEmotion changeEmotion = new CommentEmotion();
 
-                        changeEmotion.setEmotionLike();
+                        changeEmotion.setEmote(emotion);
                         changeEmotion.mappingComment(comment);
                         changeEmotion.mappingUser(user);
                         comment.updateLikeHateCount();
@@ -168,70 +165,19 @@ public class CommentService {
                     }
 
                 },
-                // 좋아요가 없을 경우 좋아요 추가
+                // 좋아요(싫어요)가 없을 경우 좋아요(싫어요) 추가
                 () -> {
                     CommentEmotion commentEmotion = new CommentEmotion();
 
-                    commentEmotion.setEmotionLike();
+                    commentEmotion.setEmote(emotion);
                     commentEmotion.mappingComment(comment);
                     commentEmotion.mappingUser(user);
                     comment.updateLikeHateCount();
 
                     commentEmotionRepository.save(commentEmotion);
                 });
-
-        return comment.getLikeCount();
     }
 
-    public Long hateComment(Long voteId, Long commentId, Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-        Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
-        Comment comment = commentRepository.findById(commentId).orElseThrow(CommentNotFoundException::new);
-
-        Optional<CommentEmotion> byCommentAndUser = commentEmotionRepository.findByCommentAndUser(comment, user);
-
-
-        byCommentAndUser.ifPresentOrElse(
-                commentEmotion -> {
-                    //싫어요를 눌렀는데 또 눌렀을 경우 싫어요 취소
-                    if (commentEmotion.getEmotion().equals(Emotion.HATE)) {
-                        commentEmotionRepository.delete(commentEmotion);
-                        comment.removeEmotion(commentEmotion);
-                        comment.updateLikeHateCount();
-                    }
-                    //좋아요를 누른 상태로 싫어요를 누른 경우 좋아요 취소 후 싫어요로 등록
-                    else {
-                        commentEmotionRepository.delete(commentEmotion);
-                        comment.removeEmotion(commentEmotion);
-
-                        CommentEmotion changeEmotion = new CommentEmotion();
-
-                        changeEmotion.setEmotionHate();
-                        changeEmotion.mappingComment(comment);
-                        changeEmotion.mappingUser(user);
-                        comment.updateLikeHateCount();
-
-                        commentEmotionRepository.save(changeEmotion);
-                    }
-
-                },
-                // 싫어요가 없을 경우 싫어요 추가
-                () -> {
-                    CommentEmotion commentEmotion = new CommentEmotion();
-
-                    commentEmotion.setEmotionHate();
-                    commentEmotion.mappingComment(comment);
-                    commentEmotion.mappingUser(user);
-
-                    comment.updateLikeHateCount();
-
-                    commentEmotionRepository.save(commentEmotion);
-                }
-        );
-
-
-        return comment.getHateCount();
-    }
 
     public Long getCommentsCountByVote(Long voteId) {
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
