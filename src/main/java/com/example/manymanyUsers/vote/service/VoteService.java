@@ -219,8 +219,6 @@ public class VoteService {
 
         Optional<Bookmark> byVoteAndUser = bookmarkRepository.findByVoteAndUser(vote, user);
 
-        boolean result = byVoteAndUser.isPresent();
-
-        return result;
+        return bookmarkRepository.findByVoteAndUser(vote, user).isPresent();
     }
 }

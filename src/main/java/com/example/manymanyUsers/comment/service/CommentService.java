@@ -143,6 +143,7 @@ public class CommentService {
         Optional<CommentEmotion> byCommentAndUser = commentEmotionRepository.findByCommentAndUser(comment, user);
 
         byCommentAndUser.ifPresentOrElse(commentEmotion -> {
+
                     //좋아요(싫어요)를 기존에 눌렀는데 또 눌렀을 경우 좋아요(싫어요) 취소
                     if (emotion == commentEmotion.getEmotion()) {
                         commentEmotionRepository.delete(commentEmotion);
