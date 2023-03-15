@@ -18,14 +18,14 @@ public class TokenController {
     private final TokenService tokenService;
 
     @GetMapping("")
-    public ResponseEntity<TokenResponse> reissueToken(TokenType tokenType, String token) {
+    public ResponseEntity<TokenResponse> reissueToken(TokenType tokenType, String refreshToken) {
         if(tokenType == TokenType.ACCESS){
-            String acessToken = tokenService.refreshAcessToken(token);
+            String acessToken = tokenService.refreshAcessToken(refreshToken);
             TokenResponse tokenResponse = new TokenResponse(acessToken, tokenType);
             return new ResponseEntity(tokenResponse,HttpStatus.OK);
         }
-        String refreshToken = tokenService.updateRefreshToken(token);
-        TokenResponse tokenResponse = new TokenResponse(refreshToken, tokenType);
+        String newRefreshToken = tokenService.updateRefreshToken(refreshToken);
+        TokenResponse tokenResponse = new TokenResponse(newRefreshToken, tokenType);
         return new ResponseEntity(tokenResponse ,HttpStatus.OK);
     }
 
