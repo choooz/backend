@@ -165,14 +165,14 @@ public class KakaoService {
             userRepository.save(user);
             isNewUser = true;
             return GetLoginTokenResponse.builder()
-                    .accessToken(this.jwtTokenProvider.makeJwtToken(user.getId(),30))
+                    .accessToken(this.jwtTokenProvider.makeJwtToken(user.getId(),1))
                     .refreshToken(tokenService.issueRefreshToken(user.getId()))
                     .isNewUser(isNewUser)
                     .build();
         }
         User findUser = id.get();
         return GetLoginTokenResponse.builder()
-                .accessToken(this.jwtTokenProvider.makeJwtToken(findUser.getId(),30))
+                .accessToken(this.jwtTokenProvider.makeJwtToken(findUser.getId(),1))
                 .refreshToken(tokenService.issueRefreshToken(findUser.getId()))
                 .isNewUser(isNewUser)
                 .build();

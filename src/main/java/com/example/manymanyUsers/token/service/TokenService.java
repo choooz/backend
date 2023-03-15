@@ -19,11 +19,11 @@ public class TokenService {
 
     /**
      * 엑세스 토큰 재발급 로직
-     * @param refreshtoken
+     * @param refreshToken
      * @return accessToken
      */
-    public String refreshAcessToken(String refreshtoken) {
-        TokenEntity tokenEntity = tokenRepository.findByRefreshToken(refreshtoken).orElseThrow(TokenNotFoundException::new);
+    public String refreshAcessToken(String refreshToken) {
+        TokenEntity tokenEntity = tokenRepository.findByRefreshToken(refreshToken).orElseThrow(TokenNotFoundException::new);
         String newAcessToken = jwtTokenProvider.makeJwtToken(tokenEntity.getUserId(), ACCESS_TOKEN_EXPIREDTIME);
         return newAcessToken;
     }
