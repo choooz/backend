@@ -5,9 +5,12 @@ import com.example.manymanyUsers.statistics.dto.VoteSelectResultData;
 import com.example.manymanyUsers.timer.Timer;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.enums.Choice;
+import com.example.manymanyUsers.vote.enums.Gender;
+import com.example.manymanyUsers.vote.enums.MBTI;
 import com.example.manymanyUsers.vote.repository.VoteRepository;
 import com.example.manymanyUsers.vote.repository.VoteResultRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 @Transactional
+@Slf4j
 public class StatisticsService {
 
     private final VoteResultRepository voteResultRepository;
@@ -32,14 +36,14 @@ public class StatisticsService {
     }
 
     @Timer
-    public VoteSelectResultData getSelectStatistics(Long voteId) {
+    public VoteSelectResultData getSelectStatistics(Long voteId, Gender gender, Integer age, MBTI mbti) {
 
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
-        Long totalVoteCount = voteResultRepository.countByVote(vote);
+        Long totalVoteCount = voteResultRepository.countUserByVoteAndGenderAndAgeAndMBTI(vote, gender, age, mbti);
 
-        int totalCountA = voteResultRepository.countByVoteAndChoice(vote, Choice.A);
-        int totalCountB = voteResultRepository.countByVoteAndChoice(vote, Choice.B);
+        int totalCountA = voteResultRepository.countByVoteAndChoiceAndGenderAndAgeAndMBTI(vote, Choice.A, gender, age, mbti);
+        int totalCountB = voteResultRepository.countByVoteAndChoiceAndGenderAndAgeAndMBTI(vote, Choice.B, gender, age, mbti);
 
         int percentA = (int) (((float)totalCountA / (float)totalVoteCount) * 100);
         int percentB = (int) (((float)totalCountB / (float)totalVoteCount) * 100);

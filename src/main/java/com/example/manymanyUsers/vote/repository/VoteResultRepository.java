@@ -3,8 +3,7 @@ package com.example.manymanyUsers.vote.repository;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.domain.VoteResult;
-import com.example.manymanyUsers.vote.enums.Category;
-import com.example.manymanyUsers.vote.enums.Choice;
+import com.example.manymanyUsers.vote.enums.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,11 +15,18 @@ import java.util.Optional;
 
 public interface VoteResultRepository extends JpaRepository<VoteResult, Long> {
 
-//    @Query("SELECT COUNT(*) FROM VoteResult v WHERE v.vote = :vote")
     Long countByVote(@Param("vote") Vote vote);
 
-//    @Query("SELECT COUNT(*) FROM VoteResult v WHERE v.vote = :vote and v.choice = com.example.manymanyUsers.vote.enums.Choice.A")
-    int countByVoteAndChoice(@Param("vote") Vote vote, @Param("choice") Choice choice);
+    @Query("SELECT COUNT(*) " +
+            "FROM VoteResult v JOIN v.votedUser u " +
+            "WHERE (v.vote = :vote) AND (:gender is null or u.gender = :gender) AND (:age is null or u.age = :age) AND (:mbti is null or u.mbti = :mbti)")
+    Long countUserByVoteAndGenderAndAgeAndMBTI(@Param("vote") Vote vote, @Param("gender") Gender gender, @Param("age") Integer age, @Param("mbti") MBTI mbti);
+
+    @Query("SELECT COUNT(*) " +
+            "FROM VoteResult v JOIN v.votedUser u " +
+            "WHERE (v.vote = :vote) and (v.choice = :choice) " +
+            "AND (:gender is null or u.gender = :gender) AND (:age is null or u.age = :age) AND (:mbti is null or u.mbti = :mbti)")
+    int countByVoteAndChoiceAndGenderAndAgeAndMBTI(@Param("vote") Vote vote, @Param("choice") Choice choice, @Param("gender") Gender gender, @Param("age") Integer age, @Param("mbti") MBTI mbti);
 
     boolean existsByVoteAndVotedUser(@Param("vote")Vote vote, @Param("votedUser")User user);
 
@@ -44,4 +50,6 @@ public interface VoteResultRepository extends JpaRepository<VoteResult, Long> {
 
     @Query("SELECT vr FROM VoteResult vr WHERE vr.vote.id = :voteId and vr.votedUser.id = :userId")
     Optional<VoteResult> getVoteResultByVoteIdAndUserId(@Param("voteId") Long voteId, @Param("userId") Long userId);
+
+
 }
