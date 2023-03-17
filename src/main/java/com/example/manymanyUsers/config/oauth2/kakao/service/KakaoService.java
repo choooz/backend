@@ -2,7 +2,6 @@ package com.example.manymanyUsers.config.oauth2.kakao.service;
 
 import com.example.manymanyUsers.config.jwt.JwtTokenProvider;
 import com.example.manymanyUsers.config.oauth2.kakao.dto.GetLoginTokenResponse;
-import com.example.manymanyUsers.token.service.TokenService;
 import com.example.manymanyUsers.user.enums.Providers;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
@@ -41,8 +40,6 @@ public class KakaoService {
     private final UserRepository userRepository;
 
     private final JwtTokenProvider jwtTokenProvider;
-
-    private final TokenService tokenService;
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String clientId;
@@ -164,18 +161,11 @@ public class KakaoService {
             user.setGender(Gender.NULL);
             userRepository.save(user);
             isNewUser = true;
-            return GetLoginTokenResponse.builder()
-                    .accessToken(this.jwtTokenProvider.makeJwtToken(user.getId(),1))
-                    .refreshToken(tokenService.issueRefreshToken(user.getId()))
-                    .isNewUser(isNewUser)
-                    .build();
+            return new GetLoginTokenResponse(this.jwtTokenProvider.makeJwtToken(user.getId(), 30), isNewUser);
+
         }
         User findUser = id.get();
-        return GetLoginTokenResponse.builder()
-                .accessToken(this.jwtTokenProvider.makeJwtToken(findUser.getId(),1))
-                .refreshToken(tokenService.issueRefreshToken(findUser.getId()))
-                .isNewUser(isNewUser)
-                .build();
+        return new GetLoginTokenResponse(this.jwtTokenProvider.makeJwtToken(findUser.getId(), 30), isNewUser);
     }
 
 

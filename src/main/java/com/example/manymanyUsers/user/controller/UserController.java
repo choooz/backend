@@ -1,11 +1,12 @@
 package com.example.manymanyUsers.user.controller;
 
 import com.example.manymanyUsers.comment.service.CommentService;
-import com.example.manymanyUsers.common.dto.CommonResponse;
+import com.example.manymanyUsers.config.oauth2.kakao.dto.GetUserInfoResponse;
 import com.example.manymanyUsers.statistics.service.StatisticsService;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.dto.*;
 import com.example.manymanyUsers.user.service.UserService;
+import com.example.manymanyUsers.common.dto.CommonResponse;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.enums.VoteType;
 import com.example.manymanyUsers.vote.service.VoteService;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpStatus;
