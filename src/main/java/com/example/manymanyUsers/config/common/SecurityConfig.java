@@ -3,7 +3,6 @@ package com.example.manymanyUsers.config.common;
 import com.example.manymanyUsers.config.jwt.JwtProperties;
 import com.example.manymanyUsers.config.jwt.JwtTokenProvider;
 import com.example.manymanyUsers.config.jwt.filter.JwtAuthenticationFilter;
-import com.example.manymanyUsers.config.jwt.filter.JwtExceptionHandlerFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
@@ -60,8 +59,6 @@ public class SecurityConfig{
 
                 http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                     .antMatcher("/api/**");
-
-                http.addFilterBefore(new JwtExceptionHandlerFilter(), JwtAuthenticationFilter.class);
 //
 //                .authorizeRequests()
 //                .antMatchers("/api/oauth/login","/api/user/addInfo")
