@@ -22,11 +22,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -222,8 +219,6 @@ public class VoteService {
 
         Optional<Bookmark> byVoteAndUser = bookmarkRepository.findByVoteAndUser(vote, user);
 
-        boolean result = byVoteAndUser.isPresent();
-
-        return result;
+        return bookmarkRepository.findByVoteAndUser(vote, user).isPresent();
     }
 }

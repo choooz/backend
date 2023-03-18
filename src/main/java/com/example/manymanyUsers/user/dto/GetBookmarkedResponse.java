@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetBookmarkedResponse {
 
-    boolean bookmarked;
+    private boolean bookmarked;
 
 
     public GetBookmarkedResponse(boolean bookmarked){
