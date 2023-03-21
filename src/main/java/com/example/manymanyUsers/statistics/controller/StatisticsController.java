@@ -41,12 +41,7 @@ public class StatisticsController {
     @GetMapping("/vote/{voteId}/select-statistics")
     public ResponseEntity<SelectStatisticsResponse> getSelectStatistics(@PathVariable("voteId") Long voteId, @RequestParam(required = false) Gender gender, @RequestParam(required = false) Age age, @RequestParam(required = false) MBTI mbti) {
 
-        Integer classifyAge = null;
-
-        if(age != null)
-            classifyAge = Integer.valueOf(age.getValue().substring(0, 2));
-
-        VoteSelectResultData voteSelectResultData  = statisticsService.getSelectedStatistics(voteId, gender, classifyAge, mbti);
+        VoteSelectResultData voteSelectResultData  = statisticsService.getSelectedStatistics(voteId, gender, age, mbti);
 
         SelectStatisticsResponse selectStatisticsResponse = new SelectStatisticsResponse(voteId, voteSelectResultData);
 

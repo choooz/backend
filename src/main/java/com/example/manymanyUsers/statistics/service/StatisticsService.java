@@ -4,6 +4,7 @@ import com.example.manymanyUsers.exception.vote.VoteNotFoundException;
 import com.example.manymanyUsers.statistics.dto.VoteSelectResultData;
 import com.example.manymanyUsers.common.timer.Timer;
 import com.example.manymanyUsers.vote.domain.Vote;
+import com.example.manymanyUsers.vote.enums.Age;
 import com.example.manymanyUsers.vote.enums.Choice;
 import com.example.manymanyUsers.vote.enums.Gender;
 import com.example.manymanyUsers.vote.enums.MBTI;
@@ -36,12 +37,17 @@ public class StatisticsService {
     }
 
     @Timer
-    public VoteSelectResultData getSelectedStatistics(Long voteId, Gender gender, Integer age, MBTI mbti) {
+    public VoteSelectResultData getSelectedStatistics(Long voteId, Gender gender, Age age, MBTI mbti) {
+
+        Integer classifyAge = null;
+
+        if(age != null)
+            classifyAge = Integer.valueOf(age.getValue().substring(0, 2));
 
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
 
-        int totalCountA = voteResultRepository.countByVoteAndChoiceAndGenderAndAgeAndMBTI(vote, Choice.A, gender, age, mbti);
-        int totalCountB = voteResultRepository.countByVoteAndChoiceAndGenderAndAgeAndMBTI(vote, Choice.B, gender, age, mbti);
+        int totalCountA = voteResultRepository.countByVoteAndChoiceAndGenderAndAgeAndMBTI(vote, Choice.A, gender, classifyAge, mbti);
+        int totalCountB = voteResultRepository.countByVoteAndChoiceAndGenderAndAgeAndMBTI(vote, Choice.B, gender, classifyAge, mbti);
 
         float totalVoteCount = totalCountA + totalCountB;
 
