@@ -1,4 +1,4 @@
-package com.example.manymanyUsers.timer;
+package com.example.manymanyUsers.common.timer;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -12,7 +12,7 @@ import org.springframework.util.StopWatch;
 @Component
 @Slf4j
 public class TimerAop {
-    @Pointcut("@annotation(com.example.manymanyUsers.timer.Timer)")
+    @Pointcut("@annotation(com.example.manymanyUsers.common.timer.Timer)")
     private void enableTimer() {}
 
     @Around("enableTimer()")

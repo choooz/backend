@@ -2,7 +2,7 @@ package com.example.manymanyUsers.statistics.service;
 
 import com.example.manymanyUsers.exception.vote.VoteNotFoundException;
 import com.example.manymanyUsers.statistics.dto.VoteSelectResultData;
-import com.example.manymanyUsers.timer.Timer;
+import com.example.manymanyUsers.common.timer.Timer;
 import com.example.manymanyUsers.vote.domain.Vote;
 import com.example.manymanyUsers.vote.enums.Choice;
 import com.example.manymanyUsers.vote.enums.Gender;

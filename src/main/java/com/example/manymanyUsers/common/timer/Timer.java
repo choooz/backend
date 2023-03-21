@@ -1,4 +1,4 @@
-package com.example.manymanyUsers.timer;
+package com.example.manymanyUsers.common.timer;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
