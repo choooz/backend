@@ -19,11 +19,6 @@ public interface VoteResultRepository extends JpaRepository<VoteResult, Long> {
 
     @Query("SELECT COUNT(*) " +
             "FROM VoteResult v JOIN v.votedUser u " +
-            "WHERE (v.vote = :vote) AND (:gender is null or u.gender = :gender) AND (:age is null or u.age = :age) AND (:mbti is null or u.mbti = :mbti)")
-    Long countUserByVoteAndGenderAndAgeAndMBTI(@Param("vote") Vote vote, @Param("gender") Gender gender, @Param("age") Integer age, @Param("mbti") MBTI mbti);
-
-    @Query("SELECT COUNT(*) " +
-            "FROM VoteResult v JOIN v.votedUser u " +
             "WHERE (v.vote = :vote) and (v.choice = :choice) " +
             "AND (:gender is null or u.gender = :gender) AND (:age is null or u.age = :age) AND (:mbti is null or u.mbti = :mbti)")
     int countByVoteAndChoiceAndGenderAndAgeAndMBTI(@Param("vote") Vote vote, @Param("choice") Choice choice, @Param("gender") Gender gender, @Param("age") Integer age, @Param("mbti") MBTI mbti);

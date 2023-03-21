@@ -46,7 +46,7 @@ public class StatisticsController {
         if(age != null)
             classifyAge = Integer.valueOf(age.getValue().substring(0, 2));
 
-        VoteSelectResultData voteSelectResultData  = statisticsService.getSelectStatistics(voteId, gender, classifyAge, mbti);
+        VoteSelectResultData voteSelectResultData  = statisticsService.getSelectedStatistics(voteId, gender, classifyAge, mbti);
 
         SelectStatisticsResponse selectStatisticsResponse = new SelectStatisticsResponse(voteId, voteSelectResultData);
 

@@ -36,17 +36,17 @@ public class StatisticsService {
     }
 
     @Timer
-    public VoteSelectResultData getSelectStatistics(Long voteId, Gender gender, Integer age, MBTI mbti) {
+    public VoteSelectResultData getSelectedStatistics(Long voteId, Gender gender, Integer age, MBTI mbti) {
 
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);
-
-        Long totalVoteCount = voteResultRepository.countUserByVoteAndGenderAndAgeAndMBTI(vote, gender, age, mbti);
 
         int totalCountA = voteResultRepository.countByVoteAndChoiceAndGenderAndAgeAndMBTI(vote, Choice.A, gender, age, mbti);
         int totalCountB = voteResultRepository.countByVoteAndChoiceAndGenderAndAgeAndMBTI(vote, Choice.B, gender, age, mbti);
 
-        int percentA = (int) (((float)totalCountA / (float)totalVoteCount) * 100);
-        int percentB = (int) (((float)totalCountB / (float)totalVoteCount) * 100);
+        float totalVoteCount = totalCountA + totalCountB;
+
+        int percentA = (int) (((float)totalCountA / totalVoteCount) * 100);
+        int percentB = (int) (((float)totalCountB / totalVoteCount) * 100);
 
         VoteSelectResultData voteSelectResultData = new VoteSelectResultData(totalCountA, totalCountB, percentA, percentB);
 
