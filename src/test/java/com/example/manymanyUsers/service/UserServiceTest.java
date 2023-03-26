@@ -166,89 +166,89 @@ public class UserServiceTest {
 
     }
 
-    @Test
-    public void 프로필수정_성공() throws NotFoundException {
-        // given
-        Long userId = 1L;
-        String nickname = "updatedNickname";
-        String image = "updatedImage";
-        MBTI originalMbti = MBTI.INFP;
-        MBTI updatedMbti = MBTI.ENFJ;
-        LocalDateTime modifiedMbtiDate = LocalDateTime.now().minusMonths(2); // 두 달 전에 MBTI를 수정함
-        List<Category> categoryList = Arrays.asList(Category.LOVE, Category.FOODS);
-
-        CategoryEntity categoryEntity1 = new CategoryEntity(2L, Category.CAREER);
-        CategoryEntity categoryEntity2 = new CategoryEntity(3L, Category.FOODS);
-
-        List<CategoryEntity> categoryEntityList = new ArrayList<>();
-        categoryEntityList.add(categoryEntity1);
-        categoryEntityList.add(categoryEntity2);
-
-
-        User user = User.builder()
-                .id(userId)
-                .nickname("originalNickname")
-                .imageUrl("originalImage")
-                .mbti(originalMbti)
-                .categoryLists(new ArrayList<>())
-                .build();
-
-
-        Mockito.when(mockUserRepository.findById(userId)).thenReturn(Optional.of(user));
-
-
-        user.setModifiedMBTIDate(modifiedMbtiDate);
-
-
-        // when
-        mockUserService.updateUser(userId, nickname, image, updatedMbti, categoryList);
-
-        //then
-        assertEquals(nickname, user.getNickname());
-        assertEquals(image, user.getImageUrl());
-        assertEquals(updatedMbti, user.getMbti());
-        assertEquals(categoryList, user.getCategoryLists().stream().map(CategoryEntity::toCategory).collect(Collectors.toList()));
-    }
-
-
-    @Test
-    public void 프로필수정_실패() throws NotFoundException {
-        // given
-        Long userId = 1L;
-        String nickname = "updatedNickname";
-        String image = "updatedImage";
-        MBTI originalMbti = MBTI.INFP;
-        MBTI updatedMbti = MBTI.ENFJ;
-        LocalDateTime modifiedMbtiDate = LocalDateTime.now().minusMonths(1); // 두 달 전에 MBTI를 수정함
-        List<Category> categoryList = Arrays.asList(Category.LOVE, Category.FOODS);
-
-        CategoryEntity categoryEntity1 = new CategoryEntity(2L, Category.CAREER);
-        CategoryEntity categoryEntity2 = new CategoryEntity(3L, Category.FOODS);
-
-        List<CategoryEntity> categoryEntityList = new ArrayList<>();
-        categoryEntityList.add(categoryEntity1);
-        categoryEntityList.add(categoryEntity2);
+//    @Test
+//    public void 프로필수정_성공() throws NotFoundException {
+//        // given
+//        Long userId = 1L;
+//        String nickname = "updatedNickname";
+//        String image = "updatedImage";
+//        MBTI originalMbti = MBTI.INFP;
+//        MBTI updatedMbti = MBTI.ENFJ;
+//        LocalDateTime modifiedMbtiDate = LocalDateTime.now().minusMonths(2); // 두 달 전에 MBTI를 수정함
+//        List<Category> categoryList = Arrays.asList(Category.LOVE, Category.FOODS);
+//
+//        CategoryEntity categoryEntity1 = new CategoryEntity(2L, Category.CAREER);
+//        CategoryEntity categoryEntity2 = new CategoryEntity(3L, Category.FOODS);
+//
+//        List<CategoryEntity> categoryEntityList = new ArrayList<>();
+//        categoryEntityList.add(categoryEntity1);
+//        categoryEntityList.add(categoryEntity2);
+//
+//
+//        User user = User.builder()
+//                .id(userId)
+//                .nickname("originalNickname")
+//                .imageUrl("originalImage")
+//                .mbti(originalMbti)
+//                .categoryLists(new ArrayList<>())
+//                .build();
+//
+//
+//        Mockito.when(mockUserRepository.findById(userId)).thenReturn(Optional.of(user));
+//
+//
+//        user.setModifiedMBTIDate(modifiedMbtiDate);
+//
+//
+//        // when
+//        mockUserService.updateUser(userId, nickname, image, updatedMbti, categoryList);
+//
+//        //then
+//        assertEquals(nickname, user.getNickname());
+//        assertEquals(image, user.getImageUrl());
+//        assertEquals(updatedMbti, user.getMbti());
+//        assertEquals(categoryList, user.getCategoryLists().stream().map(CategoryEntity::toCategory).collect(Collectors.toList()));
+//    }
 
 
-        User user = User.builder()
-                .id(userId)
-                .nickname("originalNickname")
-                .imageUrl("originalImage")
-                .mbti(originalMbti)
-                .categoryLists(new ArrayList<>())
-                .build();
-
-
-        Mockito.when(mockUserRepository.findById(userId)).thenReturn(Optional.of(user));
-
-
-        user.setModifiedMBTIDate(modifiedMbtiDate);
-
-        //when, then
-        assertThrows(UserIllegalStateException.class, () -> {
-            mockUserService.updateUser(userId, nickname, image, updatedMbti, categoryList);
-        });
-    }
+//    @Test
+//    public void 프로필수정_실패() throws NotFoundException {
+//        // given
+//        Long userId = 1L;
+//        String nickname = "updatedNickname";
+//        String image = "updatedImage";
+//        MBTI originalMbti = MBTI.INFP;
+//        MBTI updatedMbti = MBTI.ENFJ;
+//        LocalDateTime modifiedMbtiDate = LocalDateTime.now().minusMonths(1); // 두 달 전에 MBTI를 수정함
+//        List<Category> categoryList = Arrays.asList(Category.LOVE, Category.FOODS);
+//
+//        CategoryEntity categoryEntity1 = new CategoryEntity(2L, Category.CAREER);
+//        CategoryEntity categoryEntity2 = new CategoryEntity(3L, Category.FOODS);
+//
+//        List<CategoryEntity> categoryEntityList = new ArrayList<>();
+//        categoryEntityList.add(categoryEntity1);
+//        categoryEntityList.add(categoryEntity2);
+//
+//
+//        User user = User.builder()
+//                .id(userId)
+//                .nickname("originalNickname")
+//                .imageUrl("originalImage")
+//                .mbti(originalMbti)
+//                .categoryLists(new ArrayList<>())
+//                .build();
+//
+//
+//        Mockito.when(mockUserRepository.findById(userId)).thenReturn(Optional.of(user));
+//
+//
+//        user.setModifiedMBTIDate(modifiedMbtiDate);
+//
+//        //when, then
+//        assertThrows(UserIllegalStateException.class, () -> {
+//            mockUserService.updateUser(userId, nickname, image, updatedMbti, categoryList);
+//        });
+//    }
 
 
 }

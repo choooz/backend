@@ -714,7 +714,7 @@ public class VoteServiceTest {
 
         //when
         long totalVoteCount = statisticsService.getTotalStatistics(vote.getId());
-        VoteSelectResultData voteSelectResultData = statisticsService.getSelectStatistics(vote.getId(), Gender.MALE, 20, MBTI.ENFJ);
+        VoteSelectResultData voteSelectResultData = statisticsService.getSelectedStatistics(vote.getId(), Gender.MALE, Age.twenties, MBTI.ENFJ);
 
         //then
         assertEquals(3L, totalVoteCount);
@@ -763,7 +763,7 @@ public class VoteServiceTest {
 
         //when
         long totalVoteCount = statisticsService.getTotalStatistics(vote.getId());
-        VoteSelectResultData voteSelectResultData = statisticsService.getSelectStatistics(vote.getId(), Gender.MALE, 20, MBTI.ENFJ);
+        VoteSelectResultData voteSelectResultData = statisticsService.getSelectedStatistics(vote.getId(), Gender.MALE, Age.twenties, MBTI.ENFJ);
 
         //then
         assertEquals(3L, totalVoteCount);

@@ -112,16 +112,23 @@ public class VoteService {
 
     public Slice<VoteListData> getSearchVoteList(String keyword, SortBy sortBy, int page, int size, Category category) {
 
-        Slice<Vote> voteSlice;
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
+        Slice<Vote> searchedVoteSlice = null;
 
-        if (category == null) {
-            voteSlice = voteRepository.findSliceByTitleContains(keyword, pageRequest);
-        }else{
-            voteSlice = voteRepository.findSliceByCategoryAndTitleContains(category, keyword, pageRequest);
+        if(sortBy.equals(SortBy.ByTime)) {
+            PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, sortBy.getValue()));
+            searchedVoteSlice = voteRepository.findSliceByCategoryOrCategoryNullAndTitleContains(category, keyword, pageRequest);
+        } else if(sortBy.equals(SortBy.ByPopularity)) {
+            PageRequest pageRequest = PageRequest.of(page, size);
+            searchedVoteSlice = voteRepository.findSliceByCategoryOrCategoryNullAndTitleContainsPopularity(category, keyword, pageRequest);
         }
 
-        Slice<VoteListData> voteListData = voteSlice.map(vote -> {
+//        if (category == null) {
+//            voteSlice = voteRepository.findSliceByTitleContains(keyword, pageRequest);
+//        }else{
+//            voteSlice = voteRepository.findSliceByCategoryAndTitleContains(category, keyword, pageRequest);
+//        }
+
+        Slice<VoteListData> voteListData = searchedVoteSlice.map(vote -> {
             vote.getPostedUser(); //프록시 처리된 user 엔티티 가져오기 위함
             Long countVoted = voteResultRepository.countByVote(vote);
             return new VoteListData(vote, countVoted);

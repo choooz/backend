@@ -37,7 +37,18 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
     @Query("SELECT v FROM Vote v JOIN v.bookmarkList b WHERE b.user = :user")
     Slice<Vote> findBookmarkedVoteByUser(User user, PageRequest pageRequest);
   
+    Slice<Vote> findSliceByCategoryOrCategoryNullAndTitleContains(Category category, String keyword, Pageable pageable);
+
+    @Query("SELECT distinct v FROM Vote v " +
+            "left join FETCH v.voteResultList vr " +
+            "join FETCH v.postedUser pu " +
+            "WHERE (v.category IS NULL OR v.category = :category) AND (v.title LIKE %:keyword%) " +
+            "GROUP BY v.id, vr.id " +
+            "order by count(vr.vote.id) DESC")
+    Slice<Vote> findSliceByCategoryOrCategoryNullAndTitleContainsPopularity(@Param("category")Category category, @Param("keyword")String keyword, Pageable pageable);
+
     Slice<Vote> findSliceByCategoryAndTitleContains(Category category, String keyword, Pageable pageable);
+
 
     Slice<Vote> findSliceByTitleContains(String keyword, Pageable pageable);
 
