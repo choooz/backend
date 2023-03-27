@@ -7,6 +7,8 @@ import com.example.manymanyUsers.config.oauth2.kakao.service.KakaoService;
 import com.example.manymanyUsers.user.domain.User;
 import com.example.manymanyUsers.user.domain.UserRepository;
 import io.jsonwebtoken.Claims;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/oauth")
+@Tag(name = "kakao", description = "카카오 소셜 로그인 api")
 public class KakaoController {
 
     private final KakaoService kakaoService;
@@ -33,6 +36,8 @@ public class KakaoController {
      * @throws IOException
      * @throws ParseException
      */
+
+    @Operation(summary = "카카오 로그인", description = "{code, redirectUrl} json 형식으로 보내주시면 됩니다.")
     @PostMapping("/kakao")
     public ResponseEntity<GetLoginTokenResponse> getKaKaoToken(@Valid @RequestBody GetkakaoTokenRequest getkakaoToken) throws IOException, ParseException {
         String code = getkakaoToken.getCode();
@@ -41,7 +46,7 @@ public class KakaoController {
         return new ResponseEntity(getLoginToken, HttpStatus.OK);
     }
 
-
+    @Operation(summary = "유저 정보", description = "헤더에 토큰 담아 보내주시면 됩니다.")
     @GetMapping("/login")
     public ResponseEntity<GetUserInfoResponse> getUserInfo(@RequestAttribute Claims claims) {
         //엑세스 토큰안의 유저 아이디로 유저를 찾은 다음 유저정보 리턴해줌
