@@ -12,6 +12,7 @@ import com.example.manymanyUsers.vote.service.VoteService;
 import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
@@ -28,12 +29,14 @@ import java.util.Map;
 @RequestMapping("/api/user")
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "user", description = "user api")
 public class UserController {
     private final UserService userService;
     private final VoteService voteService;
     private final StatisticsService statisticsService;
     private final CommentService commentService;
 
+    @Operation(summary = "회원가입", description = "{name, email, password, provider, providerId} 을 json 형식으로 보내주시면 됩니다.")
     @PostMapping("/signup")
     public ResponseEntity<CommonResponse> registerUser(@Valid @RequestBody SignUpRequest signUpRequestDto) {
         try {
@@ -47,7 +50,7 @@ public class UserController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @Operation(description = "유저 정보 추가, 헤더에 토큰담고 바디에 AddInfoRequest 행태로 넣어주셔야 합나디.")
+    @Operation(summary = "유저 정보 추가", description = "헤더에 토큰, {mbti, age, gender} json 행식으로 보내주시면 됩니다.")
     @PatchMapping("/addInfo")
     public ResponseEntity<CommonResponse> addUserInfo(@Valid @RequestBody AddInfoRequest addInfoRequest, @RequestAttribute Claims claims) {
         Integer userId = (int) claims.get("userId");
@@ -62,7 +65,7 @@ public class UserController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-
+    @Operation(summary = "유저 관심사 카테고리 추가", description = "헤더에 토큰, {categoryLists} json 형식으로 보내주시면 됩니다.")
     @PatchMapping("/addInterestCategory")
     public ResponseEntity<CommonResponse> AddInterestCategory(@RequestBody AddInterestCategoryRequest addInterestCategoryRequest, @RequestAttribute Claims claims) {
         Integer userId = (int) claims.get("userId");
@@ -78,7 +81,7 @@ public class UserController {
     }
 
 
-    @Operation(description = "마이페이지 타입별 voteList 요청 api")
+    @Operation(summary = "마이페이지 타입별 voteList", description = "헤더에 토큰, voteType, page, size 보내주시면 됩니다.")
     @GetMapping("/mypage")
     public ResponseEntity<Slice<MyPageResponse>> getVotesByUser(@Parameter(description = "created,participated,bookmarked", required = true) @RequestParam VoteType voteType, @RequestParam int page, @RequestParam int size, @RequestAttribute Claims claims) {
         Integer userId = (int) claims.get("userId");
@@ -110,7 +113,7 @@ public class UserController {
 
     }
 
-    @Operation(description = "마이페이지 타입별 voteCount 요청 api")
+    @Operation(summary = "마이페이지 타입별 voteCount", description = "헤더에 토큰 보내주시면 됩니다.")
     @GetMapping("/mypage/count")
     public ResponseEntity<MyPageCountResponse> getMyPageCount(@RequestAttribute Claims claims) {
         Integer userId = (int) claims.get("userId");
@@ -128,7 +131,7 @@ public class UserController {
 
     }
 
-    @Operation(description = "프로필 수정")
+    @Operation(summary = "프로필 수정", description = "헤더에 토큰, {nickname, image, mbti, categoryList} 을 json 형식으로 보내주시면 됩니다.")
     @PatchMapping("/mypage/edit")
     public ResponseEntity<GetUserResponse> updateUser(@RequestBody UpdateUserRequest updateUserRequest, @RequestAttribute Claims claims) throws NotFoundException {
         Integer userId = (int) claims.get("userId");
