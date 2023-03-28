@@ -37,7 +37,7 @@ public class KakaoController {
      * @throws ParseException
      */
 
-    @Operation(summary = "카카오 로그인", description = "{code, redirectUrl} json 형식으로 보내주시면 됩니다.")
+    @Operation(summary = "카카오 로그인", description = "바디에 {code, redirectUrl} json 형식으로 보내주시면 됩니다.")
     @PostMapping("/kakao")
     public ResponseEntity<GetLoginTokenResponse> getKaKaoToken(@Valid @RequestBody GetkakaoTokenRequest getkakaoToken) throws IOException, ParseException {
         String code = getkakaoToken.getCode();
