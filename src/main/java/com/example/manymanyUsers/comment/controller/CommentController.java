@@ -37,7 +37,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @Operation(summary = "댓글 생성", description = "헤더에 토큰, 파라미터에 voteId, {parentId, content} json 형식으로 보내주시면 됩니다.")
+    @Operation(summary = "댓글 생성", description = "헤더에 토큰, 파라미터에 voteId, 바디에 {parentId, content} json 형식으로 보내주시면 됩니다.")
     @PostMapping("/votes/{voteId}/comments")
     public ResponseEntity<CommonResponse> createComment(@PathVariable Long voteId, @RequestBody @Valid CommentCreateRequest commentCreateRequest, @RequestAttribute Claims claims) throws UserNotFoundException {
         Integer userId = (int) claims.get("userId");
