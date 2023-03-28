@@ -36,7 +36,7 @@ public class UserController {
     private final StatisticsService statisticsService;
     private final CommentService commentService;
 
-    @Operation(summary = "회원가입", description = "{name, email, password, provider, providerId} 을 json 형식으로 보내주시면 됩니다.")
+    @Operation(summary = "회원가입", description = "바디에 {name, email, password, provider, providerId} 을 json 형식으로 보내주시면 됩니다.")
     @PostMapping("/signup")
     public ResponseEntity<CommonResponse> registerUser(@Valid @RequestBody SignUpRequest signUpRequestDto) {
         try {
@@ -50,7 +50,7 @@ public class UserController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "유저 정보 추가", description = "헤더에 토큰, {mbti, age, gender} json 행식으로 보내주시면 됩니다.")
+    @Operation(summary = "유저 정보 추가", description = "헤더에 토큰, 바디에 {mbti, age, gender} json 행식으로 보내주시면 됩니다.")
     @PatchMapping("/addInfo")
     public ResponseEntity<CommonResponse> addUserInfo(@Valid @RequestBody AddInfoRequest addInfoRequest, @RequestAttribute Claims claims) {
         Integer userId = (int) claims.get("userId");
@@ -65,7 +65,7 @@ public class UserController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
-    @Operation(summary = "유저 관심사 카테고리 추가", description = "헤더에 토큰, {categoryLists} json 형식으로 보내주시면 됩니다.")
+    @Operation(summary = "유저 관심사 카테고리 추가", description = "헤더에 토큰, 바디에 {categoryLists} json 형식으로 보내주시면 됩니다.")
     @PatchMapping("/addInterestCategory")
     public ResponseEntity<CommonResponse> AddInterestCategory(@RequestBody AddInterestCategoryRequest addInterestCategoryRequest, @RequestAttribute Claims claims) {
         Integer userId = (int) claims.get("userId");
@@ -131,7 +131,7 @@ public class UserController {
 
     }
 
-    @Operation(summary = "프로필 수정", description = "헤더에 토큰, {nickname, image, mbti, categoryList} 을 json 형식으로 보내주시면 됩니다.")
+    @Operation(summary = "프로필 수정", description = "헤더에 토큰, 바디에 {nickname, image, mbti, categoryList} 을 json 형식으로 보내주시면 됩니다.")
     @PatchMapping("/mypage/edit")
     public ResponseEntity<GetUserResponse> updateUser(@RequestBody UpdateUserRequest updateUserRequest, @RequestAttribute Claims claims) throws NotFoundException {
         Integer userId = (int) claims.get("userId");
