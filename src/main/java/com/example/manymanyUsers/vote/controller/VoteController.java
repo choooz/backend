@@ -11,6 +11,7 @@ import com.example.manymanyUsers.vote.enums.SortBy;
 import com.example.manymanyUsers.vote.service.VoteService;
 import io.jsonwebtoken.Claims;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Slice;
@@ -25,10 +26,11 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "vote", description = "vote api")
 public class VoteController {
     private final VoteService voteService;
 
-    @Operation(description = "투표 생성")
+    @Operation(summary = "투표 생성", description = "헤더에 토큰 담고, 바디에 {title, titleA, titleB, imageA, imageB, filteredGender, filteredAge, filteredMbti} json 형식으로 보내주시면 됩니다.")
     @PostMapping("")
     public ResponseEntity<CreateVoteResponse> createVote(@Valid @RequestBody CreateVoteRequest createVoteRequest, @RequestAttribute Claims claims) throws UserNotFoundException {
 
@@ -42,9 +44,9 @@ public class VoteController {
         return new ResponseEntity(createVoteResponse, HttpStatus.OK);
     }
 
-    @Operation(description = "투표 리스트 조회")
+    @Operation(summary = "투표 리스트 조회", description = "파라미터에 sortBy, page, size, category 보내주시면 됩니다.")
     @GetMapping("")
-    public ResponseEntity<GetVoteListResponse> getVoteList(@RequestParam SortBy sortBy, @RequestParam int page, @RequestParam int size, @RequestParam(required = false) Category category, @RequestParam(required = false) Long userId) {
+    public ResponseEntity<GetVoteListResponse> getVoteList(@RequestParam SortBy sortBy, @RequestParam int page, @RequestParam int size, @RequestParam(required = false) Category category) {
         Slice<VoteListData> voteListData = voteService.getVoteList(sortBy, page, size, category);
         GetVoteListResponse voteResponse = GetVoteListResponse.builder()
                 .voteSlice(voteListData)
@@ -52,7 +54,7 @@ public class VoteController {
         return new ResponseEntity(voteResponse, HttpStatus.OK);
     }
 
-    @Operation(description = "투표 리스트 검색")
+    @Operation(summary = "투표 리스트 검색", description = "파라미터에 keyeword, sortBy, page, size, category 보내주시면 됩니다.")
     @GetMapping("/search")
     public ResponseEntity<GetVoteListResponse> getVoteSearchList(@RequestParam String keyword, @RequestParam SortBy sortBy, @RequestParam int page, @RequestParam int size, @RequestParam(required = false) Category category) {
         Slice<VoteListData> voteListData = voteService.getSearchVoteList(keyword, sortBy, page, size, category);
@@ -62,7 +64,7 @@ public class VoteController {
         return new ResponseEntity(voteResponse, HttpStatus.OK);
     }
 
-    @Operation(description = "투표 단건 조회")
+    @Operation(summary = "투표 단건 조회", description = "파라미터에 voteId 보내주시면 됩니다.")
     @GetMapping("/{voteId}")
     public ResponseEntity<GetVoteResponse> getVote(@PathVariable Long voteId) {
         Vote vote = voteService.getVote(voteId);
@@ -95,7 +97,7 @@ public class VoteController {
     }
 
 
-    @Operation(description = "투표 업데이트")
+    @Operation(summary = "투표 수정", description = "파라미터에 voteId, 바디에 {title, detail, category, titleA, titleB} json 형식으로 보내주시면 됩니다.")
     @PatchMapping("/{voteId}")
     public ResponseEntity<CommonResponse> updateVote(@PathVariable("voteId") Long voteId, @Valid @RequestBody UpdateVoteRequest updateVoteRequest, @RequestAttribute Claims claims) throws UserNotFoundException, VoteNotFoundException {
         Integer userId = (int) claims.get("userId");
@@ -108,7 +110,7 @@ public class VoteController {
         return new ResponseEntity(updateVoteResponse, HttpStatus.OK);
     }
 
-    @Operation(description = "투표 삭제")
+    @Operation(summary = "투표 삭제", description = "헤더에 토큰 담고, 파라미터에 voteId 보내주시면 됩니다")
     @DeleteMapping("/{voteId}")
     public ResponseEntity<CommonResponse> deleteVote(@PathVariable("voteId") Long voteId, @RequestAttribute Claims claims) throws UserNotFoundException {
 
@@ -122,7 +124,7 @@ public class VoteController {
         return new ResponseEntity(updateVoteResponse, HttpStatus.OK);
     }
 
-    @Operation(description = "투표 참여")
+    @Operation(summary = "투표 참여", description = "헤더에 토큰담고, 파라미터에 voteId, 바디에 {choice} json 형식으로 보내주시면 됩니다.")
     @PostMapping("/{voteId}/vote")
     public ResponseEntity doVote(@RequestBody DoVoteRequest doVoteRequest, @PathVariable("voteId") Long voteId, @RequestAttribute Claims claims) {
 
@@ -137,7 +139,7 @@ public class VoteController {
         return new ResponseEntity(commonResponse ,HttpStatus.OK);
     }
 
-    @Operation(description = "투표 검색어 추천")
+    @Operation(summary = "투표 검색어 추천", description = "파라미터에 keyword, category 보내주시면 됩니다.")
     @GetMapping("/recommend")
     public ResponseEntity recommendVote(@RequestParam String keyword, @RequestParam(required = false) Category category) {
 
@@ -149,7 +151,7 @@ public class VoteController {
         return new ResponseEntity(voteResponse, HttpStatus.OK);
     }
 
-    @Operation(description = "투표 북마크")
+    @Operation(summary = "투표 북마크", description = "헤더에 토큰 담고, 파라미터에 voteId 보내주시면 됩니다.")
     @PostMapping("/{voteId}/bookmark")
     public ResponseEntity<CommonResponse> bookmarkVote(@PathVariable Long voteId, @RequestAttribute Claims claims) {
         Integer userId = (int) claims.get("userId");
@@ -163,7 +165,7 @@ public class VoteController {
         return new ResponseEntity(commonResponse,HttpStatus.OK);
     }
 
-    @Operation(description = "투표 참여 여부 조회")
+    @Operation(summary = "투표 참여 여부 조회", description = "파라미터에 voteId, 헤더에 userId 보내주시면 됩니다.")
     @GetMapping("/{voteId}/voted")
     public ResponseEntity<GetIsUserVotedResponse> getIsUserVoted(@PathVariable Long voteId, @RequestAttribute Long userId) {
         GetIsUserVoted userVoted = voteService.isUserVoted(voteId, userId);
@@ -172,7 +174,7 @@ public class VoteController {
         return new ResponseEntity(getIsUserVotedResponse,HttpStatus.OK);
     }
 
-    @Operation(description = "북마크 여부 조회")
+    @Operation(summary = "북마크 여부 조회", description = "파라미어테 voteId, 헤더에 userId 보내주시면 됩니다.")
     @GetMapping("/{voteId}/bookmark")
     public ResponseEntity checkBookmarked(@PathVariable Long voteId, @RequestAttribute Long userId){
 
