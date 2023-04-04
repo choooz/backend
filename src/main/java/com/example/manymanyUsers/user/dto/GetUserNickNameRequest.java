@@ -14,4 +14,6 @@ public class GetUserNickNameRequest {
     private String[] words;
 
     private String seed;
+
+
 }

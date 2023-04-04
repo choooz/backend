@@ -24,7 +24,7 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
     Slice<Vote> findAllByPostedUser(User user,PageRequest pageRequest);
 
     @Query("SELECT v FROM Vote v JOIN v.voteResultList vr WHERE vr.votedUser = :user")
-    Slice<Vote> findParticipatedVoteByUser(User user,PageRequest pageRequest);
+    Slice<Vote> findParticipatedVoteByUser(@Param("user")User user, PageRequest pageRequest);
 
 
     @Query("SELECT v FROM Vote v " +
@@ -35,7 +35,7 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
     Long countVoteByPostedUser(User user);
 
     @Query("SELECT v FROM Vote v JOIN v.bookmarkList b WHERE b.user = :user")
-    Slice<Vote> findBookmarkedVoteByUser(User user, PageRequest pageRequest);
+    Slice<Vote> findBookmarkedVoteByUser(@Param("user")User user, PageRequest pageRequest);
   
     Slice<Vote> findSliceByCategoryOrCategoryNullAndTitleContains(Category category, String keyword, Pageable pageable);
 

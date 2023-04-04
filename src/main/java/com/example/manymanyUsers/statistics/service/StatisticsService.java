@@ -26,7 +26,6 @@ public class StatisticsService {
     private final VoteRepository voteRepository;
 
     @Timer
-    @Cacheable(value = "totalStatistics", key = "#voteId")
     public Long getTotalStatistics(Long voteId) {
 
         Vote vote = voteRepository.findById(voteId).orElseThrow(VoteNotFoundException::new);

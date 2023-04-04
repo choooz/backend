@@ -81,7 +81,7 @@ public class UserController {
     }
 
 
-    @Operation(summary = "마이페이지 타입별 voteList", description = "헤더에 토큰, voteType, page, size 보내주시면 됩니다.")
+    @Operation(summary = "마이페이지 타입별 voteList", description = "헤더에 토큰, 파라미터에 voteType, page, size 보내주시면 됩니다.")
     @GetMapping("/mypage")
     public ResponseEntity<Slice<MyPageResponse>> getVotesByUser(@Parameter(description = "created,participated,bookmarked", required = true) @RequestParam VoteType voteType, @RequestParam int page, @RequestParam int size, @RequestAttribute Claims claims) {
         Integer userId = (int) claims.get("userId");
