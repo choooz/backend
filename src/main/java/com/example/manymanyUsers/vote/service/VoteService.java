@@ -177,8 +177,8 @@ public class VoteService {
         return voteList;
     }
 
-    public List<String> getRecommendVoteList(String keyword, Category category) {
-        return voteRepository.findByCategoryAndTitleContains(category, keyword).stream()
+    public List<String> getRecommendVoteList(String keyword) {
+        return voteRepository.findByCategoryAndTitleContains(keyword).stream()
                 .limit(5)
                 .map(Vote::getTitle)
                 .collect(Collectors.toList());
