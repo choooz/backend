@@ -9,7 +9,7 @@ public enum Category implements EnumModel {
     LOVE("연애"),
     FASHION("패션"),
     INTEREST("재미"),
-    NULL("null");
+    ETC("기타");
 
     private String value;
 

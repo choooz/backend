@@ -40,6 +40,7 @@ public class VoteService {
         User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
         Vote vote = Vote.builder()
+                .category(Category.ETC)
                 .postedUser(findUser)
                 .title(createVoteRequest.getTitle())
                 .imageA(createVoteRequest.getImageA())
