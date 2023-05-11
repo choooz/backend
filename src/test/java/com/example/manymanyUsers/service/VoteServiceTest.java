@@ -146,7 +146,7 @@ public class VoteServiceTest {
                         break;
                 }
                 Age filteredAge = Age.NULL;
-                Category category = Category.NULL;
+                Category category = Category.ETC;
                 switch (i%5){
                     case 1: category = Category.CAREER;
                         break;
@@ -243,7 +243,7 @@ public class VoteServiceTest {
         UpdateVoteRequest updateVoteRequest = UpdateVoteRequest.builder()
                 .title("수정 후 타이틀")
                 .detail("수정 후 디테일")
-                .category(Category.NULL)
+                .category(Category.ETC)
                 .titleA("수정 후 타이틀A")
                 .titleB("수정 후 타이틀B")
                 .build();
@@ -294,7 +294,7 @@ public class VoteServiceTest {
         UpdateVoteRequest updateVoteRequest = UpdateVoteRequest.builder()
                 .title("수정 후 타이틀")
                 .detail("수정 후 디테일")
-                .category(Category.NULL)
+                .category(Category.ETC)
                 .titleA("수정 후 타이틀A")
                 .titleB("수정 후 타이틀B")
                 .build();
@@ -337,7 +337,7 @@ public class VoteServiceTest {
         UpdateVoteRequest updateVoteRequest = UpdateVoteRequest.builder()
                 .title("수정 후 타이틀")
                 .detail("수정 후 디테일")
-                .category(Category.NULL)
+                .category(Category.ETC)
                 .titleA("수정 후 타이틀A")
                 .titleB("수정 후 타이틀B")
                 .build();
