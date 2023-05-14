@@ -1,1 +1,3 @@
-rootProject.name = 'manymanyUsers'
+rootProject.name = 'chooz'
+
+include 'chooz-api'

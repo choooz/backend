@@ -1,0 +1,20 @@
+tasks.named('bootJar') {
+    enabled = true
+}
+
+tasks.named('jar') {
+    enabled = false
+}
+
+
+
+dependencies {
+//    implementation project(':domain')
+//    implementation project(':storage:db-jpa')
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+//    implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
+
+//    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+}
+
