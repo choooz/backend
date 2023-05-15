@@ -1,3 +1,4 @@
 rootProject.name = 'chooz'
 
 include 'chooz-api'
+include 'domain'
