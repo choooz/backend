@@ -2,3 +2,6 @@ rootProject.name = 'chooz'
 
 include 'chooz-api'
 include 'domain'
+include 'storage:db-jpa'
+include 'client:kakao'
+include 'client:naver'
