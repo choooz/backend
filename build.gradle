@@ -42,10 +42,5 @@ subprojects {
 		useJUnitPlatform()
 	}
 
-	task wrapper(type: Wrapper) {
-		gradleVersion = '0.9'
-	}
-
-	tasks.register("prepareKotlinBuildScriptModel"){}
 }
 
