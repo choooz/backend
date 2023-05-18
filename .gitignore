@@ -1,21 +1,29 @@
 HELP.md
 .gradle
-
-
 build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
 
+
+
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+!gradle/wrapper/gradle-wrapper.jar
 !gradle/wrapper/gradle-wrapper.jar
 
 !build/libs
 
-src/main/resources/application.properties
+domain/main/resources/application.properties
 *.yml
-src/main/resources/templates/login.html
+domain/main/resources/templates/login.html
 
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-src/main/java/com/example/manymanyUsers/test
+domain/main/java/com/example/manymanyUsers/test
 
 
 
@@ -49,4 +57,4 @@ out/
 
 ### VS Code ###
 .vscode/
-src/main/java/com/example/manymanyUsers/test
+domain/main/java/com/example/manymanyUsers/test
