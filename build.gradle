@@ -5,7 +5,7 @@ plugins {
 }
 
 allprojects {
-	group = 'com.chooz'
+	group = 'kr.co.chooz'
 	version = '0.0.1-SNAPSHOT'
 	sourceCompatibility = '11'
 
