@@ -4,9 +4,16 @@ plugins {
 	id 'java'
 }
 
-group = 'com.example'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+allprojects {
+	group = 'ko.co.chooz'
+	version = '0.0.1-SNAPSHOT'
+	sourceCompatibility = '11'
+
+	repositories {
+		mavenCentral()
+	}
+
+}
 
 configurations {
 	compileOnly {
@@ -14,40 +21,25 @@ configurations {
 	}
 }
 
-repositories {
-	mavenCentral()
-}
+subprojects { // 각 모듈에 적용할 공통 설정
+	apply plugin: 'java'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
 
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-	implementation 'io.jsonwebtoken:jjwt:0.9.1'
-	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
-	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.2'
-	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.2'
-	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
-	implementation 'mysql:mysql-connector-java'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-	implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
-	implementation group: 'org.javassist', name: 'javassist', version: '3.15.0-GA'
-	implementation 'org.ehcache:ehcache:3.8.1'
-	implementation 'javax.cache:cache-api:1.1.1'
-	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	dependencies { // 롬복은 공통적으로 사용하는 의존성이니 여기서 끌어다 사용
+		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor 'org.projectlombok:lombok'
+	}
 
-}
+	tasks.named('bootJar') { //빌드할 때 bootjar 파일로 하겠다는 의미
+		enabled = false
+	}
 
-tasks.named('test') {
-	useJUnitPlatform()
-}
+	tasks.named('jar') { //빌드할 때 jar 파일로 하겠다는 의미
+		enabled = true
+	}
 
-jar {
-	enabled = false
+	tasks.named('test') {
+		useJUnitPlatform()
+	}
 }
