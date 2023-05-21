@@ -1,4 +1,4 @@
-package kr.co.chooz.user.entity;
+package kr.co.chooz.user.domain;
 
 
 import lombok.Builder;
