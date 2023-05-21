@@ -1,4 +1,4 @@
 package kr.co.chooz.user.domain;
 
-public enum ProviderType {
+public enum RoleType {
 }
