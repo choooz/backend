@@ -2,10 +2,10 @@ package kr.co.chooz.user.domain;
 
 
 import kr.co.chooz.user.dto.GeneralSignupInfo;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 
 
-@AllArgsConstructor
+@Builder
 public class User {
 
     private Long id;
