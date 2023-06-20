@@ -28,9 +28,25 @@ public class User {
 //    }
 
     public User(GeneralSignupInfo signupInfo) {
+
+        validateSignupInfo(signupInfo);
+
         this.provider = signupInfo.getProviderType();
         this.email = signupInfo.getEmail();
         this.providerId = signupInfo.getProviderId();
+    }
+
+    private void validateSignupInfo(GeneralSignupInfo signupInfo) {
+        if (signupInfo.getProviderId() == null) {
+            throw new IllegalArgumentException("ProviderId는 null이면 안됩니다.");
+        }
+        if (signupInfo.getProviderType() == null) {
+            throw new IllegalArgumentException("ProviderType은 null이면 안됩니다.");
+        }
+        if (signupInfo.getEmail() == null) {
+            throw new IllegalArgumentException("Email은 null이면 안됩니다.");
+        }
+
     }
 
 //    public User(String providerId, ProviderType providerType) {

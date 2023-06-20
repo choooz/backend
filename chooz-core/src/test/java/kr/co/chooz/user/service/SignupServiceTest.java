@@ -14,6 +14,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SignupServiceTest {
 
@@ -49,9 +50,19 @@ class SignupServiceTest {
         assertEquals(providerId, user.getProviderId());
     }
 
-    @Test
-    void 회원가입에_필요한_정보중_필수값이_누락되면_IllegalArgumentException을_터트린다() {
-//        assertThat();
+    @ParameterizedTest
+    @CsvSource(value = {
+            ",GOOGLE,providerId_1",
+            "example2@kakao.com,,providerId_2",
+            "example3@naver.com,NAVER,"
+    }, delimiter = ',')
+    void 회원가입에_필요한_정보중_필수값이_누락되면_IllegalArgumentException을_터트린다(String email, ProviderType providerType, String providerId) {
+        //given
+        GeneralSignupInfo generalSignupInfo = new GeneralSignupInfo(email, providerType, providerId);
+        //then
+        assertThrows(IllegalArgumentException.class, () -> {
+            new User(generalSignupInfo);
+        });
     }
 
     @Test
