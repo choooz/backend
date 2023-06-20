@@ -9,9 +9,6 @@ tasks.named('jar') {
 
 dependencies {
     implementation project(':chooz-core')
-    implementation project(':storage:db-jpa')
-    implementation project(':client:kakao')
-    implementation project(':client:naver')
     implementation 'org.springframework.boot:spring-boot-starter-web'
 }
 
