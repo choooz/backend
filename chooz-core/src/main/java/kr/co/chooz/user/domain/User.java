@@ -3,9 +3,9 @@ package kr.co.chooz.user.domain;
 
 import kr.co.chooz.user.dto.GeneralSignupInfo;
 import lombok.Builder;
+import lombok.Getter;
 
-
-@Builder
+@Getter
 public class User {
 
     private Long id;
@@ -20,21 +20,24 @@ public class User {
     private MbtiType mbti;
 
 
-    public User(String name, String email, String password, String providerId) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.providerId = providerId;
-    }
+//    public User(String name, String email, String password, String providerId) {
+//        this.name = name;
+//        this.email = email;
+//        this.password = password;
+//        this.providerId = providerId;
+//    }
 
     public User(GeneralSignupInfo signupInfo) {
-        this.name = signupInfo.getName();
+        this.provider = signupInfo.getProviderType();
         this.email = signupInfo.getEmail();
-        this.password = signupInfo.getPassword();
+        this.providerId = signupInfo.getProviderId();
     }
 
-    public User(String providerId, ProviderType providerType) {
-        this.providerId = providerId;
-        this.provider = providerType;
-    }
+//    public User(String providerId, ProviderType providerType) {
+//        this.providerId = providerId;
+//        this.provider = providerType;
+//    }
+
+
+
 }

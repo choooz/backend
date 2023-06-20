@@ -9,9 +9,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class ManageService{
 
-    private final UserPersistencePort userPersistencePort;
+//    private final UserPersistencePort userPersistencePort;
 
-    public void addUserInfo(AddInfoRequest addInfoRequest, Long userId) throws NotFoundException{
+//    public void addUserInfo(AddInfoRequest addInfoRequest, Long userId) throws NotFoundException{
 
 //        Optional<User> byId = userRepository.findById(userId);
 //        if (byId.isEmpty()) {
@@ -37,13 +37,13 @@ public class ManageService{
 //
 //        userRepository.save(user);
 
-    }
+//    }
 
     /**
      * 외부 api 호출해서 랜덤닉네임을 생성
-     * @return GetUserNickNameRequest
+//     * @return GetUserNickNameRequest
      */
-    public GetUserNickNameRequest getUserNickName() {
+//    public GetUserNickNameRequest getUserNickName() {
 //        URI uri = UriComponentsBuilder
 //                .fromUriString("https://nickname.hwanmoo.kr/")
 //                .queryParam("format", "json")
@@ -58,13 +58,13 @@ public class ManageService{
 //        ResponseEntity<GetUserNickNameRequest> result = restTemplate.getForEntity(uri, GetUserNickNameRequest.class);
 //
 //        return result.getBody();
-    }
+//    }
 
 
     /**
      * 유저 정보 기입 이후에 호출되며 유저가 관심이 있는 카테고리를 추가 해주는 메서드
      */
-    public void addInterestCategory(List<Category> lists, Long userId) throws NotFoundException{
+//    public void addInterestCategory(List<Category> lists, Long userId) throws NotFoundException{
 //        Optional<User> byId = userRepository.findById(userId);
 //        if (byId.isEmpty()) {
 //            throw new NotFoundException("해당 아이디 값을 가진 유저가 없습니다. 아이디를 다시 한번 확인하세요.");
@@ -81,5 +81,6 @@ public class ManageService{
 //        }
 //
 //        userRepository.save(user);
-    }
+//    }
+
 }

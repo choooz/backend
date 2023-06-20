@@ -1,16 +1,17 @@
 package kr.co.chooz.user.dto;
 
+import kr.co.chooz.user.domain.ProviderType;
 import lombok.Getter;
 
 @Getter
 public class GeneralSignupInfo {
-    private String name;
     private String email;
-    private String password;
+    private ProviderType providerType;
+    private String providerId;
 
-    public GeneralSignupInfo(String name, String email, String password) {
-        this.name = name;
+    public GeneralSignupInfo(String email, ProviderType providerType, String providerId) {
         this.email = email;
-        this.password = password;
+        this.providerType = providerType;
+        this.providerId = providerId;
     }
 }

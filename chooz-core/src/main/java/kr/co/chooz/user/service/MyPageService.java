@@ -15,7 +15,7 @@ public class MyPageService {
 //    private final VoteResultRepository voteResultRepository;
 //    private final BookmarkRepository bookmarkRepository;
 
-    public Map<String, Long> getMyPageCount(Long userId) {
+//    public Map<String, Long> getMyPageCount(Long userId) {
 //        User findUser = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 //        Map<String, Long> map = new HashMap<>();
 //
@@ -33,5 +33,5 @@ public class MyPageService {
 //        map.put("BOOKMARKED_VOTE", bookmarkedVoteCount);
 //
 //        return map;
-    }
+//    }
 }
