@@ -9,6 +9,6 @@ import org.springframework.stereotype.Controller;
 public class UserController {
     private final UserUserCase userUserCase;
 
-    
+
 
 }
