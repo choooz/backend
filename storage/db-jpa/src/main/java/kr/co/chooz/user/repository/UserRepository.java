@@ -1,4 +1,4 @@
-package kr.co.chooz.user;
+package kr.co.chooz.user.repository;
 
 import kr.co.chooz.user.entity.UserJpaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

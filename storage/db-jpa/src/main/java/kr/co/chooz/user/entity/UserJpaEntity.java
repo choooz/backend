@@ -1,5 +1,7 @@
 package kr.co.chooz.user.entity;
 
+import kr.co.chooz.user.domain.ProviderType;
+import kr.co.chooz.user.domain.User;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -30,4 +32,10 @@ public class UserJpaEntity {
 
     private String providerId;  // oauth2를 이용할 경우 아이디값
 
+    private ProviderType providerType;
+
+
+    public User toDomainUser() {
+        return new User(nickname, email, password, providerId, providerType);
+    }
 }

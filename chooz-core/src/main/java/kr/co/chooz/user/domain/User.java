@@ -9,29 +9,30 @@ import lombok.Getter;
 public class User {
 
     private Long id;
-    private String name;
+    private String nickName;
     private String email;
     private String password;
     private String providerId;
-    private ProviderType provider;
+    private ProviderType providerType;
     private RoleType role;
     private Integer age;
     private GenderType gender;
     private MbtiType mbti;
 
 
-//    public User(String name, String email, String password, String providerId) {
-//        this.name = name;
-//        this.email = email;
-//        this.password = password;
-//        this.providerId = providerId;
-//    }
+    public User(String nickName, String email, String password, String providerId, ProviderType providerType) {
+        this.nickName = nickName;
+        this.email = email;
+        this.password = password;
+        this.providerId = providerId;
+        this.providerType = providerType;
+    }
 
     public User(GeneralSignupInfo signupInfo) {
 
         validateSignupInfo(signupInfo);
 
-        this.provider = signupInfo.getProviderType();
+        this.providerType = signupInfo.getProviderType();
         this.email = signupInfo.getEmail();
         this.providerId = signupInfo.getProviderId();
     }
