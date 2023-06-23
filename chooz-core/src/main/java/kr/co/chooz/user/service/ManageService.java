@@ -1,6 +1,5 @@
 package kr.co.chooz.user.service;
 
-import kr.co.chooz.user.port.out.UserPersistencePort;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

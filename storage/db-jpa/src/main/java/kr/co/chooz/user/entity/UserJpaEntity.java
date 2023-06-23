@@ -1,7 +1,7 @@
 package kr.co.chooz.user.entity;
 
-import kr.co.chooz.user.domain.ProviderType;
-import kr.co.chooz.user.domain.User;
+import kr.co.chooz.user.domain.entitiy.ProviderType;
+import kr.co.chooz.user.domain.entitiy.User;
 import lombok.*;
 
 import javax.persistence.Column;

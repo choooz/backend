@@ -1,8 +1,7 @@
-package kr.co.chooz.user.domain;
+package kr.co.chooz.user.domain.entitiy;
 
 
-import kr.co.chooz.user.dto.GeneralSignupInfo;
-import lombok.Builder;
+import kr.co.chooz.user.dto.LoginRequest;
 import lombok.Getter;
 
 @Getter
@@ -28,7 +27,7 @@ public class User {
         this.providerType = providerType;
     }
 
-    public User(GeneralSignupInfo signupInfo) {
+    public User(LoginRequest signupInfo) {
 
         validateSignupInfo(signupInfo);
 
@@ -37,7 +36,7 @@ public class User {
         this.providerId = signupInfo.getProviderId();
     }
 
-    private void validateSignupInfo(GeneralSignupInfo signupInfo) {
+    private void validateSignupInfo(LoginRequest signupInfo) {
         if (signupInfo.getProviderId() == null) {
             throw new IllegalArgumentException("ProviderId는 null이면 안됩니다.");
         }

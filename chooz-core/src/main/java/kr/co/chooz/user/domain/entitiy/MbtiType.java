@@ -1,4 +1,4 @@
-package kr.co.chooz.user.domain;
+package kr.co.chooz.user.domain.entitiy;
 
 import kr.co.chooz.common.EnumModel;
 
