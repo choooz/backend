@@ -1,6 +1,8 @@
 package kr.co.chooz.token.domain;
 
-import kr.co.chooz.token.dto.TokenGenerateResponse;
+import kr.co.chooz.user.domain.UserFinder;
+import kr.co.chooz.user.domain.entitiy.User;
+import kr.co.chooz.user.dto.LoginToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,26 +13,27 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TokenGenerator {
 
+    private final UserFinder userFinder;
     private final JwtTokenProvider jwtTokenProvider;
-    private static final int ACCESS_TOKEN_VALIDITY_PERIOD = 30;
-    private static final int REFESH_TOKEN_VALIDITY_PERIOD = 43200;
 
-    public TokenGenerateResponse generateToken(Long userId) {
-        String accessToken = generateAccessToken(userId);
-        String refeshToken = generateRefeshToken(userId);
-        return new TokenGenerateResponse(accessToken, refeshToken);
+    private final int MONTH_TO_MINITES = 43200;
+    private final int ACCESS_TOKEN_EXPIREDTIME = 30;
+
+    public LoginToken generate(String providerId, boolean isNewUser) {
+        User user = userFinder.findByProviderId(providerId);
+
+        return new LoginToken(
+                generateAccessToken(user.getId()),
+                generateRefreshToken(user.getId()),
+                isNewUser
+        );
+    }
+
+    private String generateRefreshToken(Long userId) {
+        return jwtTokenProvider.makeJwtToken(userId, MONTH_TO_MINITES);
     }
 
     private String generateAccessToken(Long userId) {
-        return jwtTokenProvider.makeJwtToken(userId, ACCESS_TOKEN_VALIDITY_PERIOD);
+        return jwtTokenProvider.makeJwtToken(userId, ACCESS_TOKEN_EXPIREDTIME);
     }
-
-    private String generateRefeshToken(Long userId) {
-        return jwtTokenProvider.makeJwtToken(userId, REFESH_TOKEN_VALIDITY_PERIOD);
-    }
-
-
-
-
-
 }

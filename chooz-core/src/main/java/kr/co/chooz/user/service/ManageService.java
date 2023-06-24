@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor(access = AccessLevel.PUBLIC)
 @Service
-public class ManageService{
+public class ManageService {
 
 //    private final UserPersistencePort userPersistencePort;
 
@@ -40,7 +40,7 @@ public class ManageService{
 
     /**
      * 외부 api 호출해서 랜덤닉네임을 생성
-//     * @return GetUserNickNameRequest
+     //     * @return GetUserNickNameRequest
      */
 //    public GetUserNickNameRequest getUserNickName() {
 //        URI uri = UriComponentsBuilder

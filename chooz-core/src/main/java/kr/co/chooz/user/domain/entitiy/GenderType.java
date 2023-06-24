@@ -16,6 +16,7 @@ public enum GenderType implements EnumModel {
 
     /**
      * enum key 리턴
+     *
      * @return 'Male' or 'FEMALE'
      */
     @Override
@@ -25,6 +26,7 @@ public enum GenderType implements EnumModel {
 
     /**
      * enum value 리턴
+     *
      * @return '남자' or '여자'
      */
     @Override

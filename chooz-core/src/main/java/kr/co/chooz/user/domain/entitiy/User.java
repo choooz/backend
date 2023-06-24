@@ -1,7 +1,6 @@
 package kr.co.chooz.user.domain.entitiy;
 
 
-import kr.co.chooz.user.dto.LoginRequest;
 import lombok.Getter;
 
 @Getter
@@ -27,24 +26,20 @@ public class User {
         this.providerType = providerType;
     }
 
-    public User(LoginRequest signupInfo) {
+    public User(String providerId, ProviderType providerType) {
 
-        validateSignupInfo(signupInfo);
+        validateSignupInfo(providerId, providerType);
 
-        this.providerType = signupInfo.getProviderType();
-        this.email = signupInfo.getEmail();
-        this.providerId = signupInfo.getProviderId();
+        this.providerId = providerId;
+        this.providerType = providerType;
     }
 
-    private void validateSignupInfo(LoginRequest signupInfo) {
-        if (signupInfo.getProviderId() == null) {
+    private void validateSignupInfo(String providerId, ProviderType providerType) {
+        if (providerId == null) {
             throw new IllegalArgumentException("ProviderId는 null이면 안됩니다.");
         }
-        if (signupInfo.getProviderType() == null) {
+        if (providerType == null) {
             throw new IllegalArgumentException("ProviderType은 null이면 안됩니다.");
-        }
-        if (signupInfo.getEmail() == null) {
-            throw new IllegalArgumentException("Email은 null이면 안됩니다.");
         }
 
     }
@@ -53,7 +48,6 @@ public class User {
 //        this.providerId = providerId;
 //        this.provider = providerType;
 //    }
-
 
 
 }

@@ -4,8 +4,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-
 @RequiredArgsConstructor(access = AccessLevel.PUBLIC)
 @Service
 public class MyPageService {

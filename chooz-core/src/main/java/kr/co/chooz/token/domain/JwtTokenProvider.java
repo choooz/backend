@@ -21,9 +21,10 @@ public class JwtTokenProvider {
 
     /**
      * JwtToken 생성 메서드
-     * @param userId         : 유저  아이디
-     * @param minutes        : jwt 유효시간
-     * @return               : jwt 토큰
+     *
+     * @param userId  : 유저  아이디
+     * @param minutes : jwt 유효시간
+     * @return : jwt 토큰
      */
     public String makeJwtToken(Long userId, int minutes) {
         Date now = new Date();
@@ -32,7 +33,7 @@ public class JwtTokenProvider {
                 .setIssuer(jwtProperties.getIssuer())
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + Duration.ofMinutes(minutes).toMillis()))
-                .claim("userId",userId)
+                .claim("userId", userId)
                 .signWith(SignatureAlgorithm.HS512, jwtProperties.getSecretKey())
                 .compact();
     }
@@ -42,7 +43,7 @@ public class JwtTokenProvider {
         validationAuthorizationHeader(authorizationHeader);
         String token = extractToken(authorizationHeader);
 
-        log.info("*******Accesstoken : {}",token);
+        log.info("*******Accesstoken : {}", token);
         HashMap<String, Object> hashMap = new HashMap<>();
 
         hashMap.put("token", token);
@@ -57,6 +58,7 @@ public class JwtTokenProvider {
 
     /**
      * 토큰 헤더 검증 메서드 : 헤더가 없거나, Bearer 로 시작하지않으면 에러처리
+     *
      * @param header
      */
     private void validationAuthorizationHeader(String header) {
@@ -68,8 +70,9 @@ public class JwtTokenProvider {
 
     /**
      * 토큰 추출 메서드 : 헤더에서 토큰값만 추출해줌
-     * @param authorizationHeader   : 헤더
-     * @return                      : 추출된 토큰 값
+     *
+     * @param authorizationHeader : 헤더
+     * @return : 추출된 토큰 값
      */
     private String extractToken(String authorizationHeader) {
         return authorizationHeader.substring("Bearer ".length());
@@ -77,8 +80,9 @@ public class JwtTokenProvider {
 
     /**
      * 토큰 검증 메서드
-     * @param token                 :
-     * @return                      : 토큰안에 들어있는 유저 이메일 값(user Email)
+     *
+     * @param token :
+     * @return : 토큰안에 들어있는 유저 이메일 값(user Email)
      * @throws ExpiredJwtException
      */
     public Object validateToken(String token) throws ExpiredJwtException {
