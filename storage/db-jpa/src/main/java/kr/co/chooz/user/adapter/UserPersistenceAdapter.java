@@ -6,6 +6,8 @@ import kr.co.chooz.user.entity.UserJpaEntity;
 import kr.co.chooz.user.port.out.UserPersistencePort;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 public class UserPersistenceAdapter implements UserPersistencePort {
 
@@ -18,11 +20,11 @@ public class UserPersistenceAdapter implements UserPersistencePort {
 
     @Override
     public boolean isUserExistByProviderId(String providerId) {
-        return false;
+        return userRepository.existsByProviderId(providerId);
     }
 
     @Override
-    public User findByUser(Long userId) {
+    public User findByUserId(Long userId) {
         UserJpaEntity userJpaEntity = userRepository.findById(userId).orElseThrow(RuntimeException::new);
         return userJpaEntity.toDomainUser();
     }

@@ -1,6 +1,8 @@
 package kr.co.chooz.user.service;
 
+import kr.co.chooz.token.domain.JwtTokenProvider;
 import kr.co.chooz.token.domain.TokenGenerator;
+import kr.co.chooz.token.dto.TokenGenerateResponse;
 import kr.co.chooz.user.domain.UserRegister;
 import kr.co.chooz.user.domain.entitiy.User;
 import kr.co.chooz.user.domain.validate.RegisterUserValidator;
@@ -15,6 +17,7 @@ public class UserService {
     private final UserPersistencePort userPersistencePort;
     private final UserRegister userRegister;
     private final RegisterUserValidator registerUserValidator;
+
     private final TokenGenerator tokenGenerator;
 
 
@@ -25,12 +28,17 @@ public class UserService {
         }
 
 
+
     }
 
     public boolean registerUser(LoginRequest loginRequest) {
         User user = new User(loginRequest);
         userPersistencePort.register(user);
         return true;
+    }
+
+    private TokenGenerateResponse generateToken(Long userId) {
+        return tokenGenerator.generateToken(userId);
     }
 
 
