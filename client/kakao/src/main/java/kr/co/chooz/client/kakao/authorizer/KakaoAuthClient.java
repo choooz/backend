@@ -1,6 +1,6 @@
-package kr.co.chooz.kakao;
+package kr.co.chooz.client.kakao.authorizer;
 
-import kr.co.chooz.kakao.response.KakaoTokenResponse;
+import kr.co.chooz.client.kakao.response.KakaoTokenResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;

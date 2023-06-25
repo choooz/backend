@@ -1,4 +1,4 @@
-package kr.co.chooz.kakao.response;
+package kr.co.chooz.client.kakao.response;
 
 import lombok.Data;
 

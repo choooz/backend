@@ -1,8 +1,8 @@
-package kr.co.chooz.kakao;
+package kr.co.chooz.client.kakao.authorizer;
 
-import kr.co.chooz.kakao.request.BearerAuthHeader;
-import kr.co.chooz.kakao.response.KakaoTokenResponse;
-import kr.co.chooz.kakao.response.KakaoUserInfo;
+import kr.co.chooz.client.kakao.request.BearerAuthHeader;
+import kr.co.chooz.client.kakao.response.KakaoTokenResponse;
+import kr.co.chooz.client.kakao.response.KakaoUserInfo;
 import kr.co.chooz.user.domain.entitiy.ProviderType;
 import kr.co.chooz.user.domain.thirdParty.ThirdPartyAuthorizer;
 import kr.co.chooz.user.dto.ThirdPartySignupInfo;
@@ -16,7 +16,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class KakaoAuthorizer implements ThirdPartyAuthorizer {
 
-    @org.springframework.beans.factory.annotation.Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String clientId;
 
     @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")

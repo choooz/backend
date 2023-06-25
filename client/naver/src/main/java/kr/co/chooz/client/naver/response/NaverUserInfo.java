@@ -1,11 +1,12 @@
-package kr.co.chooz.kakao.response;
+package kr.co.chooz.client.naver.response;
 
 import lombok.Data;
 
 @Data
-public class KakaoUserInfo {
+public class NaverUserInfo {
+
     private Long id;
-    private KakaoUserProperties properties;
+    private NaverUserProperties properties;
 
     public String getNickName() {
         return properties.getNickname();
@@ -14,10 +15,13 @@ public class KakaoUserInfo {
     public String getProfileImage() {
         return properties.getProfile_image();
     }
+
 }
 
 @Data
-class KakaoUserProperties {
+class NaverUserProperties {
+
     private String nickname;
     private String profile_image;
+
 }

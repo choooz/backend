@@ -1,9 +1,9 @@
-package kr.co.chooz.kakao;
+package kr.co.chooz.client.naver.authorizer;
 
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableFeignClients
-public class KakaoApiConfig {
+public class NaverApiConfig {
 }
