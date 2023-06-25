@@ -9,4 +9,6 @@ public interface RegisterUserRepository extends JpaRepository<UserJpaEntity, Lon
     void register(UserJpaEntity user);
 
     UserJpaEntity findByProviderId(String providerId);
+
+    f
 }

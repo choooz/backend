@@ -5,9 +5,11 @@ import kr.co.chooz.user.domain.entitiy.User;
 import kr.co.chooz.user.entity.UserJpaEntity;
 import kr.co.chooz.user.port.out.UserPersistencePort;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+@Component
 @RequiredArgsConstructor
 public class UserPersistenceAdapter implements UserPersistencePort {
 
@@ -21,6 +23,16 @@ public class UserPersistenceAdapter implements UserPersistencePort {
     @Override
     public boolean isUserExistByProviderId(String providerId) {
         return userRepository.existsByProviderId(providerId);
+    }
+
+    @Override
+    public boolean existsByProviderId(String providerId) {
+        return false;
+    }
+
+    @Override
+    public User findByProviderId(String providerId) {
+        return null;
     }
 
     @Override

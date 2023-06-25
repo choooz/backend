@@ -36,4 +36,5 @@ public class TokenGenerator {
     private String generateAccessToken(Long userId) {
         return jwtTokenProvider.makeJwtToken(userId, ACCESS_TOKEN_EXPIREDTIME);
     }
+
 }

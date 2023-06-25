@@ -16,10 +16,10 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class KakaoAuthorizer implements ThirdPartyAuthorizer {
 
-    @org.springframework.beans.factory.annotation.Value("${spring.security.oauth2.client.registration.kakao.client-id:대충 기본 클라이언트아이디}")
+    @org.springframework.beans.factory.annotation.Value("${spring.security.oauth2.client.registration.kakao.client-id}")
     private String clientId;
 
-    @Value("${spring.security.oauth2.client.registration.kakao.client-secret:대충 시크릿키}")
+    @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
     private String client_secret;
 
     private final KakaoAuthClient kakaoAuthClient;
