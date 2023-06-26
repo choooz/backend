@@ -36,7 +36,7 @@ public class UserJpaEntity {
 
 
     public User toDomainUser() {
-        return new User(nickname, email, password, providerId, providerType);
+        return new User(id, nickname, email, password, providerId, providerType);
     }
 
 

@@ -24,6 +24,7 @@ configurations {
 }
 
 dependencies {
+	implementation project(':chooz-api')
 	implementation project(':chooz-core')
 	implementation project(':storage:db-jpa')
 	implementation project(':client:kakao')

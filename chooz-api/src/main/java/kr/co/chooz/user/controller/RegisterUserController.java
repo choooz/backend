@@ -7,10 +7,7 @@ import kr.co.chooz.user.port.in.UserUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -28,5 +25,4 @@ public class RegisterUserController {
         LoginToken loginToken = userUserCase.signupByThirdParty(socialLoginRequest.toKakaoDomain());// 카카오 서버가 반환해준 유저 정보로 로그인 진행
         return new ResponseEntity(new TokenResponse(loginToken), HttpStatus.OK);
     }
-
 }

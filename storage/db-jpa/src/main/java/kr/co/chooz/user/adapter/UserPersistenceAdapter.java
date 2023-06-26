@@ -30,7 +30,9 @@ public class UserPersistenceAdapter implements UserPersistencePort {
 
     @Override
     public User findByProviderId(String providerId) {
-        return null;
+
+        UserJpaEntity userJpaEntity = userRepository.findByProviderId(providerId).orElseThrow(RuntimeException::new);
+        return userJpaEntity.toDomainUser();
     }
 
     @Override
