@@ -25,7 +25,6 @@ public class RegisterUserController {
      */
     @PostMapping("/signup/kakao")
     public ResponseEntity<TokenResponse> socialLogin(@Valid @RequestBody SocialLoginRequest socialLoginRequest) {
-
         LoginToken loginToken = userUserCase.signupByThirdParty(socialLoginRequest.toKakaoDomain());// 카카오 서버가 반환해준 유저 정보로 로그인 진행
         return new ResponseEntity(new TokenResponse(loginToken), HttpStatus.OK);
     }
