@@ -4,3 +4,4 @@ spring:
     include:
       - kakao
       - core
+      - naver

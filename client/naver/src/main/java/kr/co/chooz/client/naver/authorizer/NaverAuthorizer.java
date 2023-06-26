@@ -12,14 +12,14 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
-//@Component
+@Component
 @RequiredArgsConstructor
 public class NaverAuthorizer implements ThirdPartyAuthorizer {
 
-    @Value("${spring.security.oauth2.client.registration.naver.client-id}")
+    @Value("${spring.oauth2.client.registration.naver.client-id}")
     private String clientId;
 
-    @Value("${spring.security.oauth2.client.registration.naver.client-secret}")
+    @Value("${spring.oauth2.client.registration.naver.client-secret}")
     private String client_secret;
 
     private final NaverAuthClient naverAuthClient;
