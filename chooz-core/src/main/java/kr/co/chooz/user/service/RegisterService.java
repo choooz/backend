@@ -5,7 +5,7 @@ import kr.co.chooz.user.domain.UserRegister;
 import kr.co.chooz.user.domain.thirdParty.ThirdPartyAuthorizer;
 import kr.co.chooz.user.domain.thirdParty.ThirdPartyAuthorizerProvider;
 import kr.co.chooz.user.dto.LoginToken;
-import kr.co.chooz.user.dto.SocialLoginRequest;
+import kr.co.chooz.user.dto.SocialLoginInfo;
 import kr.co.chooz.user.dto.ThirdPartySignupInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,8 +19,8 @@ public class RegisterService {
     private final ThirdPartyAuthorizerProvider thirdPartyAuthorizerProvider;
     private final TokenGenerator tokenGenerator;
 
-    public void signup(SocialLoginRequest socialLoginRequest) {
-        userRegister.register(socialLoginRequest.getProviderId(), socialLoginRequest.getProviderType());
+    public void signup(SocialLoginInfo socialLoginInfo) {
+        userRegister.register(socialLoginInfo.getProviderId(), socialLoginInfo.getProviderType());
     }
 
     public LoginToken signupByThirdParty(ThirdPartySignupInfo signupInfo) {

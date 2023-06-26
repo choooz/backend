@@ -41,13 +41,7 @@ public class User {
         if (providerType == null) {
             throw new IllegalArgumentException("ProviderType은 null이면 안됩니다.");
         }
-
     }
-
-//    public User(String providerId, ProviderType providerType) {
-//        this.providerId = providerId;
-//        this.provider = providerType;
-//    }
 
 
 }

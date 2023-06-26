@@ -38,4 +38,14 @@ public class UserJpaEntity {
     public User toDomainUser() {
         return new User(nickname, email, password, providerId, providerType);
     }
+
+
+    public UserJpaEntity(User user) {
+        this.nickname = user.getNickName();
+        this.email = user.getEmail();
+        this.password = user.getPassword();
+        this.providerId = user.getProviderId();
+        this.providerType = user.getProviderType();
+    }
+
 }

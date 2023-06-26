@@ -14,5 +14,5 @@ public interface UserPersistencePort {
 
     public User findByUserId(Long userId);
 
-    public boolean register(User user);
+    public User register(User user);
 }
