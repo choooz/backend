@@ -5,6 +5,7 @@ import kr.co.chooz.user.domain.entitiy.ProviderType;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,11 +23,11 @@ public class SocialLoginRequest {
     @Schema(description = "카카오 로그인후 리다이렉트 받을 주소 경로", example = "http://localhost:3000/login/kakaoLoginProcess")
     private String redirectUrl;
 
-    @Schema(description = "네이버 로그인후 리다이렉트 받을 주소 경로", example = "http://localhost:3000/login/NaverLoginProcess")
+    @Schema(description = "네이버 로그인에서 요구하는 상태값", example = "http://localhost:3000/login/NaverLoginProcess")
     private String state;
 
     @Schema(description = "소셜 로그인 타입", example = "KAKAO")
-    @NotBlank
+    @NotNull
     private ProviderType providerType;
 
     public ThirdPartySignupInfo toKakaoDomain() {

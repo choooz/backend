@@ -4,10 +4,7 @@ import kr.co.chooz.user.domain.entitiy.ProviderType;
 import kr.co.chooz.user.domain.entitiy.User;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -32,6 +29,7 @@ public class UserJpaEntity {
 
     private String providerId;  // oauth2를 이용할 경우 아이디값
 
+    @Enumerated(EnumType.STRING)
     private ProviderType providerType;
 
 
