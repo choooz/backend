@@ -1,7 +1,5 @@
 # <div align="center"> CHOOOZ </div>
 
-
-
 <br>
 
 ## 기획의도 💡
@@ -9,11 +7,10 @@
 <br>
 
 ## 핵심기능 💡
-    
+
 <br>
 
 ## 🛠 기술 스택
-
 
 <br>
 
@@ -34,12 +31,12 @@
 <br>
 
 ## API 문서
+
 - https://chooz.co.kr/swagger-ui/index.html
 
 <br>
 
 ## 💡 트러블 슈팅
-
 
 <br>
 
@@ -48,4 +45,5 @@
 <br>
 
 ### Front-End Repository
+
 - [프론트엔드 Repository](https://github.com/choooz/client)

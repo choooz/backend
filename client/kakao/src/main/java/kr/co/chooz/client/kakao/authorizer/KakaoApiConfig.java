@@ -5,4 +5,5 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableFeignClients
-public class KakaoApiConfig {}
+public class KakaoApiConfig {
+}

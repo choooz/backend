@@ -26,7 +26,7 @@ public class User {
         this.providerType = providerType;
     }
 
-    public User(Long id ,String nickName, String email, String password, String providerId, ProviderType providerType) {
+    public User(Long id, String nickName, String email, String password, String providerId, ProviderType providerType) {
         this.id = id;
         this.nickName = nickName;
         this.email = email;

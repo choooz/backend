@@ -27,6 +27,7 @@ public class JwtTokenProvider {
 
     @Value("${jwt.tokenPrefix}")
     private String tokenPrefix;
+
     /**
      * JwtToken 생성 메서드
      *

@@ -2,7 +2,10 @@ package kr.co.chooz.user.entity;
 
 import kr.co.chooz.user.domain.entitiy.ProviderType;
 import kr.co.chooz.user.domain.entitiy.User;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 

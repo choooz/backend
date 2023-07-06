@@ -2,8 +2,9 @@ spring:
   profiles:
     active: local
     include:
-      - kakao
-      - jpa
+      - api
       - core
+      - jpa
+      - kakao
       - naver
 
