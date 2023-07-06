@@ -1,5 +1,6 @@
 package kr.co.chooz.user.entity;
 
+import kr.co.chooz.common.entity.BaseTimeEntity;
 import kr.co.chooz.user.domain.entitiy.ProviderType;
 import kr.co.chooz.user.domain.entitiy.User;
 import lombok.AccessLevel;
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
-public class UserJpaEntity {
+public class UserJpaEntity extends BaseTimeEntity {
     @Id
     @GeneratedValue
     @Column(name = "USER_ID")
