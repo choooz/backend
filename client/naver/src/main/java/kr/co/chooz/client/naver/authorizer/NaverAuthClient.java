@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface NaverAuthClient {
 
     @PostMapping(value = "/token", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    NaverTokenResponse generateToken(@RequestParam String grant_type,
-                                     @RequestParam String client_id,
-                                     @RequestParam String client_secret,
-                                     @RequestParam String code,
-                                     @RequestParam String state);
+    NaverTokenResponse generateToken(@RequestParam(name = "grant_type") String grantType,
+                                     @RequestParam(name = "client_id") String clientId,
+                                     @RequestParam(name = "redirect_uri") String redirectUri,
+                                     @RequestParam(name = "code") String code,
+                                     @RequestParam(name = "client_secret") String clientSecret);
 
 }
