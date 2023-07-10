@@ -23,8 +23,7 @@ domain/main/resources/templates/login.html
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-domain/main/java/com/example/manymanyUsers/test
-
+*/src/main/generated/
 
 
 ### STS ###
