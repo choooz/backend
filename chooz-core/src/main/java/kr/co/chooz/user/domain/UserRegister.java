@@ -14,12 +14,12 @@ public class UserRegister {
     /**
      * 일반 회원 가입
      */
-    public void register(String providerId, ProviderType providerTyp) {
+    public void register(String providerId, ProviderType providerType) {
         if (userPersistencePort.existsByProviderId(providerId)) {
             throw new IllegalArgumentException("이미 가입된 이메일입니다.");
         }
 
-        User user = new User(providerId, providerTyp);
+        User user = new User(providerId, providerType);
         userPersistencePort.register(user);
     }
 

@@ -26,6 +26,15 @@ public class User {
         this.providerType = providerType;
     }
 
+    public User(Long id, String nickName, String email, String password, String providerId, ProviderType providerType) {
+        this.id = id;
+        this.nickName = nickName;
+        this.email = email;
+        this.password = password;
+        this.providerId = providerId;
+        this.providerType = providerType;
+    }
+
     public User(String providerId, ProviderType providerType) {
 
         validateSignupInfo(providerId, providerType);
@@ -41,13 +50,7 @@ public class User {
         if (providerType == null) {
             throw new IllegalArgumentException("ProviderType은 null이면 안됩니다.");
         }
-
     }
-
-//    public User(String providerId, ProviderType providerType) {
-//        this.providerId = providerId;
-//        this.provider = providerType;
-//    }
 
 
 }

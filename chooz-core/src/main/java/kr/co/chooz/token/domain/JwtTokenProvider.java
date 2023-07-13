@@ -3,6 +3,7 @@ package kr.co.chooz.token.domain;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -17,7 +18,15 @@ import java.util.HashMap;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtTokenProvider {
-    private final JwtProperties jwtProperties;
+
+    @Value("${jwt.issuer}")
+    private String issuer;
+
+    @Value("${jwt.secretKey}")
+    private String secretKey;
+
+    @Value("${jwt.tokenPrefix}")
+    private String tokenPrefix;
 
     /**
      * JwtToken 생성 메서드
@@ -30,11 +39,11 @@ public class JwtTokenProvider {
         Date now = new Date();
         return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
-                .setIssuer(jwtProperties.getIssuer())
+                .setIssuer(issuer)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + Duration.ofMinutes(minutes).toMillis()))
                 .claim("userId", userId)
-                .signWith(SignatureAlgorithm.HS512, jwtProperties.getSecretKey())
+                .signWith(SignatureAlgorithm.HS512, secretKey)
                 .compact();
     }
 
@@ -88,7 +97,7 @@ public class JwtTokenProvider {
     public Object validateToken(String token) throws ExpiredJwtException {
 
         return Jwts.parser()
-                .setSigningKey(jwtProperties.getSecretKey())
+                .setSigningKey(secretKey)
                 .parseClaimsJws(token)
                 .getBody();
     }

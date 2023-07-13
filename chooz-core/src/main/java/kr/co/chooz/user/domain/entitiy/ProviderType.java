@@ -9,7 +9,7 @@ public enum ProviderType implements EnumModel {
     NAVER("naver");
 
 
-    private String value;
+    private final String value;
 
     ProviderType(String value) {
         this.value = value;

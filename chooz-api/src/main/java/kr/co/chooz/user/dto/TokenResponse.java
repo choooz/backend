@@ -1,5 +1,8 @@
 package kr.co.chooz.user.dto;
 
+import lombok.Getter;
+
+@Getter
 public class TokenResponse {
 
     private String accessToken;
