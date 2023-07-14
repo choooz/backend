@@ -24,8 +24,8 @@ public class RegisterUserController {
         return new ResponseEntity<>(new TokenResponse(loginToken), HttpStatus.OK);
     }
 
-    @GetMapping("/userInfo")
-    public ResponseEntity<Claims> getUserInfo(@RequestAttribute Claims claims) {
-        return new ResponseEntity<>(claims, HttpStatus.OK);
+    @GetMapping("/additional-info")
+    public ResponseEntity<Integer> addUserInfo(@RequestAttribute Integer userId) {
+        return new ResponseEntity<>(userId, HttpStatus.OK);
     }
 }

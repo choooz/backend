@@ -10,7 +10,7 @@ import javax.servlet.Filter;
 @Configuration
 public class WebFilterConfig {
 
-    private static final String[] filterUrls = {"/api/users/userInfo"};
+    private static final String[] filterUrls = {"/api/users/additional-info"};
 
     @Bean
     public FilterRegistrationBean JwtFilter(JwtAuthenticationFilter jwtAuthenticationFilter) {

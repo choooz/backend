@@ -59,10 +59,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 HashMap<String, Object> parseJwtTokenMap = jwtTokenProvider.parseJwtToken(authorizationHeader);
                 Claims claims = (Claims) parseJwtTokenMap.get("claims");
-                String token = (String) parseJwtTokenMap.get("token");
+                Integer userId = (Integer) claims.get("userId");
 
                 request.setAttribute("claims", claims); // jwt 정보 컨트롤러에서 사용할 수 있게 request에 담기
-                request.setAttribute("token", token);
+                request.setAttribute("userId", userId);
 
             } catch (ExpiredJwtException jwtException) {
                 log.info("토큰 만료");
