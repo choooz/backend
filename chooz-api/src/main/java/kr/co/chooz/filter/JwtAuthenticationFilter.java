@@ -5,7 +5,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import kr.co.chooz.token.domain.JwtTokenProvider;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -29,20 +28,36 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    @Builder
     public JwtAuthenticationFilter(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
-    }
-
-    public static JwtAuthenticationFilter of(JwtTokenProvider jwtTokenProvider) {
-        return JwtAuthenticationFilter.builder()
-                .jwtTokenProvider(jwtTokenProvider)
-                .build();
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
+        setResponseHeader(response);
+
+        if (isPreflightRequest(request)) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return;
+        }
+
+        String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+        try {
+            parseTokenAndTransferUserId(request, authorizationHeader);
+        } catch (ExpiredJwtException jwtException) {
+            proceedWhenTokenExpired(response);
+        } catch (JwtException | IllegalArgumentException exception) {
+            log.info("jwtException : {}", exception);
+            throw exception;
+        }
+
+        filterChain.doFilter(request, response);
+
+    }
+
+    private static void setResponseHeader(HttpServletResponse response) {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "*");
@@ -50,40 +65,34 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         response.setHeader("Access-Control-Allow-Headers",
                 "Origin, X-Requested-With, Content-Type, Accept, Authorization");
         response.setHeader("Content-Type", "*");
+    }
 
-        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
-            response.setStatus(HttpServletResponse.SC_OK); //option 요청일때 필터검증 안함
-        } else { // 진짜 요청일때 필터 검증
+    private static boolean isPreflightRequest(HttpServletRequest request) {
+        return "OPTIONS".equalsIgnoreCase(request.getMethod());
+    }
 
-            String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-            try {
-                HashMap<String, Object> parseJwtTokenMap = jwtTokenProvider.parseJwtToken(authorizationHeader);
-                Claims claims = (Claims) parseJwtTokenMap.get("claims");
-                Integer userId = (Integer) claims.get("userId");
+    private void parseTokenAndTransferUserId(HttpServletRequest request, String authorizationHeader) {
+        HashMap<String, Object> parseJwtTokenMap = jwtTokenProvider.parseJwtToken(authorizationHeader);
+        Integer userId = getUserIdFromToken(parseJwtTokenMap);
+        request.setAttribute("userId", userId);
+    }
 
-                request.setAttribute("claims", claims); // jwt 정보 컨트롤러에서 사용할 수 있게 request에 담기
-                request.setAttribute("userId", userId);
+    private static Integer getUserIdFromToken(HashMap<String, Object> parseJwtTokenMap) {
+        Claims claims = (Claims) parseJwtTokenMap.get("claims");
+        return (Integer) claims.get("userId");
+    }
 
-            } catch (ExpiredJwtException jwtException) {
-                log.info("토큰 만료");
+    private static void proceedWhenTokenExpired(HttpServletResponse response) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        setResponseHeaderWhenTokenExpired(response);
+        ResponseStatusException responseStatusException = new ResponseStatusException(
+                HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다.");
+        mapper.writeValue(response.getWriter(), responseStatusException);
+    }
 
-                ObjectMapper mapper = new ObjectMapper(); // 객체 <-> json 파싱
-
-                response.setStatus(HttpStatus.UNAUTHORIZED.value());
-                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                response.setCharacterEncoding("UTF-8");
-
-                ResponseStatusException responseStatusException = new ResponseStatusException(
-                        HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다.");
-
-                mapper.writeValue(response.getWriter(), responseStatusException);
-
-            } catch (JwtException | IllegalArgumentException exception) {
-                log.info("jwtException : {}", exception);
-                throw exception;
-            }
-
-            filterChain.doFilter(request, response);
-        }
+    private static void setResponseHeaderWhenTokenExpired(HttpServletResponse response) {
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding("UTF-8");
     }
 }
