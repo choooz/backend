@@ -43,7 +43,7 @@ public class UserPersistenceAdapter implements UserPersistencePort {
 
     @Override
     public User register(User user) {
-        UserJpaEntity userJpaEntity = new UserJpaEntity(user);
+        UserJpaEntity userJpaEntity = UserJpaEntity.of(user);
         UserJpaEntity save = userRepository.save(userJpaEntity);
         return save.toDomainUser();
     }

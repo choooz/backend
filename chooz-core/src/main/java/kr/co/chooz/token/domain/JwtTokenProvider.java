@@ -52,15 +52,20 @@ public class JwtTokenProvider {
         validationAuthorizationHeader(authorizationHeader);
         String token = extractToken(authorizationHeader);
 
+        loggingTokenInfo(token);
+        return getParsedTokenDataHashMap(token);
+    }
+
+    private void loggingTokenInfo(String token) {
         log.info("*******Accesstoken : {}", token);
+    }
+
+    private HashMap<String, Object> getParsedTokenDataHashMap(String token) {
         HashMap<String, Object> hashMap = new HashMap<>();
-
         hashMap.put("token", token);
-        //토큰 검증
+
         Claims claims = (Claims) validateToken(token);
-
         hashMap.put("claims", claims);
-
         return hashMap;
     }
 

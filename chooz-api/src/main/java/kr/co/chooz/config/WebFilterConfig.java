@@ -14,10 +14,7 @@ public class WebFilterConfig {
 
     @Bean
     public FilterRegistrationBean JwtFilter(JwtAuthenticationFilter jwtAuthenticationFilter) {
-
-        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
-        filterRegistrationBean.setFilter(jwtAuthenticationFilter);
-
+        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>(jwtAuthenticationFilter);
         filterRegistrationBean.addUrlPatterns(filterUrls);
         return filterRegistrationBean;
     }
