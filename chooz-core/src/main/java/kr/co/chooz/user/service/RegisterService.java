@@ -9,11 +9,13 @@ import kr.co.chooz.user.dto.SocialLoginInfo;
 import kr.co.chooz.user.dto.ThirdPartySignupInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class RegisterService {
     private final UserRegister userRegister;
     private final ThirdPartyAuthorizerProvider thirdPartyAuthorizerProvider;

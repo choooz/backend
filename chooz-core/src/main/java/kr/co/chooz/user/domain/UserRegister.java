@@ -18,7 +18,7 @@ public class UserRegister {
         if (userPersistencePort.existsByProviderId(providerId)) {
             throw new IllegalArgumentException("이미 가입된 이메일입니다.");
         }
-        User user = userOfWhenSocialLogin(providerId, providerType);
+        User user = userOfWhenLogin(providerId, providerType);
         userPersistencePort.register(user);
     }
 
@@ -29,12 +29,12 @@ public class UserRegister {
         if (userPersistencePort.existsByProviderId(providerId)) {
             return false;
         }
-        User user = userOfWhenSocialLogin(providerId, providerType);
+        User user = userOfWhenLogin(providerId, providerType);
         userPersistencePort.register(user);
         return true;
     }
 
-    private User userOfWhenSocialLogin(String providerId, ProviderType providerType) {
+    private User userOfWhenLogin(String providerId, ProviderType providerType) {
         return User.builder()
                 .providerId(providerId)
                 .providerType(providerType)

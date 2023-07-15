@@ -1,24 +1,20 @@
 package kr.co.chooz.user.repository;
 
-import kr.co.chooz.TestConfiguration;
+import kr.co.chooz.support.RepositoryTest;
 import kr.co.chooz.user.domain.entitiy.ProviderType;
 import kr.co.chooz.user.domain.entitiy.User;
 import kr.co.chooz.user.entity.UserJpaEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@SpringBootTest
-@ContextConfiguration(classes = TestConfiguration.class)
-@TestPropertySource("classpath:application-jpa-test.yml")
+@RepositoryTest
 class RegisterUserRepositoryTest {
 
     @Autowired
