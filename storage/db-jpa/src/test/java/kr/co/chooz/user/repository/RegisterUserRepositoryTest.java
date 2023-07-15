@@ -11,7 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
 @ContextConfiguration(classes = TestConfiguration.class)
@@ -33,12 +36,38 @@ class RegisterUserRepositoryTest {
                 .build();
 
         UserJpaEntity userJpaEntity = UserJpaEntity.of(user);
-
         registerUserRepository.save(userJpaEntity);
+
         //when
         boolean actual = registerUserRepository.existsByProviderId(providerId);
 
         //then
         assertThat(actual).isTrue();
+    }
+
+    @DisplayName("ProviderId를 가진 유저를 조회한다.")
+    @Test
+    void findByProviderId() {
+        //given
+        String providerId = "1";
+        User user = User.builder()
+                .email("exam123@kakao.com")
+                .providerId(providerId)
+                .providerType(ProviderType.KAKAO)
+                .build();
+
+        UserJpaEntity userJpaEntity = UserJpaEntity.of(user);
+        registerUserRepository.save(userJpaEntity);
+
+        //when
+        Optional<UserJpaEntity> findUserEntity = registerUserRepository.findByProviderId(providerId);
+
+        //then
+        assertAll(
+                () -> assertThat(findUserEntity).isPresent(),
+                () -> assertThat(findUserEntity.get()).isEqualTo(userJpaEntity)
+        );
+
+
     }
 }

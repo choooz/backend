@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -57,4 +58,16 @@ public class UserJpaEntity extends BaseTimeEntity {
                 .build();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserJpaEntity)) return false;
+        UserJpaEntity that = (UserJpaEntity) o;
+        return Objects.equals(id, that.id) && Objects.equals(nickname, that.nickname) && Objects.equals(email, that.email) && Objects.equals(imageUrl, that.imageUrl) && Objects.equals(password, that.password) && Objects.equals(providerId, that.providerId) && providerType == that.providerType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nickname, email, imageUrl, password, providerId, providerType);
+    }
 }
