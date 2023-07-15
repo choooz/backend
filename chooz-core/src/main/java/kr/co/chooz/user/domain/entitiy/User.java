@@ -1,10 +1,7 @@
 package kr.co.chooz.user.domain.entitiy;
 
-
 import lombok.Builder;
 import lombok.Getter;
-
-import javax.validation.constraints.NotNull;
 
 @Getter
 public class User {
@@ -17,10 +14,9 @@ public class User {
     private Integer age;
     private GenderType gender;
     private MbtiType mbti;
-    @NotNull
     private String providerId;
-    @NotNull
     private ProviderType providerType;
+
 
     @Builder
     private User(Long id, String nickname, String email, String password, String providerId, ProviderType providerType, RoleType role, Integer age, GenderType gender, MbtiType mbti) {
