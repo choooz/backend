@@ -1,5 +1,6 @@
-package kr.co.chooz.user.dto;
+package kr.co.chooz.user.response;
 
+import kr.co.chooz.user.dto.LoginToken;
 import lombok.Getter;
 
 @Getter

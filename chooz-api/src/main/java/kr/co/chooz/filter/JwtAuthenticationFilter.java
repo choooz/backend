@@ -73,13 +73,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private void parseTokenAndTransferUserId(HttpServletRequest request, String authorizationHeader) {
         HashMap<String, Object> parseJwtTokenMap = jwtTokenProvider.parseJwtToken(authorizationHeader);
-        Integer userId = getUserIdFromToken(parseJwtTokenMap);
+        Long userId = getUserIdFromToken(parseJwtTokenMap);
         request.setAttribute("userId", userId);
     }
 
-    private static Integer getUserIdFromToken(HashMap<String, Object> parseJwtTokenMap) {
+    private static Long getUserIdFromToken(HashMap<String, Object> parseJwtTokenMap) {
         Claims claims = (Claims) parseJwtTokenMap.get("claims");
-        return (Integer) claims.get("userId");
+        Integer integerUserId = (Integer) claims.get("userId");
+        return Long.valueOf(integerUserId);
     }
 
     private static void proceedWhenTokenExpired(HttpServletResponse response) throws IOException {
