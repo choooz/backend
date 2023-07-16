@@ -6,7 +6,10 @@ public enum ProviderType implements EnumModel {
 
     GOOGLE("google"),
     KAKAO("kakao"),
-    NAVER("naver");
+    NAVER("naver"),
+
+    NORMAL("일반회원가입");
+
 
 
     private final String value;
