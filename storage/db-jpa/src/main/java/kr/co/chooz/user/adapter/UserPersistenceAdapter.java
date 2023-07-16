@@ -25,7 +25,7 @@ public class UserPersistenceAdapter implements UserPersistencePort {
 
     @Override
     public boolean existsByProviderId(String providerId) {
-        return false;
+        return userRepository.existsByProviderId(providerId);
     }
 
     @Override

@@ -33,11 +33,24 @@ class UserRegisterTest {
                 .containsExactlyInAnyOrder(providerId, NORMAL);
     }
 
+    @DisplayName("일반 회원가입시 이미 등록되어 있는 유저의 경우 IllegalArgumentException을 throw 한다.")
+    @Test
+    void registerWhenUserIsAlreadyExist() {
+        //given
+        String providerId = "providerID";
 
+        //when
+        userRegister.register(providerId, NORMAL);
+
+        //then
+        Assertions.assertThatThrownBy(
+                () -> userRegister.register(providerId, NORMAL)
+        ).isInstanceOf(IllegalArgumentException.class);
+    }
 
     @DisplayName("소셜 회원가입시 회원을 등록한다.")
     @Test
-    void registerIfNeed(){
+    void registerIfNeed() {
         //given
         String providerId = "providerID";
 
@@ -48,5 +61,19 @@ class UserRegisterTest {
         //then
         Assertions.assertThat(findUser).extracting("providerId", "providerType")
                 .containsExactlyInAnyOrder(providerId, NORMAL);
+    }
+
+    @DisplayName("소셜 회원가입시 이미 등록 되어 있는 유저의 경우 등록하지 않는다.")
+    @Test
+    void registerIfNeedWhenUserIsAlreadyExist(){
+        //given
+        String providerId = "providerID";
+        userRegister.registerIfNeed(providerId, NORMAL);
+
+        //when
+        boolean isRegistered = userRegister.registerIfNeed(providerId, NORMAL);
+
+        //then
+        Assertions.assertThat(isRegistered).isFalse();
     }
 }
