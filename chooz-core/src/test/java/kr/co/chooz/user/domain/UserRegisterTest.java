@@ -31,6 +31,22 @@ class UserRegisterTest {
         //then
         Assertions.assertThat(findUser).extracting("providerId", "providerType")
                 .containsExactlyInAnyOrder(providerId, NORMAL);
+    }
 
+
+
+    @DisplayName("소셜 회원가입시 회원을 등록한다.")
+    @Test
+    void registerIfNeed(){
+        //given
+        String providerId = "providerID";
+
+        //when
+        userRegister.registerIfNeed(providerId, NORMAL);
+        User findUser = userPersistencePort.findByProviderId(providerId);
+
+        //then
+        Assertions.assertThat(findUser).extracting("providerId", "providerType")
+                .containsExactlyInAnyOrder(providerId, NORMAL);
     }
 }
