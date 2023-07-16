@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 public class UserRegister {
     private final UserStoreRepository userStoreRepository;
     private final UserReadRepository userReadRepository;
+
     /**
      * 일반 회원 가입
      */

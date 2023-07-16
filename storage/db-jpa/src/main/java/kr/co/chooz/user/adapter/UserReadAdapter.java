@@ -12,15 +12,6 @@ public class UserReadAdapter implements kr.co.chooz.user.port.out.UserReadReposi
 
     private final UserReadRepository userReadRepository;
 
-    @Override
-    public boolean isUserExist(Long userId) {
-        return userReadRepository.existsById(userId);
-    }
-
-    @Override
-    public boolean isUserExistByProviderId(String providerId) {
-        return userReadRepository.existsByProviderId(providerId);
-    }
 
     @Override
     public boolean existsByProviderId(String providerId) {

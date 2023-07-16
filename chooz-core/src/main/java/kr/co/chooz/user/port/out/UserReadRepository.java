@@ -3,9 +3,6 @@ package kr.co.chooz.user.port.out;
 import kr.co.chooz.user.domain.entitiy.User;
 
 public interface UserReadRepository {
-    public boolean isUserExist(Long userId);
-
-    public boolean isUserExistByProviderId(String providerId);
 
     public boolean existsByProviderId(String providerId);
 

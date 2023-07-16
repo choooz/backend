@@ -32,7 +32,6 @@ public class RegisterService {
         String providerId = userInfo.get("id");
 
         boolean isNewUser = userRegister.registerIfNeed(providerId, signupInfo.getProviderType());
-
         return tokenGenerator.generate(providerId, isNewUser);
     }
 }
