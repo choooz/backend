@@ -1,7 +1,8 @@
-package kr.co.chooz.user.dto;
+package kr.co.chooz.user.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import kr.co.chooz.user.domain.entitiy.ProviderType;
+import kr.co.chooz.user.dto.ThirdPartySignupInfo;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -10,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Data
-public class SocialLoginRequest {
+public class KakaoLoginRequest {
 
     @Schema(description = "Oauth 서버에서 받아온 인가코드", example = "인가코드")
     @NotBlank
@@ -23,14 +24,12 @@ public class SocialLoginRequest {
     @Schema(description = "카카오 로그인후 리다이렉트 받을 주소 경로", example = "http://localhost:3000/login/kakaoLoginProcess")
     private String redirectUrl;
 
-    @Schema(description = "네이버 로그인에서 요구하는 상태값", example = "http://localhost:3000/login/NaverLoginProcess")
-    private String state;
 
     @Schema(description = "소셜 로그인 타입", example = "KAKAO")
     @NotNull
     private ProviderType providerType;
 
-    public ThirdPartySignupInfo toKakaoDomain() {
+    public ThirdPartySignupInfo toDomain() {
         Map<String, String> propertiesValues = new HashMap<>();
         propertiesValues.put("code", code);
         propertiesValues.put("redirectUrl", redirectUrl);

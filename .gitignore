@@ -7,23 +7,10 @@ build/
 
 
 
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-!gradle/wrapper/gradle-wrapper.jar
-!gradle/wrapper/gradle-wrapper.jar
-
 !build/libs
 
-domain/main/resources/application.properties
 *.yml
-domain/main/resources/templates/login.html
-
-!**/src/main/**/build/
-!**/src/test/**/build/
-
-*/src/main/generated/
+*/**/generated/
 
 
 ### STS ###
