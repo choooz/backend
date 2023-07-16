@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.*;
 
 @RepositoryTest
-class RegisterUserRepositoryTest {
+class UserReadRepositoryTest {
 
     @Autowired
-    private RegisterUserRepository registerUserRepository;
+    private UserReadRepository userReadRepository;
 
     @DisplayName("ProviderId를 가진 유저가 존재하는지 확인한다.")
     @Test
@@ -31,10 +31,10 @@ class RegisterUserRepositoryTest {
                 .build();
 
         UserJpaEntity userJpaEntity = UserJpaEntity.of(user);
-        registerUserRepository.save(userJpaEntity);
+        userReadRepository.save(userJpaEntity);
 
         //when
-        boolean actual = registerUserRepository.existsByProviderId(providerId);
+        boolean actual = userReadRepository.existsByProviderId(providerId);
 
         //then
         assertThat(actual).isTrue();
@@ -52,17 +52,15 @@ class RegisterUserRepositoryTest {
                 .build();
 
         UserJpaEntity userJpaEntity = UserJpaEntity.of(user);
-        registerUserRepository.save(userJpaEntity);
+        userReadRepository.save(userJpaEntity);
 
         //when
-        Optional<UserJpaEntity> findUserEntity = registerUserRepository.findByProviderId(providerId);
+        Optional<UserJpaEntity> findUserEntity = userReadRepository.findByProviderId(providerId);
 
         //then
         assertAll(
                 () -> assertThat(findUserEntity).isPresent(),
                 () -> assertThat(findUserEntity.get()).isEqualTo(userJpaEntity)
         );
-
-
     }
 }

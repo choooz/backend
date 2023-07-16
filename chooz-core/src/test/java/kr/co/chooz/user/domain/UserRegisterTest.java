@@ -2,7 +2,7 @@ package kr.co.chooz.user.domain;
 
 import kr.co.chooz.support.ServiceTest;
 import kr.co.chooz.user.domain.entitiy.User;
-import kr.co.chooz.user.port.out.UserPersistencePort;
+import kr.co.chooz.user.port.out.UserReadRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,8 @@ class UserRegisterTest {
     @Autowired
     private UserRegister userRegister;
     @Autowired
-    private UserPersistencePort userPersistencePort;
+    private UserReadRepository userReadRepository;
+
 
     @DisplayName("일반 회원가입시 회원을 등록한다.")
     @Test
@@ -25,8 +26,8 @@ class UserRegisterTest {
         String providerId = "providerID";
 
         //when
-        userRegister.register(providerId, NORMAL);
-        User findUser = userPersistencePort.findByProviderId(providerId);
+//        userRegister.register(providerId, NORMAL);
+        User findUser = userReadRepository.findByProviderId(providerId);
 
         //then
         Assertions.assertThat(findUser).extracting("providerId", "providerType")
@@ -56,7 +57,7 @@ class UserRegisterTest {
 
         //when
         userRegister.registerIfNeed(providerId, NORMAL);
-        User findUser = userPersistencePort.findByProviderId(providerId);
+        User findUser = userReadRepository.findByProviderId(providerId);
 
         //then
         Assertions.assertThat(findUser).extracting("providerId", "providerType")
@@ -65,7 +66,7 @@ class UserRegisterTest {
 
     @DisplayName("소셜 회원가입시 이미 등록 되어 있는 유저의 경우 등록하지 않는다.")
     @Test
-    void registerIfNeedWhenUserIsAlreadyExist(){
+    void registerIfNeedWhenUserIsAlreadyExist() {
         //given
         String providerId = "providerID";
         userRegister.registerIfNeed(providerId, NORMAL);

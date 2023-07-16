@@ -1,10 +1,9 @@
 package kr.co.chooz.user.controller;
 
 import kr.co.chooz.user.dto.LoginToken;
-import kr.co.chooz.user.request.KakaoLoginRequest;
-import kr.co.chooz.user.response.AddInfoResponse;
-import kr.co.chooz.user.response.TokenResponse;
 import kr.co.chooz.user.port.in.UserUseCase;
+import kr.co.chooz.user.request.KakaoLoginRequest;
+import kr.co.chooz.user.response.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +24,8 @@ public class RegisterUserController {
     }
 
     @GetMapping("/additional-info")
-    public ResponseEntity<AddInfoResponse> addUserInfo(@RequestAttribute Long userId) {
-        return ResponseEntity.status(HttpStatus.OK).body(AddInfoResponse.of(userId));
+    public ResponseEntity addUserInfo(@RequestAttribute Long userId) {
+        userUserCase.addUserInfo(userId);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

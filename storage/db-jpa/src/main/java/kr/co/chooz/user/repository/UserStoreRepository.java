@@ -7,8 +7,4 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface RegisterUserRepository extends JpaRepository<UserJpaEntity, Long> {
-    boolean existsByProviderId(String providerId);
-
-    Optional<UserJpaEntity> findByProviderId(String providerId);
-}
+public interface UserStoreRepository extends JpaRepository<UserJpaEntity, Long> { }
