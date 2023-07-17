@@ -3,6 +3,8 @@ package kr.co.chooz.user.domain.entitiy;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.Objects;
+
 @Getter
 public class User {
 
@@ -32,4 +34,16 @@ public class User {
         this.mbti = mbti;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(nickname, user.nickname) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && role == user.role && Objects.equals(age, user.age) && gender == user.gender && mbti == user.mbti && Objects.equals(providerId, user.providerId) && providerType == user.providerType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nickname, email, password, role, age, gender, mbti, providerId, providerType);
+    }
 }

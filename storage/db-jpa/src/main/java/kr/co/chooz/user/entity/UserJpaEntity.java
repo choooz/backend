@@ -1,8 +1,11 @@
 package kr.co.chooz.user.entity;
 
 import kr.co.chooz.common.entity.BaseTimeEntity;
+import kr.co.chooz.user.domain.entitiy.GenderType;
+import kr.co.chooz.user.domain.entitiy.MbtiType;
 import kr.co.chooz.user.domain.entitiy.ProviderType;
 import kr.co.chooz.user.domain.entitiy.User;
+import kr.co.chooz.user.dto.AddUserInfo;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,8 +26,14 @@ public class UserJpaEntity extends BaseTimeEntity {
     private String email;
     private String imageUrl;
     private String password;
-    private String providerId;  // oauth2를 이용할 경우 아이디값
 
+    @Enumerated(EnumType.STRING)
+    private MbtiType mbti;
+    private Integer age;
+    @Enumerated(EnumType.STRING)
+    private GenderType gender;
+
+    private String providerId;  // oauth2를 이용할 경우 아이디값
     @Enumerated(EnumType.STRING)
     private ProviderType providerType;
 
@@ -37,6 +46,12 @@ public class UserJpaEntity extends BaseTimeEntity {
                 .providerId(providerId)
                 .providerType(providerType)
                 .build();
+    }
+
+    public void addInfo(AddUserInfo addUserInfo) {
+        this.mbti = addUserInfo.getMbti();
+        this.age = addUserInfo.getAge();
+        this.gender = addUserInfo.getGender();
     }
 
     @Builder
@@ -63,11 +78,11 @@ public class UserJpaEntity extends BaseTimeEntity {
         if (this == o) return true;
         if (!(o instanceof UserJpaEntity)) return false;
         UserJpaEntity that = (UserJpaEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(nickname, that.nickname) && Objects.equals(email, that.email) && Objects.equals(imageUrl, that.imageUrl) && Objects.equals(password, that.password) && Objects.equals(providerId, that.providerId) && providerType == that.providerType;
+        return Objects.equals(id, that.id) && Objects.equals(nickname, that.nickname) && Objects.equals(email, that.email) && Objects.equals(imageUrl, that.imageUrl) && Objects.equals(password, that.password) && Objects.equals(providerId, that.providerId) && mbti == that.mbti && Objects.equals(age, that.age) && gender == that.gender && providerType == that.providerType;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nickname, email, imageUrl, password, providerId, providerType);
+        return Objects.hash(id, nickname, email, imageUrl, password, providerId, mbti, age, gender, providerType);
     }
 }

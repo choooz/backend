@@ -1,5 +1,6 @@
 package kr.co.chooz.user.domain;
 
+import kr.co.chooz.user.dto.AddUserInfo;
 import kr.co.chooz.user.port.out.UserStoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -8,5 +9,9 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class UserManager {
     private final UserStoreRepository userStoreRepository;
+
+    public void addUserInfo(Long userId, AddUserInfo addUserInfo) {
+        userStoreRepository.addUserInfo(userId, addUserInfo);
+    }
 
 }

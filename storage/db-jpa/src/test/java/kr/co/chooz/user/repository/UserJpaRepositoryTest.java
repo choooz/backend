@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @RepositoryTest
-class UserReadRepositoryTest {
+class UserJpaRepositoryTest {
 
     @Autowired
-    private UserReadRepository userReadRepository;
+    private UserJpaRepository userReadRepository;
 
     @DisplayName("ProviderId를 가진 유저가 존재하는지 확인한다.")
     @Test

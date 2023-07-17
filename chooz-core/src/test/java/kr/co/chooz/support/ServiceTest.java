@@ -1,7 +1,6 @@
 package kr.co.chooz.support;
 
 import kr.co.chooz.TestConfiguration;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
@@ -16,4 +15,5 @@ import java.lang.annotation.Target;
 @TestPropertySource("classpath:application-core.yml")
 @ContextConfiguration(classes = TestConfiguration.class)
 @SpringBootTest
-public @interface ServiceTest {}
+public @interface ServiceTest {
+}

@@ -11,7 +11,6 @@ public enum ProviderType implements EnumModel {
     NORMAL("일반회원가입");
 
 
-
     private final String value;
 
     ProviderType(String value) {
