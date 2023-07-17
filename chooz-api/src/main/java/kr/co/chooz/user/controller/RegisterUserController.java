@@ -29,4 +29,12 @@ public class RegisterUserController {
         userUserCase.addUserInfo(userId, addInfoRequest.toAddUserInfo());
         return ResponseEntity.ok().build();
     }
+
+    @PatchMapping("/additional-category")
+    public ResponseEntity<HttpStatus> addUserCategory(@RequestAttribute Long userId, @RequestBody AddInfoRequest addInfoRequest) {
+        userUserCase.addUserInfo(userId, addInfoRequest.toAddUserInfo());
+        return ResponseEntity.ok().build();
+    }
+
+
 }

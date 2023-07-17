@@ -39,11 +39,11 @@ public class User {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(nickname, user.nickname) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && role == user.role && Objects.equals(age, user.age) && gender == user.gender && mbti == user.mbti && Objects.equals(providerId, user.providerId) && providerType == user.providerType;
+        return Objects.equals(id, user.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nickname, email, password, role, age, gender, mbti, providerId, providerType);
+        return Objects.hash(id);
     }
 }
