@@ -1,6 +1,6 @@
 package kr.co.chooz.user.adapter;
 
-import kr.co.chooz.support.AdapterTest;
+import kr.co.chooz.support.AdapterIntegrationTest;
 import kr.co.chooz.user.domain.entitiy.GenderType;
 import kr.co.chooz.user.domain.entitiy.MbtiType;
 import kr.co.chooz.user.domain.entitiy.User;
@@ -17,8 +17,8 @@ import static kr.co.chooz.user.domain.entitiy.ProviderType.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-@AdapterTest
-class UserStoreAdapterTest {
+@AdapterIntegrationTest
+class UserStoreAdapterIntegrationTest {
 
     @Autowired
     private UserStoreAdapter userStoreAdapter;
@@ -44,8 +44,12 @@ class UserStoreAdapterTest {
         Optional<UserJpaEntity> findUserEntity = userJpaRepository.findById(userId);
 
         //then
-        assertAll(() -> assertThat(findUserEntity).isPresent(), () -> assertThat(findUserEntity.get()).extracting("mbti", "age", "gender").contains(mbti, age, gender));
-
+        assertAll(
+                () -> assertThat(findUserEntity).isPresent(),
+                () -> assertThat(findUserEntity.get())
+                        .extracting("mbti", "age", "gender")
+                        .contains(mbti, age, gender)
+        );
     }
 
     private User registerUser() {

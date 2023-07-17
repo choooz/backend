@@ -13,9 +13,9 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-@SpringBootTest
-@Transactional
-@TestPropertySource("classpath:application-jpa-test.yml")
+@TestPropertySource("classpath:application-core-test.yml")
 @ContextConfiguration(classes = TestConfiguration.class)
-public @interface AdapterTest {
+@Transactional
+@SpringBootTest
+public @interface ServiceIntegrationTest {
 }
