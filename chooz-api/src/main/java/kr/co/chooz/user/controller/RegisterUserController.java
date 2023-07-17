@@ -3,6 +3,7 @@ package kr.co.chooz.user.controller;
 import kr.co.chooz.user.dto.LoginToken;
 import kr.co.chooz.user.port.in.UserUseCase;
 import kr.co.chooz.user.request.KakaoLoginRequest;
+import kr.co.chooz.user.request.NaverLoginRequest;
 import kr.co.chooz.user.response.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,5 +28,11 @@ public class RegisterUserController {
     public ResponseEntity addUserInfo(@RequestAttribute Long userId) {
         userUserCase.addUserInfo(userId);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PostMapping("/signup/naver")
+    public ResponseEntity<TokenResponse> naverLogin(@Valid @RequestBody NaverLoginRequest naverLoginRequest) {
+        LoginToken loginToken = userUserCase.signupByThirdParty(naverLoginRequest.toDomain());
+        return ResponseEntity.status(HttpStatus.OK).body(new TokenResponse(loginToken));
     }
 }

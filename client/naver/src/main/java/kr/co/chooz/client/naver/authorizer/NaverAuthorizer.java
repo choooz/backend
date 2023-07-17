@@ -34,9 +34,10 @@ public class NaverAuthorizer implements ThirdPartyAuthorizer {
         NaverTokenResponse response = naverAuthClient.generateToken(
                 "authorization_code",
                 clientId,
-                client_secret,
+                propertiesValues.get("state"),
                 propertiesValues.get("code"),
-                propertiesValues.get("state")
+                client_secret
+
         );
 
         return response.getAccess_token();
@@ -46,10 +47,11 @@ public class NaverAuthorizer implements ThirdPartyAuthorizer {
     public Map<String, String> getUserInfo(String accessToken) {
 
         NaverUserInfo naverUserInfo = naverApiClient.getUserInfo(new BearerAuthHeader(accessToken).getAuthorization());
+        System.out.println("naverUserInfo = " + naverUserInfo);
 
         Map<String, String> result = new HashMap<>();
-        result.put("id", naverUserInfo.getId().toString());
-        result.put("nickname", naverUserInfo.getNickName());
+        result.put("id", naverUserInfo.getId());
+        result.put("nickname", naverUserInfo.getNickName());         //디벨로퍼스에 추가해도 값을 못받아 오는중!..
         result.put("profile_image", naverUserInfo.getProfileImage());
 
         return result;
