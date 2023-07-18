@@ -1,5 +1,6 @@
 package kr.co.chooz.user.request;
 
+import kr.co.chooz.user.domain.entitiy.Category;
 import kr.co.chooz.user.dto.AddUserCategory;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

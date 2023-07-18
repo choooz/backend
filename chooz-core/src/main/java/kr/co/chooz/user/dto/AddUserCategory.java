@@ -1,5 +1,6 @@
 package kr.co.chooz.user.dto;
 
+import kr.co.chooz.user.domain.entitiy.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

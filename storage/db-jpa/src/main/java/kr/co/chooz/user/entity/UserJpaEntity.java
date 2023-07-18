@@ -19,8 +19,8 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserJpaEntity extends BaseTimeEntity {
     @Id
-    @GeneratedValue
-    @Column(name = "USER_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long id;
     private String nickname;
     private String email;
@@ -33,7 +33,7 @@ public class UserJpaEntity extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private GenderType gender;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "user_category", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "category")
     private List<String> categories = new ArrayList<>();

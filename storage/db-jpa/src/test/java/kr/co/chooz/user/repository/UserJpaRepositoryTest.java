@@ -63,4 +63,27 @@ class UserJpaRepositoryTest {
                 () -> assertThat(findUserEntity.get()).isEqualTo(userJpaEntity)
         );
     }
+
+    @Test
+    void findUser() {
+        //given
+        String providerId = "1";
+        User user = User.builder()
+                .email("exam123@kakao.com")
+                .providerId(providerId)
+                .providerType(ProviderType.KAKAO)
+                .build();
+
+        UserJpaEntity userJpaEntity = UserJpaEntity.of(user);
+        userReadRepository.save(userJpaEntity);
+
+        //when
+        Optional<UserJpaEntity> findUserEntity = userReadRepository.findByProviderId(providerId);
+
+        //then
+        assertAll(
+                () -> assertThat(findUserEntity).isPresent(),
+                () -> assertThat(findUserEntity.get()).isEqualTo(userJpaEntity)
+        );
+    }
 }
