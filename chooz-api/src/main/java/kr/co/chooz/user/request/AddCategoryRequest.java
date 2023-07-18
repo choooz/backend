@@ -1,7 +1,6 @@
 package kr.co.chooz.user.request;
 
 import kr.co.chooz.user.dto.AddUserCategory;
-import kr.co.chooz.user.dto.AddUserInfo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

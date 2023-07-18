@@ -17,14 +17,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class KakaoAuthorizer implements ThirdPartyAuthorizer {
 
-    @Value("${spring.oauth2.client.registration.kakao.client-id}")
-    private String clientId;
-
-    @Value("${spring.oauth2.client.registration.kakao.client-secret}")
-    private String client_secret;
-
     private final KakaoAuthClient kakaoAuthClient;
     private final KakaoApiClient kakaoApiClient;
+    @Value("${spring.oauth2.client.registration.kakao.client-id}")
+    private String clientId;
+    @Value("${spring.oauth2.client.registration.kakao.client-secret}")
+    private String client_secret;
 
     @Override
     public String getAccessToken(ThirdPartySignupInfo signupInfo) {
