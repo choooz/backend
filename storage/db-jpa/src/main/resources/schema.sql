@@ -1,4 +1,5 @@
 DROP TABLE if EXISTS user_jpa_entity CASCADE;
+DROP TABLE if EXISTS user_category;
 
 CREATE TABLE user_jpa_entity
 (
@@ -18,9 +19,9 @@ CREATE TABLE user_jpa_entity
     PRIMARY KEY (user_id)
 );
 
-CREATE TABLE category
+CREATE TABLE user_category
 (
-    `user_id` BIGINT       NOT NULL,
-    `category`    VARCHAR(50) NOT NULL
+    `user_id`  BIGINT      NOT NULL,
+    `category` VARCHAR(50) NOT NULL
 );
 

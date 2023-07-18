@@ -1,11 +1,7 @@
 package kr.co.chooz.user.entity;
 
 import kr.co.chooz.common.entity.BaseTimeEntity;
-import kr.co.chooz.user.domain.entitiy.Categories;
-import kr.co.chooz.user.domain.entitiy.GenderType;
-import kr.co.chooz.user.domain.entitiy.MbtiType;
-import kr.co.chooz.user.domain.entitiy.ProviderType;
-import kr.co.chooz.user.domain.entitiy.User;
+import kr.co.chooz.user.domain.entitiy.*;
 import kr.co.chooz.user.dto.AddUserCategory;
 import kr.co.chooz.user.dto.AddUserInfo;
 import lombok.AccessLevel;
@@ -38,13 +34,32 @@ public class UserJpaEntity extends BaseTimeEntity {
     private GenderType gender;
 
     @ElementCollection
-    @CollectionTable(name = "user_categories", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "user_category", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "category")
     private List<String> categories = new ArrayList<>();
 
     private String providerId;  // oauth2를 이용할 경우 아이디값
     @Enumerated(EnumType.STRING)
     private ProviderType providerType;
+
+    @Builder
+    private UserJpaEntity(String nickname, String email, String imageUrl, String password, String providerId, ProviderType providerType) {
+        this.nickname = nickname;
+        this.email = email;
+        this.imageUrl = imageUrl;
+        this.password = password;
+        this.providerId = providerId;
+        this.providerType = providerType;
+    }
+
+    public static UserJpaEntity of(User user) {
+        return UserJpaEntity.builder()
+                .nickname(user.getNickname())
+                .email(user.getEmail())
+                .providerId(user.getProviderId())
+                .providerType(user.getProviderType())
+                .build();
+    }
 
     public User toDomainUser() {
         return User.builder()
@@ -69,25 +84,6 @@ public class UserJpaEntity extends BaseTimeEntity {
 
     public void addCategory(AddUserCategory addUserCategory) {
         this.categories = addUserCategory.getCategories();
-    }
-
-    @Builder
-    private UserJpaEntity(String nickname, String email, String imageUrl, String password, String providerId, ProviderType providerType) {
-        this.nickname = nickname;
-        this.email = email;
-        this.imageUrl = imageUrl;
-        this.password = password;
-        this.providerId = providerId;
-        this.providerType = providerType;
-    }
-
-    public static UserJpaEntity of(User user) {
-        return UserJpaEntity.builder()
-                .nickname(user.getNickname())
-                .email(user.getEmail())
-                .providerId(user.getProviderId())
-                .providerType(user.getProviderType())
-                .build();
     }
 
     @Override
