@@ -1,5 +1,6 @@
 package kr.co.chooz.user.domain;
 
+import kr.co.chooz.user.dto.AddUserCategory;
 import kr.co.chooz.user.dto.AddUserInfo;
 import kr.co.chooz.user.port.out.UserStoreRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,4 +15,7 @@ public class UserManager {
         userStoreRepository.addUserInfo(userId, addUserInfo);
     }
 
+    public void addUserCategory(Long userId, AddUserCategory addUserCategory) {
+        userStoreRepository.addCategory(userId, addUserCategory);
+    }
 }

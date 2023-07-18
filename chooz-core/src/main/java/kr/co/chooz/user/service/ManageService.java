@@ -1,6 +1,7 @@
 package kr.co.chooz.user.service;
 
 import kr.co.chooz.user.domain.UserManager;
+import kr.co.chooz.user.dto.AddUserCategory;
 import kr.co.chooz.user.dto.AddUserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,10 @@ public class ManageService {
 
     public void addUserInfo(Long userId, AddUserInfo addUserInfo) {
         userManager.addUserInfo(userId, addUserInfo);
+    }
+
+    public void addUserCategory(Long userId, AddUserCategory addUserCategory) {
+        userManager.addUserCategory(userId, addUserCategory);
     }
 
 }

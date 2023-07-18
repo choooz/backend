@@ -1,6 +1,7 @@
 package kr.co.chooz.user.adapter;
 
 import kr.co.chooz.user.domain.entitiy.User;
+import kr.co.chooz.user.dto.AddUserCategory;
 import kr.co.chooz.user.dto.AddUserInfo;
 import kr.co.chooz.user.entity.UserJpaEntity;
 import kr.co.chooz.user.port.out.UserStoreRepository;
@@ -25,5 +26,11 @@ public class UserStoreAdapter implements UserStoreRepository {
     public void addUserInfo(Long userId, AddUserInfo addUserInfo) {
         UserJpaEntity userJpaEntity = userJpaRepository.findById(userId).orElseThrow(RuntimeException::new);
         userJpaEntity.addInfo(addUserInfo);
+    }
+
+    @Override
+    public void addCategory(Long userId, AddUserCategory addUserCategory) {
+        UserJpaEntity userJpaEntity = userJpaRepository.findById(userId).orElseThrow(RuntimeException::new);
+        userJpaEntity.addCategory(addUserCategory);
     }
 }

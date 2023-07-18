@@ -1,5 +1,6 @@
 package kr.co.chooz.user.port.in;
 
+import kr.co.chooz.user.dto.AddUserCategory;
 import kr.co.chooz.user.dto.AddUserInfo;
 import kr.co.chooz.user.dto.LoginToken;
 import kr.co.chooz.user.dto.ThirdPartySignupInfo;
@@ -21,5 +22,9 @@ public class UserUseCase {
 
     public void addUserInfo(Long userId, AddUserInfo addUserInfo) {
         manageService.addUserInfo(userId, addUserInfo);
+    }
+
+    public void addUserCategory(Long userId, AddUserCategory addUserCategory) {
+        manageService.addUserCategory(userId, addUserCategory);
     }
 }

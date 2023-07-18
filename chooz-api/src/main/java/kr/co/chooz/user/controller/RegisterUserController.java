@@ -2,6 +2,7 @@ package kr.co.chooz.user.controller;
 
 import kr.co.chooz.user.dto.LoginToken;
 import kr.co.chooz.user.port.in.UserUseCase;
+import kr.co.chooz.user.request.AddCategoryRequest;
 import kr.co.chooz.user.request.AddInfoRequest;
 import kr.co.chooz.user.request.KakaoLoginRequest;
 import kr.co.chooz.user.response.TokenResponse;
@@ -31,8 +32,8 @@ public class RegisterUserController {
     }
 
     @PatchMapping("/additional-category")
-    public ResponseEntity<HttpStatus> addUserCategory(@RequestAttribute Long userId, @RequestBody AddInfoRequest addInfoRequest) {
-        userUserCase.addUserInfo(userId, addInfoRequest.toAddUserInfo());
+    public ResponseEntity<HttpStatus> addUserCategory(@RequestAttribute Long userId, @RequestBody AddCategoryRequest addCategoryRequest) {
+        userUserCase.addUserCategory(userId, addCategoryRequest.toAddUserCategory());
         return ResponseEntity.ok().build();
     }
 

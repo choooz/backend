@@ -18,3 +18,9 @@ CREATE TABLE user_jpa_entity
     PRIMARY KEY (user_id)
 );
 
+CREATE TABLE category
+(
+    `user_id` BIGINT       NOT NULL,
+    `category`    VARCHAR(50) NOT NULL
+);
+

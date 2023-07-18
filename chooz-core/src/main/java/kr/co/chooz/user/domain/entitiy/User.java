@@ -16,23 +16,26 @@ public class User {
     private Integer age;
     private GenderType gender;
     private MbtiType mbti;
+    private Categories categories;
     private String providerId;
     private ProviderType providerType;
 
 
     @Builder
-    private User(Long id, String nickname, String email, String password, String providerId, ProviderType providerType, RoleType role, Integer age, GenderType gender, MbtiType mbti) {
+    public User(Long id, String nickname, String email, String password, RoleType role, Integer age, GenderType gender, MbtiType mbti, Categories categories, String providerId, ProviderType providerType) {
         this.id = id;
         this.nickname = nickname;
         this.email = email;
         this.password = password;
-        this.providerId = providerId;
-        this.providerType = providerType;
         this.role = role;
         this.age = age;
         this.gender = gender;
         this.mbti = mbti;
+        this.categories = categories;
+        this.providerId = providerId;
+        this.providerType = providerType;
     }
+
 
     @Override
     public boolean equals(Object o) {

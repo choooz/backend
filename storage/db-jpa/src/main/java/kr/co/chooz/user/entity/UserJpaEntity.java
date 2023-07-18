@@ -1,10 +1,12 @@
 package kr.co.chooz.user.entity;
 
 import kr.co.chooz.common.entity.BaseTimeEntity;
+import kr.co.chooz.user.domain.entitiy.Categories;
 import kr.co.chooz.user.domain.entitiy.GenderType;
 import kr.co.chooz.user.domain.entitiy.MbtiType;
 import kr.co.chooz.user.domain.entitiy.ProviderType;
 import kr.co.chooz.user.domain.entitiy.User;
+import kr.co.chooz.user.dto.AddUserCategory;
 import kr.co.chooz.user.dto.AddUserInfo;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,6 +14,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -33,6 +37,11 @@ public class UserJpaEntity extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private GenderType gender;
 
+    @ElementCollection
+    @CollectionTable(name = "user_categories", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "category")
+    private List<String> categories = new ArrayList<>();
+
     private String providerId;  // oauth2를 이용할 경우 아이디값
     @Enumerated(EnumType.STRING)
     private ProviderType providerType;
@@ -45,6 +54,10 @@ public class UserJpaEntity extends BaseTimeEntity {
                 .password(password)
                 .providerId(providerId)
                 .providerType(providerType)
+                .mbti(mbti)
+                .gender(gender)
+                .age(age)
+                .categories(Categories.of(categories))
                 .build();
     }
 
@@ -52,6 +65,10 @@ public class UserJpaEntity extends BaseTimeEntity {
         this.mbti = addUserInfo.getMbti();
         this.age = addUserInfo.getAge();
         this.gender = addUserInfo.getGender();
+    }
+
+    public void addCategory(AddUserCategory addUserCategory) {
+        this.categories = addUserCategory.getCategories();
     }
 
     @Builder
@@ -78,11 +95,11 @@ public class UserJpaEntity extends BaseTimeEntity {
         if (this == o) return true;
         if (!(o instanceof UserJpaEntity)) return false;
         UserJpaEntity that = (UserJpaEntity) o;
-        return Objects.equals(id, that.id) && Objects.equals(nickname, that.nickname) && Objects.equals(email, that.email) && Objects.equals(imageUrl, that.imageUrl) && Objects.equals(password, that.password) && Objects.equals(providerId, that.providerId) && mbti == that.mbti && Objects.equals(age, that.age) && gender == that.gender && providerType == that.providerType;
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nickname, email, imageUrl, password, providerId, mbti, age, gender, providerType);
+        return Objects.hash(id);
     }
 }
