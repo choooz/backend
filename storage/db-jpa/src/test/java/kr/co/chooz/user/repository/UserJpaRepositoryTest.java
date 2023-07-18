@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @RepositoryTest
-class UserReadRepositoryTest {
+class UserJpaRepositoryTest {
 
     @Autowired
-    private UserReadRepository userReadRepository;
+    private UserJpaRepository userReadRepository;
 
     @DisplayName("ProviderId를 가진 유저가 존재하는지 확인한다.")
     @Test
@@ -43,6 +43,29 @@ class UserReadRepositoryTest {
     @DisplayName("ProviderId를 가진 유저를 조회한다.")
     @Test
     void findByProviderId() {
+        //given
+        String providerId = "1";
+        User user = User.builder()
+                .email("exam123@kakao.com")
+                .providerId(providerId)
+                .providerType(ProviderType.KAKAO)
+                .build();
+
+        UserJpaEntity userJpaEntity = UserJpaEntity.of(user);
+        userReadRepository.save(userJpaEntity);
+
+        //when
+        Optional<UserJpaEntity> findUserEntity = userReadRepository.findByProviderId(providerId);
+
+        //then
+        assertAll(
+                () -> assertThat(findUserEntity).isPresent(),
+                () -> assertThat(findUserEntity.get()).isEqualTo(userJpaEntity)
+        );
+    }
+
+    @Test
+    void findUser() {
         //given
         String providerId = "1";
         User user = User.builder()

@@ -17,14 +17,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class NaverAuthorizer implements ThirdPartyAuthorizer {
 
-    @Value("${spring.oauth2.client.registration.naver.client-id}")
-    private String clientId;
-
-    @Value("${spring.oauth2.client.registration.naver.client-secret}")
-    private String client_secret;
-
     private final NaverAuthClient naverAuthClient;
     private final NaverApiClient naverApiClient;
+    @Value("${spring.oauth2.client.registration.naver.client-id}")
+    private String clientId;
+    @Value("${spring.oauth2.client.registration.naver.client-secret}")
+    private String client_secret;
 
     @Override
     public String getAccessToken(ThirdPartySignupInfo signupInfo) {
