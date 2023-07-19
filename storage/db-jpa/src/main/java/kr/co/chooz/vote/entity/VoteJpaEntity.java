@@ -52,6 +52,7 @@ public class VoteJpaEntity extends BaseTimeEntity {
 
     public static VoteJpaEntity of(Vote vote, VoteContentJpaEntity voteContentJpaEntity, VoteFilterJpaEntity voteFilterJpaEntity, UserJpaEntity user) {
         return VoteJpaEntity.builder()
+                .postedUser(user)
                 .voteContent(voteContentJpaEntity)
                 .title(vote.getTitle())
                 .detail(vote.getDetail())

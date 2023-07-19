@@ -20,10 +20,13 @@ public class VoteFilterJpaEntity extends BaseTimeEntity {
     @Column(name = "VOTE_FIlTER_ID")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private GenderType filteredGender;
 
+    @Enumerated(EnumType.STRING)
     private AgeType filteredAge;
 
+    @Enumerated(EnumType.STRING)
     private MbtiType filteredMbti;
 
     @Builder
