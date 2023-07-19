@@ -1,6 +1,6 @@
 package kr.co.chooz.user.domain;
 
-import kr.co.chooz.support.ServiceTest;
+import kr.co.chooz.support.ServiceIntegrationTest;
 import kr.co.chooz.user.domain.entitiy.User;
 import kr.co.chooz.user.port.out.UserReadRepository;
 import org.assertj.core.api.Assertions;
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static kr.co.chooz.user.domain.entitiy.ProviderType.NORMAL;
 
-@ServiceTest
+@ServiceIntegrationTest
 class UserRegisterTest {
 
     @Autowired
@@ -26,7 +26,7 @@ class UserRegisterTest {
         String providerId = "providerID";
 
         //when
-//        userRegister.register(providerId, NORMAL);
+        userRegister.register(providerId, NORMAL);
         User findUser = userReadRepository.findByProviderId(providerId);
 
         //then

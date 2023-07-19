@@ -2,18 +2,17 @@ package kr.co.chooz.user.domain.entitiy;
 
 import kr.co.chooz.common.EnumModel;
 
-public enum ProviderType implements EnumModel {
+public enum AgeType implements EnumModel {
+    teenager("10대"),
+    twenties("20대"),
+    thirties("30대"),
+    fourties("40대"),
+    fifties("50대"),
+    NULL("null");
 
-    GOOGLE("google"),
-    KAKAO("kakao"),
-    NAVER("naver"),
+    private String value;
 
-    NORMAL("일반회원가입");
-
-
-    private final String value;
-
-    ProviderType(String value) {
+    AgeType(String value) {
         this.value = value;
     }
 
