@@ -1,5 +1,7 @@
 package kr.co.chooz.vote.controller;
 
+import kr.co.chooz.vote.dto.VoteInfo;
+import kr.co.chooz.vote.dto.response.GetVoteResponse;
 import kr.co.chooz.vote.port.in.VoteUseCase;
 import kr.co.chooz.vote.dto.request.CreateVoteRequest;
 import kr.co.chooz.vote.dto.response.CreateVoteResponse;
@@ -27,21 +29,18 @@ public class VoteController {
 
         Long voteId = voteUseCase.createVote(request.toDomain(userId));
 
-//        CreateVoteResponse createVoteResponse = CreateVoteResponse.builder()
-//                .voteId(voteId)
-//                .message("투표 생성에 성공했습니다.")
-//                .build();
         return new ResponseEntity(new CreateVoteResponse(voteId), HttpStatus.CREATED);
     }
 
-//    @Operation(summary = "투표 단건 조회", description = "파라미터에 voteId 보내주시면 됩니다.")
-//    @GetMapping("/{voteId}")
-//    public ResponseEntity<GetVoteResponse> getVote(@PathVariable Long voteId) {
-//        VoteInfo voteInfo = voteUseCase.getVote(voteId);
-//
-//        return new ResponseEntity(new GetVoteResponse(),HttpStatus.OK);
-//    }
-//
+    @Operation(summary = "투표 단건 조회", description = "파라미터에 voteId 보내주시면 됩니다.")
+    @GetMapping("/{voteId}")
+    public ResponseEntity<GetVoteResponse> getVote(@PathVariable Long voteId) {
+
+        VoteInfo voteInfo = voteUseCase.getVote(voteId);
+
+        return new ResponseEntity(new GetVoteResponse(voteInfo), HttpStatus.OK);
+    }
+
 //    @Operation(summary = "투표 수정", description = "파라미터에 voteId, 바디에 {title, detail, category, titleA, titleB} json 형식으로 보내주시면 됩니다.")
 //    @PatchMapping("/{voteId}")
 //    public ResponseEntity<CommonResponse> updateVote(@PathVariable("voteId") Long voteId, @Valid @RequestBody UpdateVoteRequest updateVoteRequest, @RequestAttribute Claims claims) throws UserNotFoundException, VoteNotFoundException {

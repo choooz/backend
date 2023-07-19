@@ -1,7 +1,7 @@
 package kr.co.chooz.vote.adapter;
 
 import kr.co.chooz.user.entity.UserJpaEntity;
-import kr.co.chooz.user.repository.UserReadRepository;
+import kr.co.chooz.user.repository.UserJpaRepository;
 import kr.co.chooz.vote.entity.*;
 import kr.co.chooz.vote.port.out.VoteStoreRepository;
 import kr.co.chooz.vote.repository.VoteStoreJpaRepository;
@@ -15,7 +15,7 @@ import java.util.Optional;
 public class VoteStoreAdapter implements VoteStoreRepository {
 
     private final VoteStoreJpaRepository voteStoreJpaRepository;
-    private final UserReadRepository userReadRepository;
+    private final UserJpaRepository userReadRepository;
 
     @Override
     public Long register(Vote vote, VoteContent voteContent, VoteFilter voteFilter, Long userId) {

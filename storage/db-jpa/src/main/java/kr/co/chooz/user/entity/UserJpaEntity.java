@@ -26,7 +26,6 @@ public class UserJpaEntity extends BaseTimeEntity {
     private String email;
     private String imageUrl;
     private String password;
-
     @Enumerated(EnumType.STRING)
     private MbtiType mbti;
     private Integer age;
@@ -84,6 +83,34 @@ public class UserJpaEntity extends BaseTimeEntity {
 
     public void addCategory(AddUserCategory addUserCategory) {
         this.categories = addUserCategory.getCategories();
+    }
+
+    public AgeType classifyAge(Integer age){
+        if (age == null) {
+            return AgeType.NULL; // 혹은 원하는 다른 동작 수행
+        }
+        AgeType ageGroup;
+        switch (age/10){
+            case 1:
+                ageGroup = AgeType.teenager;
+                break;
+            case 2:
+                ageGroup = AgeType.twenties;
+                break;
+            case 3:
+                ageGroup = AgeType.thirties;
+                break;
+            case 4:
+                ageGroup = AgeType.fourties;
+                break;
+            case 5:
+                ageGroup = AgeType.fifties;
+                break;
+            default:
+                ageGroup = AgeType.NULL;
+                break;
+        }
+        return ageGroup;
     }
 
     @Override
