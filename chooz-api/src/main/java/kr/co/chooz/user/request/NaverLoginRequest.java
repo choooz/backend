@@ -18,16 +18,12 @@ public class NaverLoginRequest {
     private String code;
 
     /**
-     * redirectUrl 은 인가코드를 받아올 redirectUrl을 의미하며 여기서  redirectUrl은 카카오 로그인시 요청한 redirectUrl과 동일한 값으로 받아와야함
-     * 리다이렉트 유알엘을 받는 이유는 로컬, 배포 , 테스트 환경에서 유동적으로 실행할수있게 하기 위함임
+     * state 값은 CSRF를 방지하기 위한 인증값으로 임의의 값을 넣어줄 수 있음.네이버 로그인시 요청한 state 값 과 동일한 값으로 받아와야함
+     * CSRF는 Cross Site Request Forgery(사이트 간 요청 위조)의 줄임말로 웹 취약점 중 하나이다.
      */
     @Schema(description = "네이버 로그인 CSRF를 방지하기 위한 인증값", example = "string")
     private String state;
 
-
-    @Schema(description = "소셜 로그인 타입", example = "NAVER")
-    @NotNull
-    private ProviderType providerType;
 
     public ThirdPartySignupInfo toDomain() {
         Map<String, String> propertiesValues = new HashMap<>();

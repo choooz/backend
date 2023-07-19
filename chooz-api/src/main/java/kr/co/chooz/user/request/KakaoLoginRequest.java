@@ -25,10 +25,6 @@ public class KakaoLoginRequest {
     private String redirectUrl;
 
 
-    @Schema(description = "소셜 로그인 타입", example = "KAKAO")
-    @NotNull
-    private ProviderType providerType;
-
     public ThirdPartySignupInfo toDomain() {
         Map<String, String> propertiesValues = new HashMap<>();
         propertiesValues.put("code", code);
