@@ -2,18 +2,18 @@ package kr.co.chooz.user.domain.entitiy;
 
 import kr.co.chooz.common.EnumModel;
 
-public enum ProviderType implements EnumModel {
+public enum Category implements EnumModel {
 
-    GOOGLE("google"),
-    KAKAO("kakao"),
-    NAVER("naver"),
-
-    NORMAL("일반회원가입");
-
+    FOODS("음식"),
+    CAREER("진로"),
+    LOVE("연애"),
+    FASHION("패션"),
+    INTEREST("재미"),
+    ETC("기타");
 
     private final String value;
 
-    ProviderType(String value) {
+    Category(String value) {
         this.value = value;
     }
 
