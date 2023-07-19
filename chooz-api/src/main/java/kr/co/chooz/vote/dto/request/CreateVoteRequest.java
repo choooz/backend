@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import kr.co.chooz.user.domain.entitiy.AgeType;
 import kr.co.chooz.user.domain.entitiy.GenderType;
 import kr.co.chooz.user.domain.entitiy.MbtiType;
-import kr.co.chooz.user.domain.vote.CreateVoteInfo;
+import kr.co.chooz.vote.dto.CreateVoteInfo;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -54,6 +54,6 @@ public class CreateVoteRequest {
 //    }
 
     public CreateVoteInfo toDomain(Long id) {
-        return new CreateVoteInfo(title, titleA, titleB, imageA, imageB, filteredGender, filteredAge, filteredMbti);
+        return new CreateVoteInfo(id, title, titleA, titleB, imageA, imageB, filteredGender, filteredAge, filteredMbti);
     }
 }

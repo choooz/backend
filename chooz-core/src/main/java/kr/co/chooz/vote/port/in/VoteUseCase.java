@@ -1,7 +1,7 @@
-package kr.co.chooz.user.port.in;
+package kr.co.chooz.vote.port.in;
 
-import kr.co.chooz.user.domain.vote.CreateVoteInfo;
-import kr.co.chooz.user.service.VoteService;
+import kr.co.chooz.vote.dto.CreateVoteInfo;
+import kr.co.chooz.vote.service.VoteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

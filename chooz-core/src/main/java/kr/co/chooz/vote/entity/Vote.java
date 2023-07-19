@@ -1,7 +1,6 @@
-package kr.co.chooz.user.domain.entitiy;
+package kr.co.chooz.vote.entity;
 
-import kr.co.chooz.user.domain.vote.CreateVoteInfo;
-import lombok.Builder;
+import kr.co.chooz.vote.dto.CreateVoteInfo;
 import lombok.Getter;
 
 @Getter
