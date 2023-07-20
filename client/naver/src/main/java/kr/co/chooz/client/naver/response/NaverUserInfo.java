@@ -4,23 +4,25 @@ import lombok.Data;
 
 @Data
 public class NaverUserInfo {
-
-    private Long id;
-    private NaverUserProperties properties;
+    private NaverUserProperties response;
 
     public String getNickName() {
-        return properties.getNickname();
+        return response.getNickname();
     }
 
     public String getProfileImage() {
-        return properties.getProfile_image();
+        return response.getProfile_image();
+    }
+
+    public String getId() {
+        return response.getId();
     }
 
 }
 
 @Data
 class NaverUserProperties {
-
+    private String id;
     private String nickname;
     private String profile_image;
 
