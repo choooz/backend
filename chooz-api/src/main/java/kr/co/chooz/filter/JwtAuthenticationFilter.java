@@ -32,6 +32,40 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    private static void setResponseHeader(HttpServletResponse response) {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Methods", "*");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Allow-Headers",
+                "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+        response.setHeader("Content-Type", "*");
+    }
+
+    private static boolean isPreflightRequest(HttpServletRequest request) {
+        return "OPTIONS".equalsIgnoreCase(request.getMethod());
+    }
+
+    private static Long getUserIdFromToken(HashMap<String, Object> parseJwtTokenMap) {
+        Claims claims = (Claims) parseJwtTokenMap.get("claims");
+        Integer integerUserId = (Integer) claims.get("userId");
+        return Long.valueOf(integerUserId);
+    }
+
+    private static void proceedWhenTokenExpired(HttpServletResponse response) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        setResponseHeaderWhenTokenExpired(response);
+        ResponseStatusException responseStatusException = new ResponseStatusException(
+                HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다.");
+        mapper.writeValue(response.getWriter(), responseStatusException);
+    }
+
+    private static void setResponseHeaderWhenTokenExpired(HttpServletResponse response) {
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setCharacterEncoding("UTF-8");
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
@@ -57,43 +91,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     }
 
-    private static void setResponseHeader(HttpServletResponse response) {
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("Access-Control-Allow-Methods", "*");
-        response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers",
-                "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-        response.setHeader("Content-Type", "*");
-    }
-
-    private static boolean isPreflightRequest(HttpServletRequest request) {
-        return "OPTIONS".equalsIgnoreCase(request.getMethod());
-    }
-
     private void parseTokenAndTransferUserId(HttpServletRequest request, String authorizationHeader) {
         HashMap<String, Object> parseJwtTokenMap = jwtTokenProvider.parseJwtToken(authorizationHeader);
         Long userId = getUserIdFromToken(parseJwtTokenMap);
         request.setAttribute("userId", userId);
-    }
-
-    private static Long getUserIdFromToken(HashMap<String, Object> parseJwtTokenMap) {
-        Claims claims = (Claims) parseJwtTokenMap.get("claims");
-        Integer integerUserId = (Integer) claims.get("userId");
-        return Long.valueOf(integerUserId);
-    }
-
-    private static void proceedWhenTokenExpired(HttpServletResponse response) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        setResponseHeaderWhenTokenExpired(response);
-        ResponseStatusException responseStatusException = new ResponseStatusException(
-                HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다.");
-        mapper.writeValue(response.getWriter(), responseStatusException);
-    }
-
-    private static void setResponseHeaderWhenTokenExpired(HttpServletResponse response) {
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setCharacterEncoding("UTF-8");
     }
 }
