@@ -2,6 +2,7 @@ package kr.co.chooz.vote.entity;
 
 import kr.co.chooz.common.entity.BaseTimeEntity;
 import kr.co.chooz.user.entity.UserJpaEntity;
+import kr.co.chooz.vote.dto.UpdateVoteInfo;
 import kr.co.chooz.vote.dto.VoteInfo;
 import kr.co.chooz.vote.dto.VotedUserInfo;
 import lombok.AccessLevel;
@@ -85,5 +86,21 @@ public class VoteJpaEntity extends BaseTimeEntity {
                 .titleB(voteContent.getTitleB())
                 .description(detail)
                 .build();
+    }
+
+    public boolean isUserVote(Long userId) {
+
+        return this.postedUser.getId().equals(userId);
+
+    }
+
+
+    public void update(UpdateVoteInfo info) {
+
+        this.title = info.getTitle();
+        this.detail = info.getDetail();
+//        this.category = info.getCategory();
+        this.voteContent.update(info.getTitleA(), info.getTitleB());
+
     }
 }

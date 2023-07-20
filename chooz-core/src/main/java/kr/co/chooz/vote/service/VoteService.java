@@ -1,5 +1,6 @@
 package kr.co.chooz.vote.service;
 
+import kr.co.chooz.vote.dto.UpdateVoteInfo;
 import kr.co.chooz.vote.dto.VoteInfo;
 import kr.co.chooz.vote.entity.VoteContent;
 import kr.co.chooz.vote.entity.VoteFilter;
@@ -35,10 +36,27 @@ public class VoteService {
 
     }
 
-    public void isUserVote(Vote vote, Long userId) {
+    public void updateVote(UpdateVoteInfo info) {
 
-
+        isUserVote(info.getUserId(), info.getVoteId());
+        voteStoreRepository.update(info);
 
     }
+
+    public void deleteVote(Long voteId, Long userId) {
+
+        isUserVote(voteId, userId);
+        voteStoreRepository.delete(voteId);
+
+    }
+
+    public void isUserVote(Long userId, Long voteId) {
+
+        if(!voteReadRepository.isUserVote(userId, voteId)) {
+            throw new RuntimeException();
+        }
+    }
+
+
 
 }

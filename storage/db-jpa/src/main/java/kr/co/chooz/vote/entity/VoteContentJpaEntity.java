@@ -44,5 +44,10 @@ public class VoteContentJpaEntity extends BaseTimeEntity {
     }
 
 
+    public void update(String titleA, String titleB) {
 
+        this.titleA = titleA;
+        this.titleB = titleB;
+
+    }
 }

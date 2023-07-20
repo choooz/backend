@@ -10,8 +10,12 @@ import javax.servlet.Filter;
 @Configuration
 public class WebFilterConfig {
 
-    private static final String[] filterUrls = {"/api/users/additional-info", "/api/votes", "/api/users/additional-category"};
-
+    private static final String[] filterUrls = {
+            "/api/users/additional-info",
+            "/api/votes",
+            "/api/users/additional-category",
+            "/api/votes/\\d+"
+    };
     @Bean
     public FilterRegistrationBean JwtFilter(JwtAuthenticationFilter jwtAuthenticationFilter) {
         FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>(jwtAuthenticationFilter);
