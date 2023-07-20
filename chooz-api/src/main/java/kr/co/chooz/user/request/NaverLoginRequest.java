@@ -3,14 +3,17 @@ package kr.co.chooz.user.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import kr.co.chooz.user.domain.entitiy.ProviderType;
 import kr.co.chooz.user.dto.ThirdPartySignupInfo;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-@Data
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class NaverLoginRequest {
 
     @Schema(description = "Oauth 서버에서 받아온 인가코드", example = "인가코드")
