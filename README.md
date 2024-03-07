@@ -19,13 +19,13 @@
     
 </details>
 
-<details open>
+<details>
 <summary>투표 등록</summary>
     
 ![투표 등록](https://github.com/choooz/client/assets/57664427/6208c5c1-f63b-4121-b754-22b2ac304f98)
 </details>
 
-<details open>
+<details>
 <summary>통계</summary>
     
 ![통계](https://github.com/choooz/client/assets/57664427/9734f859-60f3-4cac-a7f5-89a6d15dbe64)
